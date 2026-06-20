@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Joelinton | Espacio Personal</title>
-    <!-- Tipografía Montserrat desde Google Fonts -->
+    <!-- Tipografía Montserrat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /* Variables basadas en la paleta de la imagen 1000109231.jpg */
+        /* Variables de paleta basadas en tu diseño */
         :root {
             --bg-primary: #19171b;      
             --accent-gold: #d29f22;     
             --accent-burgundy: #5d0018; 
             --text-light: #ffffff;
-            --text-muted: #a0a0a0;
+            --secondary-dark: #252628;
+            --text-muted: #8a7fa4;
         }
 
         * {
@@ -30,7 +31,7 @@
             background-color: var(--bg-primary);
             color: var(--text-light);
             line-height: 1.4;
-            overflow: hidden; /* Evita cualquier scroll al ser pantalla única */
+            overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -39,7 +40,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- HERO SECTION PRINCIPAL UNICA --- */
+        /* --- HERO SECTION --- */
         .hero {
             position: relative;
             min-height: 100vh;
@@ -51,7 +52,6 @@
             background: linear-gradient(135deg, var(--bg-primary) 50%, var(--accent-burgundy) 100%);
         }
 
-        /* Reloj Vertical Macizo de Bloques Rectangulares */
         .hero-timer-vertical-wrap {
             position: absolute;
             top: 50%;
@@ -77,52 +77,88 @@
             text-transform: uppercase;
         }
 
-        /* Contenido de texto flotante en capa superior */
         .hero-content {
             position: relative;
             z-index: 2; 
             pointer-events: none;
         }
 
-        .hero-content p:first-child { 
-            animation: fadeInUp 0.8s ease-out both; 
-            animation-delay: 0.1s; 
-            letter-spacing: 4px; 
-            color: var(--accent-gold); 
-            font-size: 0.75rem; 
-            font-weight: 600; 
-            text-transform: uppercase;
-        }
-
         .hero-content h1 { 
             font-size: 13vw; 
             font-weight: 800; 
-            margin: 5px 0; 
+            margin: 0; 
             letter-spacing: -1px; 
             text-transform: uppercase;
             color: transparent;
             -webkit-text-stroke: 1.5px rgba(210, 159, 34, 0.85); 
             animation: fadeInUp 0.8s ease-out both; 
-            animation-delay: 0.3s; 
+            animation-delay: 0.2s; 
         }
 
-        .hero-content p:nth-child(3) { 
-            font-size: 0.85rem; 
-            color: var(--text-muted); 
-            font-weight: 300; 
-            animation: fadeInUp 0.8s ease-out both; 
-            animation-delay: 0.5s; 
-            letter-spacing: 0.5px;
-            max-width: 280px;
-            margin: 10px auto 0 auto;
+        /* --- SECCIÓN CLIMA HORIZONTAL --- */
+        #weather-section {
+            background-color: var(--secondary-dark);
+            padding: 60px 20px;
+            border-top: 2px solid var(--accent-gold);
+            display: flex;
+            justify-content: center;
         }
 
-        /* --- AJUSTES RESPONSIVOS PARA MONITORES DE PC --- */
+        .dashboard {
+            width: 100%;
+            max-width: 1200px;
+            background: rgba(25, 23, 27, 0.95);
+            border: 1px solid rgba(210, 159, 34, 0.3);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 20px;
+        }
+
+        .brand h2 { font-size: 2rem; text-transform: uppercase; letter-spacing: 3px; color: var(--text-light); }
+        .brand p { color: var(--accent-gold); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; }
+
+        .date-display { text-align: right; }
+        #current-date { font-size: 1.1rem; font-weight: 600; color: var(--text-light); }
+        .date-display span { color: var(--accent-gold); font-size: 0.8rem; display: block; text-transform: uppercase; font-weight: 600; }
+
+        .timeline-container { position: relative; margin: 20px 0; }
+        .timeline-container::before, .timeline-container::after { content: ''; position: absolute; top: 0; width: 50px; height: 100%; z-index: 2; pointer-events: none; }
+        .timeline-container::before { left: 0; background: linear-gradient(to right, #19171b, transparent); }
+        .timeline-container::after { right: 0; background: linear-gradient(to left, #19171b, transparent); }
+
+        .timeline-scroll { display: flex; gap: 20px; overflow-x: auto; padding: 20px 10px; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: var(--accent-gold) transparent; }
+        .timeline-scroll::-webkit-scrollbar { height: 6px; }
+        .timeline-scroll::-webkit-scrollbar-thumb { background: var(--accent-gold); border-radius: 10px; }
+
+        .hour-card { flex: 0 0 160px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); position: relative; }
+        .hour-card.now { border-color: var(--accent-gold); background: rgba(210, 159, 34, 0.05); box-shadow: 0 0 15px rgba(210, 159, 34, 0.2); }
+        .hour-card.now::before { content: 'AHORA'; position: absolute; top: -10px; background: var(--accent-gold); color: #000; font-size: 0.65rem; font-weight: bold; padding: 2px 8px; border-radius: 10px; letter-spacing: 1px; }
+
+        .card-time { font-size: 1.2rem; font-weight: 700; color: var(--text-light); }
+        .card-temp { font-size: 2.2rem; font-weight: 800; color: var(--accent-gold); margin: 10px 0; }
+        .card-wind-box { width: 100%; background: rgba(0, 0, 0, 0.3); border-radius: 10px; padding: 10px 5px; text-align: center; margin-bottom: 12px; border: 1px solid rgba(210, 159, 34, 0.1); }
+        .card-wind { font-size: 0.95rem; font-weight: 600; color: var(--text-light); }
+        .card-gusts { font-size: 0.8rem; color: #ff5252; margin-top: 2px; font-weight: 600; }
+        .card-dir { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+        .arrow { display: inline-block; color: var(--accent-gold); font-size: 1.1rem; }
+        .card-clouds { font-size: 0.75rem; color: #a29bfe; margin-top: 10px; background: rgba(162, 155, 254, 0.1); padding: 2px 8px; border-radius: 20px; }
+        
+        .instructions { text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; }
+
         @media (max-width: 768px) {
             .clock-digit-row { font-size: 68vw; letter-spacing: -14px; } 
             .hero-content h1 { font-size: 16vw; }
+            header { flex-direction: column; align-items: center; gap: 15px; text-align: center; }
         }
-
         @media (min-width: 768px) {
             .clock-digit-row { font-size: 26rem; letter-spacing: -24px; } 
             .hero-content h1 { font-size: 7rem; }
@@ -131,35 +167,106 @@
 </head>
 <body>
 
-    <!-- HERO SECTION ÚNICA -->
     <section class="hero">
-        <!-- Capa del Reloj Triple Vertical -->
         <div class="hero-timer-vertical-wrap">
             <div id="clock-hours" class="clock-digit-row">00</div>
             <div id="clock-minutes" class="clock-digit-row">00</div>
             <div id="clock-seconds" class="clock-digit-row" style="color: rgba(210, 159, 34, 0.025);">00</div> 
         </div>
-        
-        <!-- Capa de Presentación -->
         <div class="hero-content">
             <h1>Joelinton</h1>
         </div>
     </section>
 
-    <!-- LÓGICA DE RENDERIZADO DEL TIEMPO REAL -->
-    <script>
-        const clockHours = document.getElementById('clock-hours');
-        const clockMinutes = document.getElementById('clock-minutes');
-        const clockSeconds = document.getElementById('clock-seconds');
+    <section id="weather-section">
+        <div class="dashboard">
+            <header>
+                <div class="brand">
+                    <h2>Comodoro Rivadavia</h2>
+                    <p>Datos en tiempo real // Próximas 24 Horas</p>
+                </div>
+                <div class="date-display">
+                    <span id="day-name">---</span>
+                    <div id="current-date">--/--/----</div>
+                </div>
+            </header>
+            <div class="timeline-container">
+                <div class="timeline-scroll" id="timeline-wrapper"></div>
+            </div>
+            <div class="instructions">← Desliza horizontalmente para ver el pronóstico de hora en hora →</div>
+        </div>
+    </section>
 
+    <script>
+        // 1. Reloj
         function updateTripleClock() {
             const now = new Date();
-            clockHours.textContent = String(now.getHours()).padStart(2, '0');
-            clockMinutes.textContent = String(now.getMinutes()).padStart(2, '0');
-            clockSeconds.textContent = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock-hours').textContent = String(now.getHours()).padStart(2, '0');
+            document.getElementById('clock-minutes').textContent = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('clock-seconds').textContent = String(now.getSeconds()).padStart(2, '0');
         }
         setInterval(updateTripleClock, 1000);
         updateTripleClock();
+
+        // 2. Fecha cabecera
+        const ahora = new Date();
+        document.getElementById('current-date').innerText = ahora.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+        document.getElementById('day-name').innerText = ahora.toLocaleDateString('es-ES', { weekday: 'long' });
+
+        // 3. API Clima (Corregida a hora local)
+        const lat = -45.8656;
+        const lon = -67.4944;
+        const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,wind_speed_10m,wind_gusts_10m,wind_direction_10m,cloud_cover&timezone=America/Argentina/Buenos_Aires`;
+
+        function getWindDirection(deg) {
+            const dirs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+            return dirs[Math.floor(((deg + 11.25) % 360) / 22.5)] || 'W';
+        }
+
+        async function fetchWeatherData() {
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                const hourly = data.hourly;
+                const wrapper = document.getElementById('timeline-wrapper');
+                wrapper.innerHTML = ''; 
+
+                // Tomamos la hora local exacta de tu sistema
+                const horaLocalActual = new Date().getHours();
+                
+                // Buscamos el índice que coincide con la hora local
+                let startIndex = hourly.time.findIndex(t => new Date(t).getHours() === horaLocalActual);
+                if (startIndex === -1) startIndex = 0;
+
+                for (let i = 0; i < 25; i++) {
+                    const index = startIndex + i;
+                    if (!hourly.time[index]) break; 
+
+                    const horaData = new Date(hourly.time[index]);
+                    const stringHora = `${horaData.getHours().toString().padStart(2, '0')}:00`;
+
+                    const card = document.createElement('div');
+                    card.className = `hour-card ${i === 0 ? 'now' : ''}`;
+                    card.innerHTML = `
+                        <div class="card-time">${stringHora}</div>
+                        <div class="card-temp">${Math.round(hourly.temperature_2m[index])}°C</div>
+                        <div class="card-wind-box">
+                            <div class="card-wind">${Math.round(hourly.wind_speed_10m[index])} km/h</div>
+                            <div class="card-gusts">Ráf: ${Math.round(hourly.wind_gusts_10m[index])}</div>
+                        </div>
+                        <div class="card-dir">
+                            <span class="arrow" style="transform: rotate(${hourly.wind_direction_10m[index]}deg)">↓</span>
+                            ${getWindDirection(hourly.wind_direction_10m[index])}
+                        </div>
+                        <div class="card-clouds">☁ ${hourly.cloud_cover[index]}%</div>
+                    `;
+                    wrapper.appendChild(card);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+        fetchWeatherData();
     </script>
 </body>
 </html>

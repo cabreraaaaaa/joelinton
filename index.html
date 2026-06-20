@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joelinton | Espacio Personal</title>
+    <!-- Tipografía Montserrat desde Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Variables basadas en la paleta de la imagen 1000109231.jpg */
+        :root {
+            --bg-primary: #19171b;      
+            --accent-gold: #d29f22;     
+            --accent-burgundy: #5d0018; 
+            --text-light: #ffffff;
+            --text-muted: #a0a0a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-light);
+            line-height: 1.4;
+            overflow: hidden; /* Evita cualquier scroll al ser pantalla única */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- HERO SECTION PRINCIPAL UNICA --- */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--bg-primary) 50%, var(--accent-burgundy) 100%);
+        }
+
+        /* Reloj Vertical Macizo de Bloques Rectangulares */
+        .hero-timer-vertical-wrap {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(-50%);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800; 
+            color: rgba(255, 255, 255, 0.025); 
+            line-height: 0.65; 
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .clock-digit-row {
+            font-size: 75vw;
+            letter-spacing: -20px;
+            white-space: nowrap;
+            text-transform: uppercase;
+        }
+
+        /* Contenido de texto flotante en capa superior */
+        .hero-content {
+            position: relative;
+            z-index: 2; 
+            pointer-events: none;
+        }
+
+        .hero-content p:first-child { 
+            animation: fadeInUp 0.8s ease-out both; 
+            animation-delay: 0.1s; 
+            letter-spacing: 4px; 
+            color: var(--accent-gold); 
+            font-size: 0.75rem; 
+            font-weight: 600; 
+            text-transform: uppercase;
+        }
+
+        .hero-content h1 { 
+            font-size: 13vw; 
+            font-weight: 800; 
+            margin: 5px 0; 
+            letter-spacing: -1px; 
+            text-transform: uppercase;
+            color: transparent;
+            -webkit-text-stroke: 1.5px rgba(210, 159, 34, 0.85); 
+            animation: fadeInUp 0.8s ease-out both; 
+            animation-delay: 0.3s; 
+        }
+
+        .hero-content p:nth-child(3) { 
+            font-size: 0.85rem; 
+            color: var(--text-muted); 
+            font-weight: 300; 
+            animation: fadeInUp 0.8s ease-out both; 
+            animation-delay: 0.5s; 
+            letter-spacing: 0.5px;
+            max-width: 280px;
+            margin: 10px auto 0 auto;
+        }
+
+        /* --- AJUSTES RESPONSIVOS PARA MONITORES DE PC --- */
+        @media (max-width: 768px) {
+            .clock-digit-row { font-size: 68vw; letter-spacing: -14px; } 
+            .hero-content h1 { font-size: 16vw; }
+        }
+
+        @media (min-width: 768px) {
+            .clock-digit-row { font-size: 26rem; letter-spacing: -24px; } 
+            .hero-content h1 { font-size: 7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO SECTION ÚNICA -->
+    <section class="hero">
+        <!-- Capa del Reloj Triple Vertical -->
+        <div class="hero-timer-vertical-wrap">
+            <div id="clock-hours" class="clock-digit-row">00</div>
+            <div id="clock-minutes" class="clock-digit-row">00</div>
+            <div id="clock-seconds" class="clock-digit-row" style="color: rgba(210, 159, 34, 0.025);">00</div> 
+        </div>
+        
+        <!-- Capa de Presentación -->
+        <div class="hero-content">
+            <p>Espacio Personal</p>
+            <h1>Joelinton</h1>
+            <p>Motorsport • Joshua Duerksen • Hincha de la Albirroja</p>
+        </div>
+    </section>
+
+    <!-- LÓGICA DE RENDERIZADO DEL TIEMPO REAL -->
+    <script>
+        const clockHours = document.getElementById('clock-hours');
+        const clockMinutes = document.getElementById('clock-minutes');
+        const clockSeconds = document.getElementById('clock-seconds');
+
+        function updateTripleClock() {
+            const now = new Date();
+            clockHours.textContent = String(now.getHours()).padStart(2, '0');
+            clockMinutes.textContent = String(now.getMinutes()).padStart(2, '0');
+            clockSeconds.textContent = String(now.getSeconds()).padStart(2, '0');
+        }
+        setInterval(updateTripleClock, 1000);
+        updateTripleClock();
+    </script>
+</body>
+</html>

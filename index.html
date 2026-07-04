@@ -144,13 +144,13 @@
         .hour-card.now::before { content: 'AHORA'; position: absolute; top: -10px; background: var(--accent-gold); color: #000; font-size: 0.65rem; font-weight: bold; padding: 2px 8px; border-radius: 10px; letter-spacing: 1px; }
 
         .card-time { font-size: 1.2rem; font-weight: 700; color: var(--text-light); }
-        .card-temp { font-size: 2.2rem; font-weight: 800; color: var(--accent-gold); margin: 10px 0; }
+        .card-temp { font-size: 2.2rem; font-weight: 800; color: var(--accent-gold); margin-top: 10px; }
+        .card-feels-like { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px; font-weight: 600; text-transform: uppercase; }
         .card-wind-box { width: 100%; background: rgba(0, 0, 0, 0.3); border-radius: 10px; padding: 10px 5px; text-align: center; margin-bottom: 12px; border: 1px solid rgba(210, 159, 34, 0.1); }
         .card-wind { font-size: 0.95rem; font-weight: 600; color: var(--text-light); }
         .card-gusts { font-size: 0.8rem; color: #ff5252; margin-top: 2px; font-weight: 600; }
         .card-dir { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
         .arrow { display: inline-block; color: var(--accent-gold); font-size: 1.1rem; }
-        .card-clouds { font-size: 0.75rem; color: #a29bfe; margin-top: 10px; background: rgba(162, 155, 254, 0.1); padding: 2px 8px; border-radius: 20px; }
         
         .instructions { text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; }
 
@@ -213,10 +213,10 @@
         document.getElementById('current-date').innerText = ahora.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
         document.getElementById('day-name').innerText = ahora.toLocaleDateString('es-ES', { weekday: 'long' });
 
-        // 3. API Clima (Corregida a hora local)
+        // 3. API Clima (Corregida con Sensación Térmica y sin Nubosidad)
         const lat = -45.8656;
         const lon = -67.4944;
-        const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,wind_speed_10m,wind_gusts_10m,wind_direction_10m,cloud_cover&timezone=America/Argentina/Buenos_Aires`;
+        const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,apparent_temperature,wind_speed_10m,wind_gusts_10m,wind_direction_10m&timezone=America/Argentina/Buenos_Aires`;
 
         function getWindDirection(deg) {
             const dirs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
@@ -250,6 +250,7 @@
                     card.innerHTML = `
                         <div class="card-time">${stringHora}</div>
                         <div class="card-temp">${Math.round(hourly.temperature_2m[index])}°C</div>
+                        <div class="card-feels-like">ST: ${Math.round(hourly.apparent_temperature[index])}°C</div>
                         <div class="card-wind-box">
                             <div class="card-wind">${Math.round(hourly.wind_speed_10m[index])} km/h</div>
                             <div class="card-gusts">Ráf: ${Math.round(hourly.wind_gusts_10m[index])}</div>
@@ -258,7 +259,6 @@
                             <span class="arrow" style="transform: rotate(${hourly.wind_direction_10m[index]}deg)">↓</span>
                             ${getWindDirection(hourly.wind_direction_10m[index])}
                         </div>
-                        <div class="card-clouds">☁ ${hourly.cloud_cover[index]}%</div>
                     `;
                     wrapper.appendChild(card);
                 }

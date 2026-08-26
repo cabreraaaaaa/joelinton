@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joelinton - UNPSJB Pseudocode Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0e1114;
+            --bg-card: #15181c;
+            --bg-card-header: #1b1f24;
+            --bg-editor: #111418;
+            --accent-gold: #e2a84b;
+            --accent-gold-hover: #f5bc62;
+            --accent-crimson: #680e1d;
+            --text-primary: #f0f2f5;
+            --text-secondary: #9aa0a6;
+            --text-muted: #5f6368;
+            --border-subtle: #24292e;
+            --border-gold: #e2a84b;
+            --font-main: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-code: 'Fira Code', monospace;
+
+            --status-green: #22c55e;
+            --status-green-bg: rgba(34, 197, 94, 0.12);
+            --status-yellow: #eab308;
+            --status-yellow-bg: rgba(234, 179, 8, 0.12);
+            --status-red: #ef4444;
+            --status-red-bg: rgba(239, 68, 68, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background-image: 
+                radial-gradient(circle at 85% 15%, rgba(104, 14, 29, 0.35) 0%, transparent 45%),
+                radial-gradient(circle at 15% 85%, rgba(226, 168, 75, 0.05) 0%, transparent 40%);
+        }
+
+        header {
+            border-bottom: 2px solid var(--border-gold);
+            background: linear-gradient(180deg, #16070a 0%, #0e1114 100%);
+            padding: 0.8rem 2rem;
+            position: relative;
+        }
+
+        .header-container {
+            max-width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand-title-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .brand-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.2rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.03);
+            letter-spacing: 4px;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .brand-title {
+            font-size: 1.7rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--accent-gold);
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.45rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        .status-badge.status-ok {
+            background: var(--status-green-bg);
+            border: 1px solid var(--status-green);
+            color: var(--status-green);
+        }
+
+        .status-badge.status-warn {
+            background: var(--status-yellow-bg);
+            border: 1px solid var(--status-yellow);
+            color: var(--status-yellow);
+        }
+
+        .status-badge.status-error {
+            background: var(--status-red-bg);
+            border: 1px solid var(--status-red);
+            color: var(--status-red);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-ok .status-dot { background-color: var(--status-green); box-shadow: 0 0 8px var(--status-green); }
+        .status-warn .status-dot { background-color: var(--status-yellow); box-shadow: 0 0 8px var(--status-yellow); }
+        .status-error .status-dot { background-color: var(--status-red); box-shadow: 0 0 8px var(--status-red); }
+
+        .toolbar {
+            padding: 0.6rem 2rem;
+            width: 100%;
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: var(--font-main);
+            font-weight: 600;
+            font-size: 0.82rem;
+            padding: 0.45rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--accent-gold);
+            color: #0e1114;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--accent-gold-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(226, 168, 75, 0.25);
+        }
+
+        .btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-debug {
+            background: #1e1b4b;
+            color: #a5b4fc;
+            border-color: #4338ca;
+        }
+
+        .btn-debug:hover {
+            background: #312e81;
+            color: #c7d2fe;
+            border-color: #6366f1;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border-color: var(--border-subtle);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .btn-danger {
+            background: var(--bg-card);
+            color: #f87171;
+            border-color: rgba(248, 113, 113, 0.3);
+        }
+
+        .btn-danger:hover {
+            background: rgba(248, 113, 113, 0.1);
+            border-color: #f87171;
+        }
+
+        .divider {
+            height: 20px;
+            width: 1px;
+            background-color: var(--border-subtle);
+            margin: 0 0.25rem;
+        }
+
+        .workspace {
+            padding: 0 2rem 1.2rem;
+            width: 100%;
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 1.5rem;
+            min-height: 0;
+        }
+
+        @media (max-width: 1024px) {
+            body {
+                overflow-y: auto;
+                height: auto;
+            }
+            .workspace {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            height: 100%;
+            min-height: 0;
+        }
+
+        .card-header {
+            background-color: var(--bg-card-header);
+            padding: 0.65rem 1.2rem;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .editor-wrapper {
+            display: flex;
+            flex: 1;
+            background-color: var(--bg-editor);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .line-numbers {
+            width: 52px;
+            background-color: #0d0f12;
+            padding: 1rem 0.3rem 1rem 0;
+            text-align: right;
+            color: var(--text-muted);
+            user-select: none;
+            line-height: 1.6;
+            font-family: var(--font-code);
+            font-size: 0.95rem;
+            border-right: 1px solid var(--border-subtle);
+            overflow: hidden;
+        }
+
+        .line-num-item {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 4px;
+            height: 1.6em;
+            padding-right: 6px;
+        }
+
+        .line-err-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .line-err-dot.err { background-color: var(--status-red); }
+        .line-err-dot.warn { background-color: var(--status-yellow); }
+
+        .editor-container {
+            position: relative;
+            flex: 1;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #code-highlight, #code-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 1rem;
+            margin: 0;
+            border: none;
+            outline: none;
+            font-family: var(--font-code);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            white-space: pre;
+            overflow: auto;
+            tab-size: 4;
+            box-sizing: border-box;
+        }
+
+        #code-input {
+            background: transparent;
+            color: transparent;
+            caret-color: #fff;
+            resize: none;
+            z-index: 2;
+        }
+
+        #code-highlight {
+            background: transparent;
+            color: #d1d5db;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .kw-meta {
+            color: var(--accent-gold);
+            font-weight: 700;
+            text-decoration: underline;
+            text-decoration-thickness: 1.8px;
+            text-underline-offset: 3px;
+        }
+
+        .token-str { color: #86efac; }
+        .token-num { color: #93c5fd; }
+        .token-op { color: #f472b6; font-weight: 600; }
+        .token-comment { color: #6b7280; font-style: italic; }
+
+        .issues-bar {
+            background: #101317;
+            border-top: 1px solid var(--border-subtle);
+            padding: 0.55rem 1rem;
+            font-size: 0.8rem;
+            font-family: var(--font-code);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .issue-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .issue-tag.err {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid var(--status-red);
+        }
+
+        .issue-tag.warn {
+            background: rgba(234, 179, 8, 0.2);
+            color: #fde047;
+            border: 1px solid var(--status-yellow);
+        }
+
+        .issue-tag.ok {
+            background: rgba(34, 197, 94, 0.15);
+            color: #86efac;
+            border: 1px solid var(--status-green);
+        }
+
+        .terminal {
+            background-color: #0b0d10;
+            padding: 1.2rem;
+            flex: 1;
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+            color: #e5e7eb;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        .terminal-line {
+            display: flex;
+            gap: 0.5rem;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .terminal-prefix {
+            color: var(--accent-gold);
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .terminal-sys { color: #93c5fd; }
+        .terminal-success { color: #86efac; }
+        .terminal-warn { color: #fde047; font-weight: 600; }
+        .terminal-error { color: #f87171; font-weight: 600; }
+        .terminal-debug { color: #c084fc; font-weight: 600; }
+        .terminal-prompt { color: #38bdf8; font-weight: 600; }
+        .terminal-user-input { color: var(--accent-gold); font-weight: 600; }
+
+        .terminal-input-bar {
+            background-color: var(--bg-card-header);
+            border-top: 1px solid var(--border-subtle);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .terminal-input-bar span {
+            color: var(--accent-gold);
+            font-family: var(--font-code);
+            font-weight: 700;
+        }
+
+        .terminal-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+            flex: 1;
+        }
+
+        .terminal-input:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <div class="brand-title-wrap">
+                <span class="brand-watermark">56</span>
+                <h1 class="brand-title">JOELINTON</h1>
+            </div>
+
+            <div id="status-badge" class="status-badge status-ok">
+                <span class="status-dot"></span>
+                <span id="status-text">Sintaxis Correcta</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="toolbar">
+        <button class="btn btn-primary" id="btn-run">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            Ejecutar
+        </button>
+        <button class="btn btn-debug" id="btn-diagnostico" title="Muestra un informe detallado de diagnóstico en la consola">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            Diagnóstico / Debug
+        </button>
+        <div class="divider"></div>
+        <button class="btn btn-danger" id="btn-clear">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            Limpiar Salida
+        </button>
+    </div>
+
+    <main class="workspace">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                    Editor Pseudocódigo
+                </div>
+            </div>
+            <div class="editor-wrapper">
+                <div class="line-numbers" id="line-numbers"></div>
+                <div class="editor-container">
+                    <pre id="code-highlight" aria-hidden="true"></pre>
+                    <textarea id="code-input" spellcheck="false" placeholder="Escribe tu código aquí..."></textarea>
+                </div>
+            </div>
+            <div class="issues-bar" id="issues-bar">
+                <span class="issue-tag ok">✔ Sin errores detectados</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+                    Consola Unificada
+                </div>
+            </div>
+            <div class="terminal" id="terminal-out"></div>
+            <div class="terminal-input-bar">
+                <span>&gt;</span>
+                <input type="text" id="term-input" class="terminal-input" placeholder="Esperando ejecución..." disabled />
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const META_KEYWORDS = [
+            'comienza', 'constantes', 'entonces', 'escribir', 'escribirln',
+            'hacer', 'hasta', 'leer', 'mientras', 'opcion', 'opción', 'de',
+            'para', 'repetir', 'si', 'sino', 'termina', 'variables',
+            'finsi', 'programa', 'tipos'
+        ];
+
+        const INITIAL_TEMPLATE = ``;
+
+        const codeInput = document.getElementById('code-input');
+        const codeHighlight = document.getElementById('code-highlight');
+        const lineNumbers = document.getElementById('line-numbers');
+        const terminalOut = document.getElementById('terminal-out');
+        const termInput = document.getElementById('term-input');
+        const btnRun = document.getElementById('btn-run');
+        const btnDiagnostico = document.getElementById('btn-diagnostico');
+        const btnClear = document.getElementById('btn-clear');
+        const statusBadge = document.getElementById('status-badge');
+        const statusText = document.getElementById('status-text');
+        const issuesBar = document.getElementById('issues-bar');
+
+        let currentValidation = { status: 'ok', errors: [], warnings: [], declaredVars: {}, declaredConsts: {} };
+
+        function validateSyntax(code) {
+            const lines = code.split('\n');
+            const errors = [];
+            const warnings = [];
+            const declaredConsts = {};
+            const declaredVars = {};
+            const loopControlVars = new Set();
+
+            let hasComienza = false;
+            let hasTermina = false;
+            let hasVariablesSection = false;
+            let section = '';
+            let inBody = false;
+
+            const blockStack = [];
+
+            // Pre-escaneo para registrar variables de control de bucles 'para'
+            lines.forEach((raw) => {
+                let l = raw.trim().replace(/\{[^}]*\}/g, '').trim();
+                const cIdx = l.indexOf('//');
+                if (cIdx !== -1) l = l.substring(0, cIdx).trim();
+                const m = l.match(/^para\s+([a-zA-Z0-9_]+)\s*(?:<-|:=)/i);
+                if (m) {
+                    loopControlVars.add(m[1].toLowerCase());
+                }
+            });
+
+            lines.forEach((raw, idx) => {
+                const lineNum = idx + 1;
+                const leadingSpaces = raw.match(/^\s*/)[0];
+                const indentCount = leadingSpaces.replace(/\t/g, '    ').length;
+
+                let line = raw.trim();
+                if (!line) return;
+
+                if (line.startsWith('{') && line.endsWith('}')) return;
+                if (line.startsWith('//')) return;
+
+                line = line.replace(/\{[^}]*\}/g, '').trim();
+                const commIdx = line.indexOf('//');
+                if (commIdx !== -1) line = line.substring(0, commIdx).trim();
+                if (!line) return;
+
+                const lower = line.toLowerCase();
+
+                if (lower.startsWith('programa')) { section = 'header'; return; }
+                if (lower === 'constantes') { section = 'constantes'; return; }
+                if (lower === 'variables') { 
+                    hasVariablesSection = true; 
+                    section = 'variables'; 
+                    return; 
+                }
+                if (lower === 'comienza') {
+                    if (hasComienza) errors.push({ line: lineNum, msg: 'Metapalabra "comienza" duplicada.' });
+                    hasComienza = true;
+                    inBody = true;
+                    section = 'body';
+                    return;
+                }
+                if (lower === 'termina') {
+                    if (!hasComienza) errors.push({ line: lineNum, msg: 'Falta "comienza" antes de "termina".' });
+                    hasTermina = true;
+                    inBody = false;
+                    section = 'end';
+                    return;
+                }
+
+                if (inBody && indentCount === 0 && lower !== 'termina') {
+                    warnings.push({ line: lineNum, msg: 'Falta sangría/tabulación: las instrucciones internas deben estar tabuladas.' });
+                }
+
+                if (section === 'constantes') {
+                    if (!line.includes(':') && !line.includes('=')) {
+                        errors.push({ line: lineNum, msg: 'Falta ":" o "=" para definir la constante.' });
+                    } else {
+                        const parts = line.split(/[:=]/);
+                        const cName = parts[0].trim().toLowerCase();
+                        if (cName) declaredConsts[cName] = parts[1].trim();
+                    }
+                    return;
+                }
+
+                if (section === 'variables') {
+                    if (line.includes(':')) {
+                        const parts = line.split(':');
+                        const varNamePart = parts[0].trim();
+                        const rawTipo = parts[1].trim().toLowerCase();
+                        
+                        let tipoDato = 'desconocido';
+                        if (rawTipo.includes('entero')) tipoDato = 'entero';
+                        else if (rawTipo.includes('real')) tipoDato = 'real';
+                        else if (rawTipo.includes('cadena') || rawTipo.includes('texto') || rawTipo.includes('string')) tipoDato = 'cadena';
+                        else if (rawTipo.includes('caracter')) tipoDato = 'caracter';
+                        else if (rawTipo.includes('logico') || rawTipo.includes('booleano')) tipoDato = 'logico';
+                        else tipoDato = 'real';
+
+                        const vList = varNamePart.split(',').map(v => v.trim().toLowerCase());
+                        vList.forEach(v => {
+                            if (v && /^[a-zA-ZáéíóúÁÉÍÓÚñÑ_][a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_]*$/.test(v)) {
+                                declaredVars[v] = tipoDato;
+                            }
+                        });
+                    } else {
+                        errors.push({ line: lineNum, msg: 'Declaración inválida: se esperaba "nombre_variable : tipo"' });
+                    }
+                    return;
+                }
+
+                if (inBody) {
+                    if (lower.startsWith('escribir') || lower.startsWith('escribirln')) {
+                        const match = line.match(/^(escribir|escribirln)\s*\(([\s\S]*)\)$/i);
+                        if (!match) errors.push({ line: lineNum, msg: 'Falta paréntesis en escribir: escribir(...)' });
+                        return;
+                    }
+
+                    if (lower.startsWith('leer')) {
+                        const match = line.match(/^leer\s*\((.*?)\)$/i);
+                        if (!match) {
+                            errors.push({ line: lineNum, msg: 'Falta paréntesis en leer: leer(variable)' });
+                        } else {
+                            const vars = match[1].split(',').map(v => v.trim().toLowerCase());
+                            vars.forEach(varName => {
+                                if (!varName) {
+                                    errors.push({ line: lineNum, msg: 'Variable vacía dentro de leer(...)' });
+                                } else if (!(varName in declaredVars) && !loopControlVars.has(varName)) {
+                                    errors.push({ line: lineNum, msg: `Variable "${varName}" no declarada. Debe declararse en la sección "variables".` });
+                                }
+                            });
+                        }
+                        return;
+                    }
+
+                    if (lower === 'repetir') {
+                        blockStack.push({ type: 'repetir', line: lineNum });
+                        return;
+                    }
+
+                    if (lower.startsWith('hasta ')) {
+                        const top = blockStack.pop();
+                        if (!top || top.type !== 'repetir') {
+                            errors.push({ line: lineNum, msg: '"hasta <condicion>" sin un bloque "repetir" abierto.' });
+                        }
+                        return;
+                    }
+
+                    if (lower.startsWith('opcion') || lower.startsWith('opción')) {
+                        if (!lower.endsWith('de')) {
+                            errors.push({ line: lineNum, msg: 'Falta la metapalabra "de" en "opcion <var> de".' });
+                        }
+                        blockStack.push({ type: 'opcion', line: lineNum });
+                        return;
+                    }
+
+                    if (lower === 'termina opcion' || lower === 'termina opción') {
+                        const top = blockStack.pop();
+                        if (!top || top.type !== 'opcion') {
+                            errors.push({ line: lineNum, msg: '"termina opcion" sin bloque "opcion" abierto.' });
+                        }
+                        return;
+                    }
+
+                    if (/^\d+\s*:/.test(line)) return;
+
+                    if (lower.startsWith('para ')) {
+                        if (!lower.includes('hasta') || !lower.includes('hacer')) {
+                            errors.push({ line: lineNum, msg: 'Estructura "para" incompleta: para <var> <- <ini> hasta <fin> hacer' });
+                        }
+                        blockStack.push({ type: 'para', line: lineNum });
+                        return;
+                    }
+
+                    if (lower === 'fin para' || lower === 'finpara') {
+                        const top = blockStack.pop();
+                        if (!top || top.type !== 'para') {
+                            errors.push({ line: lineNum, msg: '"fin para" sin un "para" correspondiente.' });
+                        }
+                        return;
+                    }
+
+                    if (lower.startsWith('mientras ')) {
+                        if (!lower.endsWith('hacer')) {
+                            errors.push({ line: lineNum, msg: 'Falta la metapalabra "hacer" en "mientras <cond> hacer".' });
+                        }
+                        blockStack.push({ type: 'mientras', line: lineNum });
+                        return;
+                    }
+
+                    if (lower === 'fin mientras' || lower === 'finmientras') {
+                        const top = blockStack.pop();
+                        if (!top || top.type !== 'mientras') {
+                            errors.push({ line: lineNum, msg: '"fin mientras" sin un "mientras" correspondiente.' });
+                        }
+                        return;
+                    }
+
+                    if (lower.startsWith('si ')) {
+                        if (!lower.includes('entonces')) {
+                            errors.push({ line: lineNum, msg: 'Falta la metapalabra "entonces" en "si <cond> entonces".' });
+                        }
+                        blockStack.push({ type: 'si', line: lineNum });
+                        return;
+                    }
+
+                    if (lower === 'sino') {
+                        const top = blockStack[blockStack.length - 1];
+                        if (!top || top.type !== 'si') {
+                            errors.push({ line: lineNum, msg: '"sino" sin bloque "si" correspondiente.' });
+                        }
+                        return;
+                    }
+
+                    if (lower === 'fin si' || lower === 'finsi') {
+                        const top = blockStack.pop();
+                        if (!top || top.type !== 'si') {
+                            errors.push({ line: lineNum, msg: '"fin si" sin bloque "si" correspondiente.' });
+                        }
+                        return;
+                    }
+
+                    if (line.includes('<-') || line.includes(':=')) {
+                        const sep = line.includes('<-') ? '<-' : ':=';
+                        const parts = line.split(sep);
+                        const target = parts[0].trim().toLowerCase();
+                        const expr = parts[1] ? parts[1].trim() : '';
+                        if (!target) {
+                            errors.push({ line: lineNum, msg: 'Falta variable destino antes de "<-".' });
+                        } else if (!(target in declaredVars) && !loopControlVars.has(target)) {
+                            errors.push({ line: lineNum, msg: `Variable "${target}" no declarada en "variables".` });
+                        }
+                        if (!expr) errors.push({ line: lineNum, msg: `Falta expresión tras "<-" para ${target}.` });
+                        return;
+                    }
+
+                    errors.push({ line: lineNum, msg: `Instrucción no válida: "${line}".` });
+                }
+            });
+
+            if (!hasComienza) errors.push({ line: lines.length, msg: 'Falta la metapalabra "comienza".' });
+            if (!hasTermina) errors.push({ line: lines.length, msg: 'Falta la metapalabra "termina" al final.' });
+            if (blockStack.length > 0) {
+                const unclosed = blockStack.pop();
+                if (unclosed.type === 'repetir') {
+                    errors.push({ line: unclosed.line, msg: 'Bloque "repetir" no fue cerrado (falta "hasta <condicion>").' });
+                } else {
+                    errors.push({ line: unclosed.line, msg: `Bloque "${unclosed.type}" no cerrado.` });
+                }
+            }
+
+            let status = 'ok';
+            if (errors.length > 0) status = 'error';
+            else if (warnings.length > 0) status = 'warn';
+
+            return { status, errors, warnings, declaredVars, declaredConsts, loopControlVars };
+        }
+
+        function runDiagnosticReport() {
+            const val = validateSyntax(codeInput.value);
+            printTerm('--- INFORME DE DIAGNÓSTICO & DEBUG ---', 'debug');
+
+            if (val.status === 'ok') {
+                printTerm('✔ No se encontraron errores de sintaxis.', 'success');
+                printTerm('✔ La estructura y sangría cumplen las normas de EPyA.', 'success');
+                printTerm('✔ Código listo para ser ejecutado con el botón "Ejecutar" o F5.', 'sys');
+            } else {
+                if (val.errors.length > 0) {
+                    printTerm(`✖ Se encontraron ${val.errors.length} error(es) bloqueante(s):`, 'error');
+                    val.errors.forEach(err => {
+                        printTerm(`  [Línea ${err.line}] -> ${err.msg}`, 'error');
+                    });
+                }
+                if (val.warnings.length > 0) {
+                    printTerm(`⚠ Se encontraron ${val.warnings.length} advertencia(s) de formato:`, 'warn');
+                    val.warnings.forEach(w => {
+                        printTerm(`  [Línea ${w.line}] -> ${w.msg}`, 'warn');
+                    });
+                }
+            }
+        }
+
+        btnDiagnostico.addEventListener('click', runDiagnosticReport);
+
+        function updateEditor() {
+            const text = codeInput.value;
+            const lines = text.split('\n');
+
+            currentValidation = validateSyntax(text);
+            updateStatusUI(currentValidation);
+
+            const errLines = new Set(currentValidation.errors.map(e => e.line));
+            const warnLines = new Set(currentValidation.warnings.map(w => w.line));
+
+            let linesHtml = '';
+            for (let i = 1; i <= lines.length; i++) {
+                let dot = '';
+                if (errLines.has(i)) dot = '<span class="line-err-dot err" title="Error"></span>';
+                else if (warnLines.has(i)) dot = '<span class="line-err-dot warn" title="Aviso"></span>';
+                linesHtml += `<div class="line-num-item">${dot}${i}</div>`;
+            }
+            lineNumbers.innerHTML = linesHtml;
+
+            codeHighlight.innerHTML = highlightSyntax(text) + '\n';
+        }
+
+        function updateStatusUI(val) {
+            statusBadge.className = 'status-badge';
+            if (val.status === 'ok') {
+                statusBadge.classList.add('status-ok');
+                statusText.innerText = 'Sintaxis Correcta';
+                btnRun.disabled = false;
+                issuesBar.innerHTML = '<span class="issue-tag ok">✔ Algoritmo listo para ejecutar.</span>';
+            } else if (val.status === 'warn') {
+                statusBadge.classList.add('status-warn');
+                statusText.innerText = `Aviso Leve (${val.warnings.length})`;
+                btnRun.disabled = false;
+                issuesBar.innerHTML = val.warnings.map(w => `<span class="issue-tag warn">⚠ Lín ${w.line}: ${escapeHTML(w.msg)}</span>`).join(' ');
+            } else {
+                statusBadge.classList.add('status-error');
+                statusText.innerText = `Error Sintáctico (${val.errors.length})`;
+                btnRun.disabled = false;
+                issuesBar.innerHTML = val.errors.map(e => `<span class="issue-tag err">✖ Lín ${e.line}: ${escapeHTML(e.msg)}</span>`).join(' ');
+            }
+        }
+
+        function syncScroll() {
+            codeHighlight.scrollTop = codeInput.scrollTop;
+            codeHighlight.scrollLeft = codeInput.scrollLeft;
+            lineNumbers.scrollTop = codeInput.scrollTop;
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function highlightSyntax(code) {
+            const tokens = [];
+            const regex = /(\{[^}]*\})|(\/\/.*)|("(?:\\[\s\S]|[^"\\])*")|('(?:\\[\s\S]|[^'\\])*')|(<-|<=|>=|<>|:=|[+\-*\/%=<>,:;()[\]])|(\b\d+(?:\.\d+)?\b)|([a-zA-ZáéíóúÁÉÍÓÚñÑ_][a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_]*)|(\s+)|(.)/g;
+
+            let match;
+            while ((match = regex.exec(code)) !== null) {
+                const [full, curlyComment, lineComment, str1, str2, op, num, ident, ws, other] = match;
+                if (curlyComment || lineComment) {
+                    tokens.push(`<span class="token-comment">${escapeHTML(curlyComment || lineComment)}</span>`);
+                } else if (str1 || str2) {
+                    tokens.push(`<span class="token-str">${escapeHTML(str1 || str2)}</span>`);
+                } else if (op) {
+                    tokens.push(`<span class="token-op">${escapeHTML(op)}</span>`);
+                } else if (num) {
+                    tokens.push(`<span class="token-num">${escapeHTML(num)}</span>`);
+                } else if (ident) {
+                    const lower = ident.toLowerCase();
+                    if (META_KEYWORDS.includes(lower)) {
+                        tokens.push(`<span class="kw-meta">${escapeHTML(ident)}</span>`);
+                    } else {
+                        tokens.push(escapeHTML(ident));
+                    }
+                } else if (ws) {
+                    tokens.push(escapeHTML(ws));
+                } else if (other) {
+                    tokens.push(escapeHTML(other));
+                }
+            }
+            return tokens.join('');
+        }
+
+        const ROOT_KEYWORDS = ['variables', 'constantes', 'programa', 'comienza', 'termina'];
+
+        function autoAlignRootKeywords() {
+            const start = codeInput.selectionStart;
+            const text = codeInput.value;
+            const lines = text.split('\n');
+
+            let currentPos = 0;
+            let cursorLineIdx = -1;
+            for (let i = 0; i < lines.length; i++) {
+                const lineLen = lines[i].length + 1;
+                if (start >= currentPos && start <= currentPos + lines[i].length) {
+                    cursorLineIdx = i;
+                    break;
+                }
+                currentPos += lineLen;
+            }
+
+            if (cursorLineIdx !== -1) {
+                const raw = lines[cursorLineIdx];
+                const trimmed = raw.trim().toLowerCase();
+
+                if (ROOT_KEYWORDS.includes(trimmed) && /^\s+/.test(raw)) {
+                    lines[cursorLineIdx] = raw.trim();
+                    codeInput.value = lines.join('\n');
+                    let newPos = 0;
+                    for (let i = 0; i < cursorLineIdx; i++) {
+                        newPos += lines[i].length + 1;
+                    }
+                    newPos += lines[cursorLineIdx].length;
+                    codeInput.selectionStart = codeInput.selectionEnd = newPos;
+                }
+            }
+        }
+
+        codeInput.addEventListener('input', () => {
+            autoAlignRootKeywords();
+            updateEditor();
+        });
+        codeInput.addEventListener('scroll', syncScroll);
+        
+        codeInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = codeInput.selectionStart;
+                const end = codeInput.selectionEnd;
+                codeInput.value = codeInput.value.substring(0, start) + '    ' + codeInput.value.substring(end);
+                codeInput.selectionStart = codeInput.selectionEnd = start + 4;
+                updateEditor();
+            } else if (e.key === 'Enter') {
+                const start = codeInput.selectionStart;
+                const linesBefore = codeInput.value.substring(0, start).split('\n');
+                const curLine = linesBefore[linesBefore.length - 1];
+                const matchIndent = curLine.match(/^(\s*)/);
+                let indent = matchIndent ? matchIndent[1] : '';
+
+                const curTrimmed = curLine.trim().toLowerCase();
+
+                if (curTrimmed === 'comienza' || curTrimmed === 'variables' || curTrimmed === 'constantes' || 
+                    curTrimmed === 'repetir' || curTrimmed.endsWith('hacer') || curTrimmed.endsWith('entonces') || curTrimmed.endsWith('de')) {
+                    indent = '    ';
+                }
+
+                if (curTrimmed === 'termina') {
+                    indent = '';
+                }
+
+                e.preventDefault();
+                const end = codeInput.selectionEnd;
+                codeInput.value = codeInput.value.substring(0, start) + '\n' + indent + codeInput.value.substring(end);
+                codeInput.selectionStart = codeInput.selectionEnd = start + 1 + indent.length;
+                updateEditor();
+            }
+        });
+
+        codeInput.value = INITIAL_TEMPLATE;
+        updateEditor();
+
+        function printTerm(msg, type = 'normal') {
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            
+            let prefix = '&gt;';
+            let contentClass = '';
+            
+            if (type === 'sys') {
+                prefix = '[SYS]';
+                contentClass = 'terminal-sys';
+            } else if (type === 'error') {
+                prefix = '[ERR]';
+                contentClass = 'terminal-error';
+            } else if (type === 'warn') {
+                prefix = '[AVISO]';
+                contentClass = 'terminal-warn';
+            } else if (type === 'debug') {
+                prefix = '[DEBUG]';
+                contentClass = 'terminal-debug';
+            } else if (type === 'prompt') {
+                prefix = '[ENTRADA]';
+                contentClass = 'terminal-prompt';
+            } else if (type === 'success') {
+                prefix = '[SYS]';
+                contentClass = 'terminal-success';
+            } else if (type === 'input') {
+                prefix = '&gt;';
+                contentClass = 'terminal-user-input';
+            }
+
+            line.innerHTML = `<span class="terminal-prefix">${prefix}</span> <span class="${contentClass}">${msg}</span>`;
+            terminalOut.appendChild(line);
+            terminalOut.scrollTop = terminalOut.scrollHeight;
+        }
+
+        function clearTerminal() {
+            terminalOut.innerHTML = '';
+        }
+
+        btnClear.addEventListener('click', () => {
+            clearTerminal();
+            printTerm('Consola limpia.', 'sys');
+        });
+
+        let isRunning = false;
+        let waitingForInput = null;
+        let executionAbortController = 0;
+
+        function promptConsoleStrict(varName, expectedType, execId) {
+            return new Promise((resolve, reject) => {
+                const typeLabel = expectedType ? `[Tipo: ${expectedType}]` : '';
+
+                function ask(isRetry = false) {
+                    if (execId !== executionAbortController) {
+                        reject(new Error("Ejecución cancelada por un nuevo reinicio."));
+                        return;
+                    }
+
+                    if (!isRetry) {
+                        printTerm(`Esperando dato para variable "${varName}" ${typeLabel}:`, 'prompt');
+                    }
+                    termInput.disabled = false;
+                    termInput.placeholder = `Escribe el valor para ${varName} y presiona Enter...`;
+                    termInput.focus();
+
+                    waitingForInput = (val) => {
+                        if (execId !== executionAbortController) {
+                            reject(new Error("Ejecución cancelada por un nuevo reinicio."));
+                            return;
+                        }
+
+                        const trimmed = val.trim();
+
+                        if (expectedType === 'entero') {
+                            const isInteger = /^[+-]?\d+$/.test(trimmed);
+                            if (!isInteger) {
+                                printTerm(`ERROR DE TIPO: "${val}" contiene caracteres no válidos. Se esperaba un número ENTERO. Ingréselo nuevamente:`, 'error');
+                                ask(true);
+                                return;
+                            }
+                            termInput.disabled = true;
+                            termInput.placeholder = "Ejecutando...";
+                            termInput.value = '';
+                            resolve(parseInt(trimmed, 10));
+                            return;
+                        }
+
+                        if (expectedType === 'real') {
+                            const num = Number(trimmed);
+                            if (isNaN(num) || trimmed === '') {
+                                printTerm(`ERROR DE TIPO: "${val}" contiene caracteres no válidos. Se esperaba un número REAL. Ingréselo nuevamente:`, 'error');
+                                ask(true);
+                                return;
+                            }
+                            termInput.disabled = true;
+                            termInput.placeholder = "Ejecutando...";
+                            termInput.value = '';
+                            resolve(num);
+                            return;
+                        }
+
+                        if (expectedType === 'caracter') {
+                            if (trimmed.length !== 1) {
+                                printTerm(`ERROR DE TIPO: Se esperaba exactamente 1 caracter. Ingréselo nuevamente:`, 'error');
+                                ask(true);
+                                return;
+                            }
+                            termInput.disabled = true;
+                            termInput.placeholder = "Ejecutando...";
+                            termInput.value = '';
+                            resolve(trimmed);
+                            return;
+                        }
+
+                        if (expectedType === 'logico') {
+                            const low = trimmed.toLowerCase();
+                            if (low !== 'verdadero' && low !== 'falso' && low !== 'true' && low !== 'false') {
+                                printTerm(`ERROR DE TIPO: Se esperaba "verdadero" o "falso". Ingréselo nuevamente:`, 'error');
+                                ask(true);
+                                return;
+                            }
+                            termInput.disabled = true;
+                            termInput.placeholder = "Ejecutando...";
+                            termInput.value = '';
+                            resolve(low === 'verdadero' || low === 'true');
+                            return;
+                        }
+
+                        termInput.disabled = true;
+                        termInput.placeholder = "Ejecutando...";
+                        termInput.value = '';
+                        resolve(trimmed);
+                    };
+                }
+
+                ask(false);
+            });
+        }
+
+        termInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && waitingForInput) {
+                const val = termInput.value;
+                printTerm(val, 'input');
+                const cb = waitingForInput;
+                waitingForInput = null;
+                cb(val);
+            }
+        });
+
+        function parseArguments(str) {
+            const args = [];
+            let curr = '';
+            let inQuotes = false;
+            let quoteChar = '';
+
+            for (let i = 0; i < str.length; i++) {
+                const ch = str[i];
+                if ((ch === '"' || ch === "'") && (i === 0 || str[i-1] !== '\\')) {
+                    if (!inQuotes) {
+                        inQuotes = true;
+                        quoteChar = ch;
+                    } else if (quoteChar === ch) {
+                        inQuotes = false;
+                    }
+                }
+                if (ch === ',' && !inQuotes) {
+                    args.push(curr.trim());
+                    curr = '';
+                } else {
+                    curr += ch;
+                }
+            }
+            if (curr.trim()) args.push(curr.trim());
+            return args;
+        }
+
+        function evaluateExpression(expr, memory, constants, declaredVars) {
+            expr = expr.trim();
+            if (!expr) return 0;
+
+            expr = expr.replace(/[“”«»]/g, '"');
+
+            if ((expr.startsWith('"') && expr.endsWith('"')) || (expr.startsWith("'") && expr.endsWith("'"))) {
+                return expr.slice(1, -1);
+            }
+
+            const scope = { ...constants, ...memory };
+
+            let jsExpr = expr
+                .replace(/\bdiv\b/gi, '/')
+                .replace(/\bmod\b/gi, '%')
+                .replace(/\by\b/gi, '&&')
+                .replace(/\bo\b/gi, '||')
+                .replace(/\bno\b/gi, '!')
+                .replace(/<>/g, '!=')
+                .replace(/=/g, '===');
+
+            jsExpr = jsExpr.replace(/([a-zA-ZáéíóúÁÉÍÓÚñÑ_][a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_]*)/g, (match) => {
+                const key = match.toLowerCase();
+                if (key in scope) {
+                    const val = scope[key];
+                    if (typeof val === 'number' || typeof val === 'boolean') {
+                        return val;
+                    } else {
+                        return JSON.stringify(val);
+                    }
+                }
+                return match;
+            });
+
+            try {
+                const result = Function(`"use strict"; return (${jsExpr})`)();
+                
+                if (result === false && expr.includes('=')) {
+                    const eqParts = expr.split('=');
+                    if (eqParts.length === 2) {
+                        const leftVal = evaluateExpression(eqParts[0], memory, constants, declaredVars);
+                        const rightVal = evaluateExpression(eqParts[1], memory, constants, declaredVars);
+                        if (typeof leftVal === 'string' && typeof rightVal === 'string') {
+                            return leftVal.trim().toUpperCase() === rightVal.trim().toUpperCase();
+                        }
+                    }
+                }
+                return result;
+            } catch (err) {
+                const low = expr.toLowerCase();
+                if (low in scope) return scope[low];
+                return expr;
+            }
+        }
+
+        async function executeCode() {
+            updateEditor();
+
+            executionAbortController++;
+            const currentExecId = executionAbortController;
+            waitingForInput = null;
+
+            const check = validateSyntax(codeInput.value);
+            if (check.status === 'error') {
+                clearTerminal();
+                printTerm('NO SE PUEDE EJECUTAR: Errores sintácticos presentes.', 'error');
+                check.errors.forEach(err => printTerm(`Línea ${err.line}: ${err.msg}`, 'error'));
+                btnRun.disabled = false;
+                isRunning = false;
+                return;
+            }
+
+            isRunning = true;
+            btnRun.disabled = false;
+            clearTerminal();
+            printTerm('Iniciando ejecución...', 'sys');
+
+            const source = codeInput.value;
+            const rawLines = source.split('\n');
+
+            const memory = {};
+            const constants = check.declaredConsts;
+            const declaredVars = check.declaredVars;
+
+            let inBody = false;
+            const bodyLines = [];
+
+            for (let i = 0; i < rawLines.length; i++) {
+                let l = rawLines[i].trim();
+                if (!l) continue;
+                if (l.startsWith('{') && l.endsWith('}')) continue;
+                l = l.replace(/\{[^}]*\}/g, '').trim();
+                const commIdx = l.indexOf('//');
+                if (commIdx !== -1) l = l.substring(0, commIdx).trim();
+                if (!l) continue;
+
+                const lower = l.toLowerCase();
+
+                if (lower === 'comienza') { inBody = true; continue; }
+                if (lower === 'termina') { inBody = false; break; }
+
+                if (inBody) {
+                    bodyLines.push({ text: l, lineNum: i + 1 });
+                }
+            }
+
+            try {
+                await executeBlock(bodyLines, 0, bodyLines.length, memory, constants, declaredVars, currentExecId);
+                if (currentExecId === executionAbortController) {
+                    printTerm('Ejecución finalizada con éxito.', 'success');
+                }
+            } catch (err) {
+                if (currentExecId === executionAbortController) {
+                    printTerm(`Error en ejecución: ${err.message}`, 'error');
+                }
+            } finally {
+                if (currentExecId === executionAbortController) {
+                    isRunning = false;
+                    btnRun.disabled = false;
+                    termInput.disabled = true;
+                    termInput.placeholder = "Esperando ejecución...";
+                }
+            }
+        }
+
+        async function executeBlock(lines, start, end, memory, constants, declaredVars, execId) {
+            let i = start;
+            let loopSafety = 0;
+
+            while (i < end) {
+                if (execId !== executionAbortController) return;
+
+                loopSafety++;
+                if (loopSafety > 100000) throw new Error("Posible bucle infinito detectado (>100,000 iteraciones).");
+
+                const lineObj = lines[i];
+                const rawLine = lineObj.text;
+                const lower = rawLine.toLowerCase();
+
+                if (lower.startsWith('escribir') || lower.startsWith('escribirln')) {
+                    const match = rawLine.match(/^(escribir|escribirln)\s*\(([\s\S]*)\)$/i);
+                    if (match) {
+                        const args = parseArguments(match[2]);
+                        let out = '';
+                        for (const arg of args) {
+                            const val = evaluateExpression(arg, memory, constants, declaredVars);
+                            out += (val !== undefined ? val : '') + ' ';
+                        }
+                        printTerm(out.trim());
+                    }
+                    i++;
+                    continue;
+                }
+
+                if (lower.startsWith('leer')) {
+                    const match = rawLine.match(/^leer\s*\((.*?)\)$/i);
+                    if (match) {
+                        const varNames = match[1].split(',').map(v => v.trim().toLowerCase());
+                        for (const varName of varNames) {
+                            if (varName) {
+                                const expectedType = declaredVars[varName] || 'real';
+                                const inputVal = await promptConsoleStrict(varName, expectedType, execId);
+                                memory[varName] = inputVal;
+                            }
+                        }
+                    }
+                    i++;
+                    continue;
+                }
+
+                if (lower === 'repetir') {
+                    let depth = 1;
+                    let j = i + 1;
+                    let conditionStr = '';
+
+                    while (j < end && depth > 0) {
+                        const curLow = lines[j].text.toLowerCase();
+                        if (curLow === 'repetir') depth++;
+                        if (curLow.startsWith('hasta ')) {
+                            depth--;
+                            if (depth === 0) {
+                                conditionStr = lines[j].text.substring(5).trim();
+                                break;
+                            }
+                        }
+                        j++;
+                    }
+
+                    const innerRepeatLines = lines.slice(i + 1, j);
+                    let repeatIter = 0;
+                    let condMet = false;
+
+                    do {
+                        if (execId !== executionAbortController) return;
+                        repeatIter++;
+                        if (repeatIter > 50000) throw new Error("Bucle 'repetir...hasta' infinito.");
+                        await executeBlock(innerRepeatLines, 0, innerRepeatLines.length, memory, constants, declaredVars, execId);
+                        condMet = Boolean(evaluateExpression(conditionStr, memory, constants, declaredVars));
+                    } while (!condMet);
+
+                    i = j + 1;
+                    continue;
+                }
+
+                if (lower.startsWith('opcion') || lower.startsWith('opción')) {
+                    const optMatch = rawLine.match(/^opci[oó]n\s+(.*?)\s+de$/i);
+                    const optVar = optMatch ? optMatch[1].trim() : '';
+                    const optVal = evaluateExpression(optVar, memory, constants, declaredVars);
+
+                    let depth = 1;
+                    let j = i + 1;
+                    const cases = [];
+
+                    while (j < end && depth > 0) {
+                        const curLow = lines[j].text.toLowerCase();
+                        if (curLow.startsWith('opcion') || curLow.startsWith('opción')) depth++;
+                        if (curLow === 'termina opcion' || curLow === 'termina opción') {
+                            depth--;
+                            if (depth === 0) break;
+                        }
+                        if (depth === 1 && /^\d+\s*:/.test(lines[j].text)) {
+                            cases.push({ lineIndex: j, text: lines[j].text });
+                        }
+                        j++;
+                    }
+
+                    for (const c of cases) {
+                        const caseParts = c.text.split(':');
+                        const caseVal = Number(caseParts[0].trim());
+                        if (caseVal === Number(optVal)) {
+                            const statement = caseParts.slice(1).join(':').trim();
+                            if (statement) {
+                                await executeBlock([{ text: statement, lineNum: lines[c.lineIndex].lineNum }], 0, 1, memory, constants, declaredVars, execId);
+                            }
+                            break;
+                        }
+                    }
+
+                    i = j + 1;
+                    continue;
+                }
+
+                if (lower.startsWith('para ')) {
+                    const matchPara = rawLine.match(/^para\s+([a-zA-Z0-9_]+)\s*(?:<-|:=)\s*(.*?)\s+hasta\s+(.*?)\s+hacer$/i);
+                    if (!matchPara) throw new Error(`Sintaxis inválida en "para" (Línea ${lineObj.lineNum})`);
+
+                    const ctrlVar = matchPara[1].trim().toLowerCase();
+                    const startVal = Number(evaluateExpression(matchPara[2], memory, constants, declaredVars));
+                    const endVal = Number(evaluateExpression(matchPara[3], memory, constants, declaredVars));
+
+                    let depth = 1;
+                    let j = i + 1;
+                    while (j < end && depth > 0) {
+                        const curLow = lines[j].text.toLowerCase();
+                        if (curLow.startsWith('para ')) depth++;
+                        if (curLow === 'fin para' || curLow === 'finpara') {
+                            depth--;
+                            if (depth === 0) break;
+                        }
+                        j++;
+                    }
+
+                    const innerParaLines = lines.slice(i + 1, j);
+
+                    for (let val = startVal; val <= endVal; val++) {
+                        if (execId !== executionAbortController) return;
+                        memory[ctrlVar] = val;
+                        await executeBlock(innerParaLines, 0, innerParaLines.length, memory, constants, declaredVars, execId);
+                    }
+
+                    i = j + 1;
+                    continue;
+                }
+
+                if (lower.startsWith('mientras ')) {
+                    const matchM = rawLine.match(/^mientras\s+(.*?)\s+hacer$/i);
+                    if (!matchM) throw new Error(`Sintaxis inválida en "mientras" (Línea ${lineObj.lineNum})`);
+
+                    const conditionStr = matchM[1].trim();
+
+                    let depth = 1;
+                    let j = i + 1;
+                    while (j < end && depth > 0) {
+                        const curLow = lines[j].text.toLowerCase();
+                        if (curLow.startsWith('mientras ')) depth++;
+                        if (curLow === 'fin mientras' || curLow === 'finmientras') {
+                            depth--;
+                            if (depth === 0) break;
+                        }
+                        j++;
+                    }
+
+                    const innerWhileLines = lines.slice(i + 1, j);
+                    let whileIter = 0;
+
+                    while (Boolean(evaluateExpression(conditionStr, memory, constants, declaredVars))) {
+                        if (execId !== executionAbortController) return;
+                        whileIter++;
+                        if (whileIter > 50000) throw new Error("Bucle 'mientras' infinito.");
+                        await executeBlock(innerWhileLines, 0, innerWhileLines.length, memory, constants, declaredVars, execId);
+                    }
+
+                    i = j + 1;
+                    continue;
+                }
+
+                if (lower.startsWith('si ')) {
+                    const matchSi = rawLine.match(/^si\s+(.*?)\s+entonces$/i);
+                    if (!matchSi) throw new Error(`Sintaxis inválida en "si" (Línea ${lineObj.lineNum})`);
+
+                    const condition = Boolean(evaluateExpression(matchSi[1].trim(), memory, constants, declaredVars));
+
+                    let depth = 1;
+                    let j = i + 1;
+                    let elseIndex = -1;
+
+                    while (j < end && depth > 0) {
+                        const curLow = lines[j].text.toLowerCase();
+                        if (curLow.startsWith('si ')) depth++;
+                        if (curLow === 'sino' && depth === 1) elseIndex = j;
+                        if (curLow === 'fin si' || curLow === 'finsi') {
+                            depth--;
+                            if (depth === 0) break;
+                        }
+                        j++;
+                    }
+
+                    if (condition) {
+                        const thenEnd = (elseIndex !== -1) ? elseIndex : j;
+                        await executeBlock(lines.slice(i + 1, thenEnd), 0, thenEnd - (i + 1), memory, constants, declaredVars, execId);
+                    } else if (elseIndex !== -1) {
+                        await executeBlock(lines.slice(elseIndex + 1, j), 0, j - (elseIndex + 1), memory, constants, declaredVars, execId);
+                    }
+
+                    i = j + 1;
+                    continue;
+                }
+
+                if (rawLine.includes('<-') || rawLine.includes(':=')) {
+                    const sep = rawLine.includes('<-') ? '<-' : ':=';
+                    const parts = rawLine.split(sep);
+                    const target = parts[0].trim().toLowerCase();
+                    const expr = parts[1] ? parts[1].trim() : '';
+                    if (!target) {
+                        throw new Error(`Falta variable destino antes de "<-" (Línea ${lineObj.lineNum})`);
+                    }
+                    const val = evaluateExpression(parts[1].trim(), memory, constants, declaredVars);
+
+                    const targetType = declaredVars[target];
+                    if (targetType === 'entero' && typeof val === 'number') {
+                        memory[target] = Math.trunc(val);
+                    } else if (targetType === 'entero' && typeof val !== 'number') {
+                        throw new Error(`Incompatibilidad de tipos: no se puede asignar un valor no numérico a la variable entera "${target}".`);
+                    } else if (targetType === 'real' && typeof val !== 'number') {
+                        throw new Error(`Incompatibilidad de tipos: la variable real "${target}" solo acepta números.`);
+                    } else {
+                        memory[target] = val;
+                    }
+
+                    i++;
+                    continue;
+                }
+
+                i++;
+            }
+        }
+
+        btnRun.addEventListener('click', executeCode);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F5' || (e.ctrlKey && e.key === 'Enter')) {
+                e.preventDefault();
+                executeCode();
+            }
+        });
+    </script>
+</body>
+</html>

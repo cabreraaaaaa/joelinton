@@ -67,7 +67,29 @@
 
         .brand-title-wrap {
             position: relative;
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-home {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-home:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
         }
 
         .brand-watermark {
@@ -476,6 +498,10 @@
     <header>
         <div class="header-container">
             <div class="brand-title-wrap">
+                <a href="/" class="btn-home" title="Volver a la página principal">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    Inicio
+                </a>
                 <span class="brand-watermark">56</span>
                 <h1 class="brand-title">JOELINTON</h1>
             </div>
@@ -562,6 +588,14 @@
 
         let currentValidation = { status: 'ok', errors: [], warnings: [], declaredVars: {}, declaredConsts: {} };
 
+        function extractReadVarNames(content) {
+            let str = content.trim();
+            if (str.startsWith('(') && str.endsWith(')')) {
+                str = str.substring(1, str.length - 1).trim();
+            }
+            return str.split(',').map(v => v.trim().toLowerCase()).filter(v => v !== '');
+        }
+
         function validateSyntax(code) {
             const lines = code.split('\n');
             const errors = [];
@@ -572,9 +606,12 @@
 
             let hasComienza = false;
             let hasTermina = false;
-            let hasVariablesSection = false;
             let section = '';
             let inBody = false;
+
+            const SECTION_ORDER = { 'constantes': 1, 'tipos': 2, 'variables': 3 };
+            let lastHeaderOrder = 0;
+            let seenSections = new Set();
 
             const blockStack = [];
 
@@ -608,12 +645,26 @@
                 const lower = line.toLowerCase();
 
                 if (lower.startsWith('programa')) { section = 'header'; return; }
-                if (lower === 'constantes') { section = 'constantes'; return; }
-                if (lower === 'variables') { 
-                    hasVariablesSection = true; 
-                    section = 'variables'; 
-                    return; 
+
+                if (lower === 'constantes' || lower === 'tipos' || lower === 'variables') {
+                    if (hasComienza) {
+                        errors.push({ line: lineNum, msg: `La sección "${lower}" debe declararse antes de "comienza".` });
+                        return;
+                    }
+                    if (seenSections.has(lower)) {
+                        errors.push({ line: lineNum, msg: `Sección "${lower}" duplicada.` });
+                        return;
+                    }
+                    seenSections.add(lower);
+                    const currentOrder = SECTION_ORDER[lower];
+                    if (currentOrder < lastHeaderOrder) {
+                        errors.push({ line: lineNum, msg: `Orden de encabezado inválido: las secciones deben respetar el orden [constantes -> tipos -> variables].` });
+                    }
+                    lastHeaderOrder = currentOrder;
+                    section = lower;
+                    return;
                 }
+
                 if (lower === 'comienza') {
                     if (hasComienza) errors.push({ line: lineNum, msg: 'Metapalabra "comienza" duplicada.' });
                     hasComienza = true;
@@ -621,6 +672,7 @@
                     section = 'body';
                     return;
                 }
+
                 if (lower === 'termina') {
                     if (!hasComienza) errors.push({ line: lineNum, msg: 'Falta "comienza" antes de "termina".' });
                     hasTermina = true;
@@ -641,6 +693,10 @@
                         const cName = parts[0].trim().toLowerCase();
                         if (cName) declaredConsts[cName] = parts[1].trim();
                     }
+                    return;
+                }
+
+                if (section === 'tipos') {
                     return;
                 }
 
@@ -677,16 +733,17 @@
                         return;
                     }
 
-                    if (lower.startsWith('leer')) {
-                        const match = line.match(/^leer\s*\((.*?)\)$/i);
-                        if (!match) {
-                            errors.push({ line: lineNum, msg: 'Falta paréntesis en leer: leer(variable)' });
+                    if (lower === 'leer' || lower.startsWith('leer ') || lower.startsWith('leer(')) {
+                        const content = line.substring(4).trim();
+                        if (!content) {
+                            errors.push({ line: lineNum, msg: 'Falta indicar la(s) variable(s) a leer: leer <variable>' });
                         } else {
-                            const vars = match[1].split(',').map(v => v.trim().toLowerCase());
+                            const vars = extractReadVarNames(content);
+                            if (vars.length === 0) {
+                                errors.push({ line: lineNum, msg: 'Variable vacía en instrucción leer.' });
+                            }
                             vars.forEach(varName => {
-                                if (!varName) {
-                                    errors.push({ line: lineNum, msg: 'Variable vacía dentro de leer(...)' });
-                                } else if (!(varName in declaredVars) && !loopControlVars.has(varName)) {
+                                if (!(varName in declaredVars) && !loopControlVars.has(varName)) {
                                     errors.push({ line: lineNum, msg: `Variable "${varName}" no declarada. Debe declararse en la sección "variables".` });
                                 }
                             });
@@ -926,7 +983,7 @@
             return tokens.join('');
         }
 
-        const ROOT_KEYWORDS = ['variables', 'constantes', 'programa', 'comienza', 'termina'];
+        const ROOT_KEYWORDS = ['variables', 'constantes', 'tipos', 'programa', 'comienza', 'termina'];
 
         function autoAlignRootKeywords() {
             const start = codeInput.selectionStart;
@@ -984,7 +1041,7 @@
 
                 const curTrimmed = curLine.trim().toLowerCase();
 
-                if (curTrimmed === 'comienza' || curTrimmed === 'variables' || curTrimmed === 'constantes' || 
+                if (curTrimmed === 'comienza' || curTrimmed === 'variables' || curTrimmed === 'constantes' || curTrimmed === 'tipos' ||
                     curTrimmed === 'repetir' || curTrimmed.endsWith('hacer') || curTrimmed.endsWith('entonces') || curTrimmed.endsWith('de')) {
                     indent = '    ';
                 }
@@ -1334,16 +1391,14 @@
                     continue;
                 }
 
-                if (lower.startsWith('leer')) {
-                    const match = rawLine.match(/^leer\s*\((.*?)\)$/i);
-                    if (match) {
-                        const varNames = match[1].split(',').map(v => v.trim().toLowerCase());
-                        for (const varName of varNames) {
-                            if (varName) {
-                                const expectedType = declaredVars[varName] || 'real';
-                                const inputVal = await promptConsoleStrict(varName, expectedType, execId);
-                                memory[varName] = inputVal;
-                            }
+                if (lower === 'leer' || lower.startsWith('leer ') || lower.startsWith('leer(')) {
+                    const content = rawLine.substring(4).trim();
+                    const varNames = extractReadVarNames(content);
+                    for (const varName of varNames) {
+                        if (varName) {
+                            const expectedType = declaredVars[varName] || 'real';
+                            const inputVal = await promptConsoleStrict(varName, expectedType, execId);
+                            memory[varName] = inputVal;
                         }
                     }
                     i++;

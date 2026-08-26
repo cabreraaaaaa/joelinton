@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /* Variables de paleta basadas en tu diseño */
         :root {
             --bg-primary: #19171b;      
             --accent-gold: #d29f22;     
@@ -33,6 +32,37 @@
             line-height: 1.4;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        /* --- BOTÓN FLOTANTE CONSOLA --- */
+        .nav-console-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(25, 23, 27, 0.85);
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-console-btn:hover {
+            background: var(--accent-gold);
+            color: #19171b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(210, 159, 34, 0.4);
         }
 
         @keyframes fadeInUp {
@@ -80,7 +110,10 @@
         .hero-content {
             position: relative;
             z-index: 2; 
-            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
         }
 
         .hero-content h1 { 
@@ -93,6 +126,32 @@
             -webkit-text-stroke: 1.5px rgba(210, 159, 34, 0.85); 
             animation: fadeInUp 0.8s ease-out both; 
             animation-delay: 0.2s; 
+        }
+
+        .hero-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+            border: 2px solid var(--accent-gold);
+            color: var(--text-light);
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease-out both;
+            animation-delay: 0.4s;
+        }
+
+        .hero-action-btn:hover {
+            background: var(--accent-gold);
+            color: #0e1114;
+            box-shadow: 0 0 20px rgba(210, 159, 34, 0.5);
+            transform: translateY(-2px);
         }
 
         /* --- SECCIÓN CLIMA HORIZONTAL --- */
@@ -167,6 +226,12 @@
 </head>
 <body>
 
+    <!-- Botón directo a consola -->
+    <a href="/consola" class="nav-console-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+        Consola Studio
+    </a>
+
     <section class="hero">
         <div class="hero-timer-vertical-wrap">
             <div id="clock-hours" class="clock-digit-row">00</div>
@@ -175,6 +240,10 @@
         </div>
         <div class="hero-content">
             <h1>Joelinton</h1>
+            <a href="/consola" class="hero-action-btn">
+                <span>Abrir Editor Pseudocódigo</span>
+                <span>→</span>
+            </a>
         </div>
     </section>
 
@@ -198,7 +267,6 @@
     </section>
 
     <script>
-        // 1. Reloj
         function updateTripleClock() {
             const now = new Date();
             document.getElementById('clock-hours').textContent = String(now.getHours()).padStart(2, '0');
@@ -208,12 +276,10 @@
         setInterval(updateTripleClock, 1000);
         updateTripleClock();
 
-        // 2. Fecha cabecera
         const ahora = new Date();
         document.getElementById('current-date').innerText = ahora.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
         document.getElementById('day-name').innerText = ahora.toLocaleDateString('es-ES', { weekday: 'long' });
 
-        // 3. API Clima (Corregida con Sensación Térmica y sin Nubosidad)
         const lat = -45.8656;
         const lon = -67.4944;
         const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,apparent_temperature,wind_speed_10m,wind_gusts_10m,wind_direction_10m&timezone=America/Argentina/Buenos_Aires`;
@@ -231,10 +297,7 @@
                 const wrapper = document.getElementById('timeline-wrapper');
                 wrapper.innerHTML = ''; 
 
-                // Tomamos la hora local exacta de tu sistema
                 const horaLocalActual = new Date().getHours();
-                
-                // Buscamos el índice que coincide con la hora local
                 let startIndex = hourly.time.findIndex(t => new Date(t).getHours() === horaLocalActual);
                 if (startIndex === -1) startIndex = 0;
 

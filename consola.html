@@ -686,13 +686,29 @@
                 }
 
                 if (section === 'constantes') {
-                    if (!line.includes(':') && !line.includes('=')) {
-                        errors.push({ line: lineNum, msg: 'Falta ":" o "=" para definir la constante.' });
-                    } else {
-                        const parts = line.split(/[:=]/);
-                        const cName = parts[0].trim().toLowerCase();
-                        if (cName) declaredConsts[cName] = parts[1].trim();
-                    }
+                        if (!line.includes(':') && !line.includes('=')) {
+                              errors.push({ line: lineNum, msg: 'Falta ":" o "=" para definir la constante.' });
+                        } else {
+                             const parts = line.split(/[:=]/);
+                             const cName = parts[0].trim().toLowerCase();
+                             let rawVal = parts.slice(1).join(':').trim();
+
+                        // Convertir automáticamente a su tipo primitivo (entero, real, booleano o texto)
+                            let parsedVal = rawVal;
+                            if (/^[+-]?\d+$/.test(rawVal)) {
+                            parsedVal = parseInt(rawVal, 10);
+                       } else if (/^[+-]?\d+(\.\d+)?$/.test(rawVal)) {
+                            parsedVal = parseFloat(rawVal);
+                       } else if (/^(verdadero|true)$/i.test(rawVal)) {
+                            parsedVal = true;
+                       } else if (/^(falso|false)$/i.test(rawVal)) {
+                            parsedVal = false;
+                       } else if ((rawVal.startsWith('"') && rawVal.endsWith('"')) || (rawVal.startsWith("'") && rawVal.endsWith("'"))) {
+                            parsedVal = rawVal.slice(1, -1);
+                       }
+
+                        if (cName) declaredConsts[cName] = parsedVal;
+                       }
                     return;
                 }
 

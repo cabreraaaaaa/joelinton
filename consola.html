@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Joelinton - UNPSJB Pseudocode Studio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -244,21 +244,20 @@
             padding: 0 2rem 1.2rem;
             width: 100%;
             flex: 1;
-            display: grid;
-            grid-template-columns: 1.15fr 1fr;
-            gap: 1.5rem;
+            display: flex;
             min-height: 0;
+            position: relative;
+            user-select: auto;
         }
 
-        @media (max-width: 1024px) {
-            body {
-                overflow-y: auto;
-                height: auto;
-            }
-            .workspace {
-                grid-template-columns: 1fr;
-                height: auto;
-            }
+        .workspace.resizing {
+            user-select: none;
+            cursor: col-resize;
+        }
+
+        .workspace.resizing iframe,
+        .workspace.resizing textarea {
+            pointer-events: none;
         }
 
         .card {
@@ -271,6 +270,66 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
             height: 100%;
             min-height: 0;
+        }
+
+        #editor-card {
+            flex: 1 1 0;
+            min-width: 250px;
+        }
+
+        #terminal-card {
+            flex: 0 0 420px;
+            min-width: 180px;
+            max-width: 80%;
+            transition: width 0.2s ease;
+        }
+
+        #terminal-card.collapsed {
+            flex: 0 0 46px !important;
+            min-width: 46px !important;
+        }
+
+        #terminal-card.collapsed .terminal,
+        #terminal-card.collapsed .terminal-input-bar {
+            display: none;
+        }
+
+        #terminal-card.collapsed .card-header {
+            padding: 0.65rem 0.5rem;
+            justify-content: center;
+        }
+
+        #terminal-card.collapsed .card-title span {
+            display: none;
+        }
+
+        .workspace-resizer {
+            width: 12px;
+            margin: 0 4px;
+            cursor: col-resize;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .workspace-resizer::after {
+            content: '';
+            width: 4px;
+            height: 48px;
+            border-radius: 4px;
+            background-color: var(--border-subtle);
+            transition: all 0.2s ease;
+        }
+
+        .workspace-resizer:hover::after,
+        .workspace-resizer.active::after {
+            background-color: var(--accent-gold);
+            height: 80px;
+            box-shadow: 0 0 10px var(--accent-gold);
         }
 
         .card-header {
@@ -291,6 +350,229 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+        }
+
+        .btn-card-action {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 3px 6px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-card-action:hover {
+            color: var(--accent-gold);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .drawer-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .projects-drawer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 320px;
+            height: 100vh;
+            background: #121519;
+            border-right: 1px solid var(--border-gold);
+            z-index: 101;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8);
+            transform: translateX(-100%);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .projects-drawer.active {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            background: linear-gradient(180deg, #1d0b10 0%, #15181c 100%);
+            padding: 1.1rem 1.2rem;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .drawer-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-transform: uppercase;
+        }
+
+        .btn-close-drawer {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+
+        .btn-close-drawer:hover {
+            color: #ef4444;
+        }
+
+        .drawer-body {
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .project-input {
+            width: 100%;
+            background: #090b0d;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: var(--font-main);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .project-input:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .projects-list-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .projects-list-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .projects-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            flex: 1;
+            max-height: none;
+            padding-right: 4px;
+        }
+
+        /* Barra de scroll personalizada y delgada para la lista de proyectos */
+        .projects-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .projects-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .projects-list::-webkit-scrollbar-thumb {
+            background: var(--border-subtle);
+            border-radius: 4px;
+        }
+
+        .projects-list::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-gold);
+        }
+
+        .project-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.65rem 0.85rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.15s ease, border-color 0.15s ease;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            user-select: none;
+            width: 100%;
+        }
+
+        .project-item:hover {
+            background: rgba(226, 168, 75, 0.1);
+            border-color: rgba(226, 168, 75, 0.5);
+            color: var(--text-primary);
+        }
+
+        .project-item:active {
+            background: rgba(226, 168, 75, 0.18);
+        }
+
+        .project-item.active {
+            background: rgba(226, 168, 75, 0.16);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        .project-name-txt {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+            pointer-events: none;
+        }
+
+        .btn-del-proj {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 2px 6px;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+            margin-left: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .btn-del-proj:hover {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.15);
         }
 
         .editor-wrapper {
@@ -491,6 +773,26 @@
             opacity: 0.4;
             cursor: not-allowed;
         }
+
+        @media (max-width: 1024px) {
+            body {
+                overflow-y: auto;
+                height: auto;
+            }
+            .workspace {
+                flex-direction: column;
+                height: auto;
+            }
+            .workspace-resizer {
+                display: none;
+            }
+            #terminal-card {
+                flex: none;
+                width: 100% !important;
+                height: 400px;
+                margin-top: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -522,15 +824,54 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
             Diagnóstico / Debug
         </button>
+
         <div class="divider"></div>
+
+        <button class="btn btn-secondary" id="btn-open-projects" title="Abrir panel lateral de proyectos">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            Mis Proyectos
+        </button>
+
+        <button class="btn btn-secondary" id="btn-new-project" title="Crear un nuevo proyecto limpio">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Nuevo Proyecto
+        </button>
+
+        <div class="divider"></div>
+
         <button class="btn btn-danger" id="btn-clear">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             Limpiar Salida
         </button>
     </div>
 
-    <main class="workspace">
-        <div class="card">
+    <div class="drawer-overlay" id="drawer-overlay"></div>
+    <aside class="projects-drawer" id="projects-drawer">
+        <div class="drawer-header">
+            <div class="drawer-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Gestor de Proyectos
+            </div>
+            <button class="btn-close-drawer" id="btn-close-drawer" title="Cerrar">&times;</button>
+        </div>
+        <div class="drawer-body">
+            <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                <input type="text" id="project-name-input" class="project-input" placeholder="Nombre del proyecto..." />
+                <button class="btn btn-primary" id="btn-save-project" style="justify-content: center; width: 100%;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                    Guardar Proyecto
+                </button>
+            </div>
+
+            <div class="projects-list-wrap">
+                <span class="projects-list-title">Proyectos Guardados</span>
+                <div class="projects-list" id="projects-list"></div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="workspace" id="workspace">
+        <div class="card" id="editor-card">
             <div class="card-header">
                 <div class="card-title">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
@@ -549,12 +890,17 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="workspace-resizer" id="workspace-resizer" title="Arrastra para cambiar tamaño de la consola"></div>
+
+        <div class="card" id="terminal-card">
             <div class="card-header">
                 <div class="card-title">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
-                    Consola Unificada
+                    <span>Consola Unificada</span>
                 </div>
+                <button class="btn-card-action" id="btn-toggle-terminal" title="Ocultar/Mostrar Consola">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="toggle-term-icon"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
             </div>
             <div class="terminal" id="terminal-out"></div>
             <div class="terminal-input-bar">
@@ -586,6 +932,191 @@
         const statusText = document.getElementById('status-text');
         const issuesBar = document.getElementById('issues-bar');
 
+        const workspace = document.getElementById('workspace');
+        const terminalCard = document.getElementById('terminal-card');
+        const workspaceResizer = document.getElementById('workspace-resizer');
+        const btnToggleTerminal = document.getElementById('btn-toggle-terminal');
+        const toggleTermIcon = document.getElementById('toggle-term-icon');
+
+        const btnOpenProjects = document.getElementById('btn-open-projects');
+        const btnNewProject = document.getElementById('btn-new-project');
+        const btnCloseDrawer = document.getElementById('btn-close-drawer');
+        const drawerOverlay = document.getElementById('drawer-overlay');
+        const projectsDrawer = document.getElementById('projects-drawer');
+        const projectNameInput = document.getElementById('project-name-input');
+        const btnSaveProject = document.getElementById('btn-save-project');
+        const projectsList = document.getElementById('projects-list');
+
+        let currentActiveProject = null;
+        let lastTerminalWidth = 420;
+
+        let isResizing = false;
+
+        workspaceResizer.addEventListener('mousedown', (e) => {
+            if (terminalCard.classList.contains('collapsed')) return;
+            isResizing = true;
+            workspace.classList.add('resizing');
+            workspaceResizer.classList.add('active');
+            document.body.style.cursor = 'col-resize';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            const containerRect = workspace.getBoundingClientRect();
+            let newTerminalWidth = containerRect.right - e.clientX;
+
+            const minWidth = 180;
+            const maxWidth = containerRect.width - 260;
+
+            if (newTerminalWidth < minWidth) newTerminalWidth = minWidth;
+            if (newTerminalWidth > maxWidth) newTerminalWidth = maxWidth;
+
+            terminalCard.style.flex = `0 0 ${newTerminalWidth}px`;
+            lastTerminalWidth = newTerminalWidth;
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isResizing) {
+                isResizing = false;
+                workspace.classList.remove('resizing');
+                workspaceResizer.classList.remove('active');
+                document.body.style.cursor = '';
+            }
+        });
+
+        btnToggleTerminal.addEventListener('click', () => {
+            const isCollapsed = terminalCard.classList.toggle('collapsed');
+            if (isCollapsed) {
+                workspaceResizer.style.display = 'none';
+                btnToggleTerminal.title = 'Mostrar Consola';
+                toggleTermIcon.innerHTML = '<polyline points="15 18 9 12 15 6"></polyline>';
+            } else {
+                workspaceResizer.style.display = 'flex';
+                terminalCard.style.flex = `0 0 ${lastTerminalWidth}px`;
+                btnToggleTerminal.title = 'Minimizar Consola';
+                toggleTermIcon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
+            }
+        });
+
+        function openDrawer() {
+            projectsDrawer.classList.add('active');
+            drawerOverlay.classList.add('active');
+        }
+
+        function closeDrawer() {
+            projectsDrawer.classList.remove('active');
+            drawerOverlay.classList.remove('active');
+        }
+
+        btnOpenProjects.addEventListener('click', openDrawer);
+        btnCloseDrawer.addEventListener('click', closeDrawer);
+        drawerOverlay.addEventListener('click', closeDrawer);
+
+        function getSavedProjects() {
+            try {
+                return JSON.parse(localStorage.getItem('joelinton_projects')) || {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveProjectsData(projects) {
+            localStorage.setItem('joelinton_projects', JSON.stringify(projects));
+        }
+
+        function renderProjectsList() {
+            const projects = getSavedProjects();
+            projectsList.innerHTML = '';
+            const names = Object.keys(projects);
+
+            if (names.length === 0) {
+                projectsList.innerHTML = '<div style="padding: 0.6rem; color: var(--text-muted); font-size: 0.8rem; text-align: center;">No tienes proyectos guardados.</div>';
+                return;
+            }
+
+            names.forEach(name => {
+                const item = document.createElement('div');
+                item.className = 'project-item' + (currentActiveProject === name ? ' active' : '');
+
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'project-name-txt';
+                nameSpan.innerText = name;
+                nameSpan.title = name;
+
+                item.addEventListener('click', () => {
+                    currentActiveProject = name;
+                    projectNameInput.value = name;
+                    codeInput.value = projects[name];
+                    updateEditor();
+                    renderProjectsList();
+                    closeDrawer();
+                    printTerm(`Proyecto cargado: "${name}".`, 'sys');
+                });
+
+                const delBtn = document.createElement('button');
+                delBtn.className = 'btn-del-proj';
+                delBtn.innerHTML = '&times;';
+                delBtn.title = 'Eliminar proyecto';
+                delBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (confirm(`¿Estás seguro de que deseas eliminar el proyecto "${name}"?`)) {
+                        delete projects[name];
+                        saveProjectsData(projects);
+                        if (currentActiveProject === name) currentActiveProject = null;
+                        renderProjectsList();
+                        printTerm(`Proyecto "${name}" eliminado.`, 'warn');
+                    }
+                });
+
+                item.appendChild(nameSpan);
+                item.appendChild(delBtn);
+                projectsList.appendChild(item);
+            });
+        }
+
+        btnSaveProject.addEventListener('click', () => {
+            const name = projectNameInput.value.trim();
+            if (!name) {
+                alert('Por favor, escribe un nombre para el proyecto.');
+                projectNameInput.focus();
+                return;
+            }
+
+            const projects = getSavedProjects();
+
+            if (projects.hasOwnProperty(name)) {
+                const confirmOverwrite = confirm(`El proyecto "${name}" ya existe. ¿Deseas sobreescribirlo?`);
+                if (!confirmOverwrite) return;
+            }
+
+            projects[name] = codeInput.value;
+            saveProjectsData(projects);
+            currentActiveProject = null;
+            renderProjectsList();
+
+            codeInput.value = '';
+            projectNameInput.value = '';
+            updateEditor();
+            closeDrawer();
+
+            printTerm(`Proyecto guardado con éxito: "${name}". Editor limpio.`, 'success');
+        });
+
+        btnNewProject.addEventListener('click', () => {
+            if (codeInput.value.trim() !== '') {
+                const confirmNew = confirm('¿Deseas iniciar un nuevo proyecto? Cualquier cambio sin guardar se perderá.');
+                if (!confirmNew) return;
+            }
+            currentActiveProject = null;
+            projectNameInput.value = '';
+            codeInput.value = '';
+            updateEditor();
+            clearTerminal();
+            printTerm('Nuevo proyecto creado. Editor limpio.', 'sys');
+        });
+
+        renderProjectsList();
+
         let currentValidation = { status: 'ok', errors: [], warnings: [], declaredVars: {}, declaredConsts: {} };
 
         function extractReadVarNames(content) {
@@ -615,7 +1146,6 @@
 
             const blockStack = [];
 
-            // Pre-escaneo para registrar variables de control de bucles 'para'
             lines.forEach((raw) => {
                 let l = raw.trim().replace(/\{[^}]*\}/g, '').trim();
                 const cIdx = l.indexOf('//');
@@ -686,29 +1216,29 @@
                 }
 
                 if (section === 'constantes') {
-                        if (!line.includes(':') && !line.includes('=')) {
-                              errors.push({ line: lineNum, msg: 'Falta ":" o "=" para definir la constante.' });
-                        } else {
-                             const parts = line.split(/[:=]/);
-                             const cName = parts[0].trim().toLowerCase();
-                             let rawVal = parts.slice(1).join(':').trim();
+                    if (!line.includes(':') && !line.includes('=')) {
+                        errors.push({ line: lineNum, msg: 'Falta ":" o "=" para definir la constante.' });
+                    } else {
+                        const sepMatch = line.match(/[:=]/);
+                        const sepIdx = line.indexOf(sepMatch[0]);
+                        const cName = line.substring(0, sepIdx).trim().toLowerCase();
+                        let rawVal = line.substring(sepIdx + 1).trim();
 
-                        // Convertir automáticamente a su tipo primitivo (entero, real, booleano o texto)
-                            let parsedVal = rawVal;
-                            if (/^[+-]?\d+$/.test(rawVal)) {
+                        let parsedVal = rawVal;
+                        if (/^[+-]?\d+$/.test(rawVal)) {
                             parsedVal = parseInt(rawVal, 10);
-                       } else if (/^[+-]?\d+(\.\d+)?$/.test(rawVal)) {
+                        } else if (/^[+-]?\d+\.\d+$/.test(rawVal)) {
                             parsedVal = parseFloat(rawVal);
-                       } else if (/^(verdadero|true)$/i.test(rawVal)) {
+                        } else if (/^(verdadero|true)$/i.test(rawVal)) {
                             parsedVal = true;
-                       } else if (/^(falso|false)$/i.test(rawVal)) {
+                        } else if (/^(falso|false)$/i.test(rawVal)) {
                             parsedVal = false;
-                       } else if ((rawVal.startsWith('"') && rawVal.endsWith('"')) || (rawVal.startsWith("'") && rawVal.endsWith("'"))) {
+                        } else if ((rawVal.startsWith('"') && rawVal.endsWith('"')) || (rawVal.startsWith("'") && rawVal.endsWith("'"))) {
                             parsedVal = rawVal.slice(1, -1);
-                       }
+                        }
 
                         if (cName) declaredConsts[cName] = parsedVal;
-                       }
+                    }
                     return;
                 }
 
@@ -721,14 +1251,23 @@
                         const parts = line.split(':');
                         const varNamePart = parts[0].trim();
                         const rawTipo = parts[1].trim().toLowerCase();
-                        
-                        let tipoDato = 'desconocido';
+
+                        if (!rawTipo) {
+                            errors.push({ line: lineNum, msg: `Falta definir el tipo de dato tras ":" para "${varNamePart}".` });
+                            return;
+                        }
+
+                        let tipoDato = null;
                         if (rawTipo.includes('entero')) tipoDato = 'entero';
-                        else if (rawTipo.includes('real')) tipoDato = 'real';
+                        else if (rawTipo.includes('real') || rawTipo.includes('flotante') || rawTipo.includes('float')) tipoDato = 'real';
                         else if (rawTipo.includes('cadena') || rawTipo.includes('texto') || rawTipo.includes('string')) tipoDato = 'cadena';
                         else if (rawTipo.includes('caracter')) tipoDato = 'caracter';
                         else if (rawTipo.includes('logico') || rawTipo.includes('booleano')) tipoDato = 'logico';
-                        else tipoDato = 'real';
+
+                        if (!tipoDato) {
+                            errors.push({ line: lineNum, msg: `Tipo de dato inválido o desconocido: "${parts[1].trim()}".` });
+                            return;
+                        }
 
                         const vList = varNamePart.split(',').map(v => v.trim().toLowerCase());
                         vList.forEach(v => {
@@ -1088,7 +1627,7 @@
                 prefix = '[SYS]';
                 contentClass = 'terminal-sys';
             } else if (type === 'error') {
-                prefix = '[ERR]';
+                prefix = '[ERROR]';
                 contentClass = 'terminal-error';
             } else if (type === 'warn') {
                 prefix = '[AVISO]';
@@ -1310,6 +1849,14 @@
 
         async function executeCode() {
             updateEditor();
+
+            if (terminalCard.classList.contains('collapsed')) {
+                terminalCard.classList.remove('collapsed');
+                workspaceResizer.style.display = 'flex';
+                terminalCard.style.flex = `0 0 ${lastTerminalWidth}px`;
+                btnToggleTerminal.title = 'Minimizar Consola';
+                toggleTermIcon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
+            }
 
             executionAbortController++;
             const currentExecId = executionAbortController;
@@ -1600,12 +2147,29 @@
                     const val = evaluateExpression(parts[1].trim(), memory, constants, declaredVars);
 
                     const targetType = declaredVars[target];
-                    if (targetType === 'entero' && typeof val === 'number') {
+
+                    if (targetType === 'entero') {
+                        if (typeof val !== 'number') {
+                            throw new Error(`Incompatibilidad de tipos: no se puede asignar un valor no numérico a la variable entera "${target}".`);
+                        }
                         memory[target] = Math.trunc(val);
-                    } else if (targetType === 'entero' && typeof val !== 'number') {
-                        throw new Error(`Incompatibilidad de tipos: no se puede asignar un valor no numérico a la variable entera "${target}".`);
-                    } else if (targetType === 'real' && typeof val !== 'number') {
-                        throw new Error(`Incompatibilidad de tipos: la variable real "${target}" solo acepta números.`);
+                    } else if (targetType === 'real') {
+                        if (typeof val !== 'number') {
+                            throw new Error(`Incompatibilidad de tipos: la variable real "${target}" solo acepta números.`);
+                        }
+                        memory[target] = val;
+                    } else if (targetType === 'logico') {
+                        if (typeof val !== 'boolean') {
+                            throw new Error(`Incompatibilidad de tipos: la variable lógica "${target}" solo acepta valores booleanos (verdadero/falso).`);
+                        }
+                        memory[target] = val;
+                    } else if (targetType === 'caracter') {
+                        if (typeof val !== 'string' || val.length !== 1) {
+                            throw new Error(`Incompatibilidad de tipos: la variable caracter "${target}" solo acepta exactamente 1 caracter.`);
+                        }
+                        memory[target] = val;
+                    } else if (targetType === 'cadena') {
+                        memory[target] = String(val);
                     } else {
                         memory[target] = val;
                     }

@@ -13,6 +13,7 @@
         :root {
             --bg-primary: #19171b;      
             --accent-gold: #d29f22;     
+            --accent-cyan: #38bdf8;
             --accent-burgundy: #5d0018; 
             --text-light: #ffffff;
             --secondary-dark: #252628;
@@ -34,15 +35,12 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* --- BOTÓN FLOTANTE CONSOLA --- */
-        .nav-console-btn {
+        /* --- BOTONES SUPERIORES FLOTANTES (SIMÉTRICOS IZQUIERDA Y DERECHA) --- */
+        .top-nav-btn {
             position: fixed;
             top: 20px;
-            right: 20px;
             z-index: 100;
             background: rgba(25, 23, 27, 0.85);
-            border: 1px solid var(--accent-gold);
-            color: var(--accent-gold);
             padding: 10px 20px;
             border-radius: 30px;
             font-size: 0.85rem;
@@ -58,7 +56,28 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         }
 
-        .nav-console-btn:hover {
+        /* Botón Izquierdo: Pseudoassembler */
+        .top-nav-left {
+            left: 20px;
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .top-nav-left:hover {
+            background: var(--accent-cyan);
+            color: #0b090e;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(56, 189, 248, 0.4);
+        }
+
+        /* Botón Derecho: Consola Studio */
+        .top-nav-right {
+            right: 20px;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .top-nav-right:hover {
             background: var(--accent-gold);
             color: #19171b;
             transform: translateY(-2px);
@@ -113,7 +132,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 24px;
         }
 
         .hero-content h1 { 
@@ -128,6 +147,13 @@
             animation-delay: 0.2s; 
         }
 
+        .hero-btn-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
         .hero-action-btn {
             display: inline-flex;
             align-items: center;
@@ -135,9 +161,9 @@
             background: transparent;
             border: 2px solid var(--accent-gold);
             color: var(--text-light);
-            padding: 12px 28px;
+            padding: 12px 26px;
             border-radius: 50px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -152,6 +178,17 @@
             color: #0e1114;
             box-shadow: 0 0 20px rgba(210, 159, 34, 0.5);
             transform: translateY(-2px);
+        }
+
+        .hero-action-btn.assembler {
+            border-color: var(--accent-cyan);
+            color: var(--text-light);
+        }
+
+        .hero-action-btn.assembler:hover {
+            background: var(--accent-cyan);
+            color: #09070c;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
         }
 
         /* --- SECCIÓN CLIMA HORIZONTAL --- */
@@ -217,6 +254,9 @@
             .clock-digit-row { font-size: 68vw; letter-spacing: -14px; } 
             .hero-content h1 { font-size: 16vw; }
             header { flex-direction: column; align-items: center; gap: 15px; text-align: center; }
+            .top-nav-btn { font-size: 0.72rem; padding: 8px 14px; }
+            .top-nav-left { left: 10px; top: 12px; }
+            .top-nav-right { right: 10px; top: 12px; }
         }
         @media (min-width: 768px) {
             .clock-digit-row { font-size: 26rem; letter-spacing: -24px; } 
@@ -225,8 +265,15 @@
     </style>
 </head>
 <body>
-    <!-- Botón directo a consola -->
-    <a href="/consola" class="nav-console-btn">
+
+    <!-- Botón Superior Izquierdo: Pseudoassembler -->
+    <a href="PSEUDOASSEMBLER.html" class="top-nav-btn top-nav-left">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+        Pseudoassembler
+    </a>
+
+    <!-- Botón Superior Derecho: Consola Studio -->
+    <a href="/consola" class="top-nav-btn top-nav-right">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
         Consola Studio
     </a>
@@ -239,10 +286,16 @@
         </div>
         <div class="hero-content">
             <h1>Joelinton</h1>
-            <a href="/consola" class="hero-action-btn">
-                <span>Abrir Editor Pseudocódigo</span>
-                <span>→</span>
-            </a>
+            <div class="hero-btn-group">
+                <a href="/consola" class="hero-action-btn">
+                    <span>Editor Pseudocódigo</span>
+                    <span>→</span>
+                </a>
+                <a href="PSEUDOASSEMBLER.html" class="hero-action-btn assembler">
+                    <span>Editor Pseudoassembler</span>
+                    <span>→</span>
+                </a>
+            </div>
         </div>
     </section>
 

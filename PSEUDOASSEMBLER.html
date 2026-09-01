@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JOELINTON // 8085 Pseudoassembler Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=JetBrains+Mono:wght@400;600;700&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #09070c;
+      --bg-card: rgba(16, 13, 20, 0.94);
+      --jersey-blue: #1c92d2;
+      --jersey-cyan: #38bdf8;
+      --jersey-gold: #eab308;
+      --jersey-red: #ef4444;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: rgba(234, 179, 8, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(28, 146, 210, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 90% 85%, rgba(239, 68, 68, 0.14) 0%, transparent 45%),
+        linear-gradient(145deg, #070509 0%, #120c15 50%, #060b13 100%);
+      color: var(--text-main);
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-jersey-stripe {
+      height: 4px;
+      width: 100%;
+      flex-shrink: 0;
+      background: linear-gradient(90deg, 
+        var(--jersey-blue) 0%, 
+        var(--jersey-cyan) 25%, 
+        var(--jersey-gold) 50%, 
+        var(--jersey-red) 75%, 
+        var(--jersey-blue) 100%);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 2rem;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(9, 7, 12, 0.88);
+      backdrop-filter: blur(12px);
+      flex-shrink: 0;
+      gap: 1rem;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--jersey-gold);
+      text-transform: uppercase;
+    }
+
+    .badge-tag {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: rgba(28, 146, 210, 0.2);
+      border: 1px solid var(--jersey-cyan);
+      color: var(--jersey-cyan);
+      letter-spacing: 1px;
+    }
+
+    .top-status-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.45);
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(234, 179, 8, 0.25);
+      flex-wrap: wrap;
+    }
+
+    .status-chip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.75rem;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .status-chip .chip-lbl {
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.7rem;
+    }
+
+    .status-chip .chip-val {
+      font-weight: bold;
+      color: var(--jersey-cyan);
+      font-family: 'Chakra Petch', sans-serif;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    .status-chip.acc {
+      border-color: rgba(234, 179, 8, 0.5);
+      background: rgba(234, 179, 8, 0.1);
+    }
+    .status-chip.acc .chip-lbl { color: var(--jersey-gold); }
+    .status-chip.acc .chip-val { color: #fff; font-size: 0.85rem; }
+
+    .status-chip.flag-z {
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .status-chip.flag-s {
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+    .status-chip.flag-s .chip-lbl { color: var(--jersey-red); }
+
+    .header-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    /* CONTROL INTERACTIVO DE DELAY */
+    .delay-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.45);
+      padding: 4px 10px;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 20px;
+    }
+
+    .delay-label {
+      font-size: 0.72rem;
+      color: var(--jersey-cyan);
+      font-weight: 700;
+      white-space: nowrap;
+      min-width: 60px;
+    }
+
+    .delay-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 75px;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.2);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .delay-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--jersey-cyan);
+      cursor: pointer;
+      box-shadow: 0 0 6px var(--jersey-cyan);
+    }
+
+    .btn {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 0.5rem 1.1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-gold {
+      background: transparent;
+      border: 1.5px solid var(--jersey-gold);
+      color: var(--jersey-gold);
+      box-shadow: 0 0 10px rgba(234, 179, 8, 0.15);
+    }
+
+    .btn-gold:hover:not(:disabled) {
+      background: var(--jersey-gold);
+      color: #000;
+      box-shadow: 0 0 18px rgba(234, 179, 8, 0.4);
+    }
+
+    .btn-red {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1.5px solid var(--jersey-red);
+      color: var(--jersey-red);
+    }
+
+    .btn-red:hover:not(:disabled) {
+      background: var(--jersey-red);
+      color: #fff;
+    }
+
+    .btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    main {
+      flex: 1;
+      padding: 1rem 2rem;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 1.2rem;
+      max-width: 1800px;
+      margin: 0 auto;
+      width: 100%;
+      height: calc(100vh - 105px);
+      min-height: 0;
+    }
+
+    .panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+      height: 100%;
+      min-height: 0;
+    }
+
+    .panel-header {
+      padding: 0.65rem 1rem;
+      background: rgba(18, 14, 22, 0.95);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .panel-title {
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 1.5px;
+      color: var(--jersey-gold);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .table-headings {
+      display: grid;
+      grid-template-columns: 45px 150px 1fr;
+      padding: 6px 12px;
+      background: rgba(0,0,0,0.5);
+      border-bottom: 1px solid rgba(234, 179, 8, 0.15);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--jersey-cyan);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .editor-wrapper {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* FILAS ESTRUCTURADAS DEL EDITOR */
+    .editor-rows-container {
+      flex: 1;
+      overflow-y: auto;
+      background: rgba(7, 5, 9, 0.75);
+      padding: 4px 0;
+    }
+
+    .editor-row {
+      display: grid;
+      grid-template-columns: 45px 150px 1fr;
+      align-items: center;
+      min-height: 28px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+      transition: background 0.15s ease;
+    }
+
+    .editor-row:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .editor-row.active-line {
+      background: rgba(234, 179, 8, 0.12) !important;
+      border-left: 3px solid var(--jersey-gold);
+    }
+
+    .row-num {
+      text-align: right;
+      padding-right: 8px;
+      color: #4b5563;
+      font-size: 0.85rem;
+      user-select: none;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .editor-row.active-line .row-num {
+      color: var(--jersey-gold);
+      font-weight: bold;
+    }
+
+    .row-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      padding: 4px 10px;
+      width: 100%;
+      height: 100%;
+    }
+
+    .row-label-input {
+      color: var(--jersey-gold);
+      border-right: 1px dashed rgba(234, 179, 8, 0.2);
+    }
+
+    .row-inst-input {
+      color: #f1f5f9;
+    }
+
+    .row-input:focus {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .editor-bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 12px;
+      background: rgba(0,0,0,0.4);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .quick-bar {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .quick-btn {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-muted);
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .quick-btn:hover {
+      border-color: var(--jersey-gold);
+      color: var(--jersey-gold);
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-row-action {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--jersey-cyan);
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .btn-row-action:hover {
+      background: var(--jersey-cyan);
+      color: #000;
+    }
+
+    /* CONSOLA DE EJECUCIÓN */
+    .console-terminal {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      background: rgba(4, 3, 6, 0.94);
+      min-height: 0;
+      position: relative;
+    }
+
+    .terminal-body {
+      flex: 1;
+      padding: 12px 16px;
+      overflow-y: auto;
+      font-size: 0.85rem;
+      line-height: 1.45;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 0;
+    }
+
+    .terminal-body::-webkit-scrollbar,
+    .editor-rows-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    .terminal-body::-webkit-scrollbar-track,
+    .editor-rows-container::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.3);
+    }
+    .terminal-body::-webkit-scrollbar-thumb,
+    .editor-rows-container::-webkit-scrollbar-thumb {
+      background: rgba(234, 179, 8, 0.3);
+      border-radius: 4px;
+    }
+    .terminal-body::-webkit-scrollbar-thumb:hover,
+    .editor-rows-container::-webkit-scrollbar-thumb:hover {
+      background: var(--jersey-cyan);
+    }
+
+    .term-line {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 3px 6px;
+      border-radius: 3px;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .term-line.executing {
+      color: var(--jersey-cyan);
+      border-left: 3px solid var(--jersey-cyan);
+      background: rgba(56, 189, 248, 0.06);
+    }
+
+    .term-line.prompt {
+      color: var(--jersey-gold);
+      font-weight: 700;
+      border-left: 3px solid var(--jersey-gold);
+      background: rgba(234, 179, 8, 0.08);
+    }
+
+    .term-line.output {
+      color: #4ade80;
+      font-weight: 700;
+      border-left: 3px solid #4ade80;
+      background: rgba(74, 222, 128, 0.08);
+    }
+
+    .term-line.halt {
+      color: var(--jersey-red);
+      font-weight: 700;
+      border-left: 3px solid var(--jersey-red);
+    }
+
+    .term-line.info {
+      color: var(--text-muted);
+    }
+
+    .interactive-input-row {
+      display: none;
+      padding: 8px 14px;
+      background: rgba(18, 14, 22, 0.98);
+      border-top: 1px solid var(--jersey-gold);
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .interactive-input-row.active {
+      display: flex;
+    }
+
+    .prompt-label {
+      color: var(--jersey-gold);
+      font-weight: 700;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    .term-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.65);
+      border: 1px solid var(--jersey-cyan);
+      border-radius: 4px;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 10px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .term-input:focus {
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+    }
+
+    .btn-send {
+      background: var(--jersey-cyan);
+      color: #000;
+      border: none;
+      padding: 6px 14px;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.75rem;
+    }
+
+    .btn-send:hover {
+      background: #7dd3fc;
+    }
+
+    footer {
+      padding: 0.4rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.7rem;
+      color: #64748b;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-jersey-stripe"></div>
+
+  <header>
+    <div class="brand-group">
+      <h1 class="brand-title">JOELINTON</h1>
+      <span class="badge-tag">8085 STUDIO</span>
+    </div>
+
+    <!-- BARRA SUPERIOR DE REGISTROS Y FLAGS -->
+    <div class="top-status-bar">
+      <div class="status-chip acc" title="Acumulador">
+        <span class="chip-lbl">ACC (A):</span>
+        <span class="chip-val" id="chip-a">0</span>
+      </div>
+      <div class="status-chip" title="Registro B">
+        <span class="chip-lbl">B:</span>
+        <span class="chip-val" id="chip-b">0</span>
+      </div>
+      <div class="status-chip" title="Registro C">
+        <span class="chip-lbl">C:</span>
+        <span class="chip-val" id="chip-c">0</span>
+      </div>
+      <div class="status-chip" title="Registro D">
+        <span class="chip-lbl">D:</span>
+        <span class="chip-val" id="chip-d">0</span>
+      </div>
+      <div class="status-chip" title="Registro E">
+        <span class="chip-lbl">E:</span>
+        <span class="chip-val" id="chip-e">0</span>
+      </div>
+      <div class="status-chip" title="Registro H">
+        <span class="chip-lbl">H:</span>
+        <span class="chip-val" id="chip-h">0</span>
+      </div>
+      <div class="status-chip" title="Registro L">
+        <span class="chip-lbl">L:</span>
+        <span class="chip-val" id="chip-l">0</span>
+      </div>
+      <div class="status-chip flag-z" title="Zero Flag">
+        <span class="chip-lbl">Z:</span>
+        <span class="chip-val" id="chip-z">1</span>
+      </div>
+      <div class="status-chip flag-s" title="Sign Flag">
+        <span class="chip-lbl">S:</span>
+        <span class="chip-val" id="chip-s">0</span>
+      </div>
+    </div>
+
+    <div class="header-controls">
+      <!-- CONTROL INTERACTIVO DEL SLIDER (1s a 5s) -->
+      <div class="delay-control">
+        <span class="delay-label" id="delay-display">⏱ 2.0s</span>
+        <input type="range" class="delay-slider" id="delay-slider" min="1.0" max="5.0" step="0.5" value="2.0">
+      </div>
+
+      <button class="btn btn-gold" id="btn-run">▶ EJECUTAR</button>
+      <button class="btn btn-red" id="btn-reset">■ RESET</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- PANEL IZQUIERDO: PROGRAMA FUENTE -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span>&gt;_</span> PROGRAMA FUENTE
+        </div>
+        <span style="font-size:0.75rem; color: var(--text-muted);">UNPSJB - Elementos de Informática</span>
+      </div>
+
+      <div class="table-headings">
+        <div>#</div>
+        <div>ETIQUETA</div>
+        <div>MNEMÓNICO / INSTRUCCIÓN</div>
+      </div>
+
+      <div class="editor-wrapper">
+        <div class="editor-rows-container" id="editor-container">
+          <!-- Las filas se renderizan dinámicamente -->
+        </div>
+
+        <div class="editor-bottom-bar">
+          <div class="quick-bar">
+            <span style="color: var(--text-muted); font-size: 0.7rem;">Ejemplos:</span>
+            <button class="quick-btn" onclick="loadExample(1)">1. Sumar 2 Números</button>
+            <button class="quick-btn" onclick="loadExample(2)">2. Restar 10 (0Ah)</button>
+            <button class="quick-btn" onclick="loadExample(4)">4. Iterar hasta 0</button>
+            <button class="quick-btn" onclick="loadExample(6)">6. Sumatoria 'total'</button>
+            <button class="quick-btn" onclick="loadExample(7)">7. Contador B</button>
+          </div>
+          <div class="row-actions">
+            <button class="btn-row-action" onclick="addNewRow()">+ Fila</button>
+            <button class="btn-row-action" onclick="removeLastRow()">- Fila</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL DERECHO: CONSOLA DE EJECUCIÓN -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span>🖥</span> CONSOLA DE EJECUCIÓN
+        </div>
+        <span id="exec-status" class="badge-tag" style="border-color: var(--jersey-cyan); color: var(--jersey-cyan);">LISTO</span>
+      </div>
+
+      <div class="console-terminal">
+        <div class="terminal-body" id="term-logs">
+          <div class="term-line info">&gt; Consola lista. Haz clic en cualquier casilla para editar directamente.</div>
+        </div>
+
+        <div class="interactive-input-row" id="input-container">
+          <span class="prompt-label" id="prompt-label">&gt; Ingrese valor:</span>
+          <input type="text" class="term-input" id="user-input" placeholder="Ej: 5, -2, 0Ah..." autocomplete="off">
+          <button class="btn-send" id="btn-submit-val">ENVIAR ↵</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div>JOELINTON PSEUDOASSEMBLER STUDIO // SET 8085</div>
+    <div>SOPORTE: IN, OUT, LDA, STA, MOV, MVI, ADD, SUB, ADI, SUI, JMP, JZ, JM, HLT</div>
+  </footer>
+
+  <script>
+    // DATOS DE LAS LÍNEAS DEL EDITOR
+    let programRows = [];
+
+    // ESTADO CPU
+    let CPU = {
+      A: 0, B: 0, C: 0, D: 0, E: 0, H: 0, L: 0,
+      PC: 0, Z: 1, S: 0, isHalted: false,
+      memory: {}, labels: {}, instructions: []
+    };
+
+    let isRunning = false;
+    let executionTimer = null;
+    let pendingInputResolve = null;
+    let stepDelay = 2000; // milisegundos
+
+    // Elementos DOM
+    const editorContainer = document.getElementById('editor-container');
+    const termLogs = document.getElementById('term-logs');
+    const execStatus = document.getElementById('exec-status');
+
+    // Chips
+    const chipA = document.getElementById('chip-a');
+    const chipB = document.getElementById('chip-b');
+    const chipC = document.getElementById('chip-c');
+    const chipD = document.getElementById('chip-d');
+    const chipE = document.getElementById('chip-e');
+    const chipH = document.getElementById('chip-h');
+    const chipL = document.getElementById('chip-l');
+    const chipZ = document.getElementById('chip-z');
+    const chipS = document.getElementById('chip-s');
+
+    // Input interactivo
+    const inputContainer = document.getElementById('input-container');
+    const userInput = document.getElementById('user-input');
+    const btnSubmitVal = document.getElementById('btn-submit-val');
+    const promptLabel = document.getElementById('prompt-label');
+
+    // Control Delay
+    const delaySlider = document.getElementById('delay-slider');
+    const delayDisplay = document.getElementById('delay-display');
+
+    delaySlider.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      stepDelay = val * 1000;
+      delayDisplay.innerText = `⏱ ${val.toFixed(1)}s`;
+    });
+
+    const btnRun = document.getElementById('btn-run');
+    const btnReset = document.getElementById('btn-reset');
+
+    // RENDERIZADOR DE FILAS DEL EDITOR (Cada fila es un input individual)
+    function renderEditor() {
+      editorContainer.innerHTML = '';
+      programRows.forEach((row, index) => {
+        const rowEl = document.createElement('div');
+        rowEl.className = 'editor-row';
+        rowEl.id = `row-index-${index}`;
+
+        rowEl.innerHTML = `
+          <div class="row-num">${index + 1}</div>
+          <input type="text" class="row-input row-label-input" id="label-input-${index}" value="${row.label || ''}" placeholder="etiqueta" spellcheck="false">
+          <input type="text" class="row-input row-inst-input" id="inst-input-${index}" value="${row.inst || ''}" placeholder="instrucción" spellcheck="false">
+        `;
+
+        // Eventos para actualizar los datos en memoria
+        const labelInp = rowEl.querySelector('.row-label-input');
+        const instInp = rowEl.querySelector('.row-inst-input');
+
+        labelInp.addEventListener('input', (e) => {
+          programRows[index].label = e.target.value;
+        });
+
+        instInp.addEventListener('input', (e) => {
+          programRows[index].inst = e.target.value;
+        });
+
+        // Navegación intuitiva con teclado (Flechas Arriba/Abajo y Enter)
+        labelInp.addEventListener('keydown', (e) => handleKeyNav(e, index, 'label'));
+        instInp.addEventListener('keydown', (e) => handleKeyNav(e, index, 'inst'));
+
+        editorContainer.appendChild(rowEl);
+      });
+    }
+
+    function handleKeyNav(e, index, type) {
+      if (e.key === 'ArrowDown' || e.key === 'Enter') {
+        e.preventDefault();
+        if (index + 1 < programRows.length) {
+          const next = document.getElementById(`${type}-input-${index + 1}`);
+          if (next) next.focus();
+        } else if (e.key === 'Enter') {
+          addNewRow();
+          setTimeout(() => {
+            const next = document.getElementById(`${type}-input-${index + 1}`);
+            if (next) next.focus();
+          }, 50);
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (index - 1 >= 0) {
+          const prev = document.getElementById(`${type}-input-${index - 1}`);
+          if (prev) prev.focus();
+        }
+      } else if (e.key === 'ArrowRight' && type === 'label' && e.target.selectionStart === e.target.value.length) {
+        const instTarget = document.getElementById(`inst-input-${index}`);
+        if (instTarget) instTarget.focus();
+      } else if (e.key === 'ArrowLeft' && type === 'inst' && e.target.selectionStart === 0) {
+        const labelTarget = document.getElementById(`label-input-${index}`);
+        if (labelTarget) labelTarget.focus();
+      }
+    }
+
+    function addNewRow() {
+      programRows.push({ label: '', inst: '' });
+      renderEditor();
+    }
+
+    function removeLastRow() {
+      if (programRows.length > 1) {
+        programRows.pop();
+        renderEditor();
+      }
+    }
+
+    function highlightRow(index) {
+      document.querySelectorAll('.editor-row').forEach(r => r.classList.remove('active-line'));
+      const active = document.getElementById(`row-index-${index}`);
+      if (active) {
+        active.classList.add('active-line');
+        active.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function logTerm(msg, type = '') {
+      const div = document.createElement('div');
+      div.className = `term-line ${type}`;
+      div.innerHTML = msg;
+      termLogs.appendChild(div);
+      termLogs.scrollTop = termLogs.scrollHeight;
+    }
+
+    function parseVal(valStr) {
+      if (!valStr) return 0;
+      valStr = String(valStr).trim();
+      if (valStr.toLowerCase().endsWith('h')) {
+        return parseInt(valStr.slice(0, -1), 16);
+      }
+      return parseInt(valStr, 10) || 0;
+    }
+
+    function updateCPUHeader() {
+      CPU.Z = CPU.A === 0 ? 1 : 0;
+      CPU.S = CPU.A < 0 ? 1 : 0;
+
+      chipA.innerText = CPU.A;
+      chipB.innerText = CPU.B;
+      chipC.innerText = CPU.C;
+      chipD.innerText = CPU.D;
+      chipE.innerText = CPU.E;
+      chipH.innerText = CPU.H;
+      chipL.innerText = CPU.L;
+      chipZ.innerText = CPU.Z;
+      chipS.innerText = CPU.S;
+    }
+
+    const sleep = (ms) => new Promise(resolve => {
+      executionTimer = setTimeout(resolve, ms);
+    });
+
+    function promptUserValue(promptText) {
+      return new Promise((resolve) => {
+        promptLabel.innerText = `> ${promptText}:`;
+        inputContainer.classList.add('active');
+        userInput.value = '';
+        userInput.focus();
+
+        pendingInputResolve = resolve;
+      });
+    }
+
+    function submitInputValue() {
+      if (!pendingInputResolve) return;
+      const val = userInput.value.trim();
+      const num = parseVal(val);
+      
+      inputContainer.classList.remove('active');
+      logTerm(`&gt; Valor ingresado: <span style="color:var(--jersey-cyan); font-weight:bold;">${num}</span>`, 'info');
+      
+      const res = pendingInputResolve;
+      pendingInputResolve = null;
+      res(num);
+    }
+
+    btnSubmitVal.addEventListener('click', submitInputValue);
+    userInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') submitInputValue();
+    });
+
+    function prepareProgram() {
+      CPU = {
+        A: 0, B: 0, C: 0, D: 0, E: 0, H: 0, L: 0,
+        PC: 0, Z: 1, S: 0, isHalted: false,
+        memory: {}, labels: {}, instructions: []
+      };
+
+      programRows.forEach((row, i) => {
+        const lab = (row.label || '').trim().toLowerCase();
+        const inst = (row.inst || '').trim();
+
+        if (lab) {
+          CPU.labels[lab] = i;
+        }
+        CPU.instructions.push(inst);
+      });
+
+      updateCPUHeader();
+    }
+
+    function getReg(r) {
+      const reg = r.toUpperCase();
+      if (CPU.hasOwnProperty(reg)) return CPU[reg];
+      return 0;
+    }
+
+    function setReg(r, val) {
+      const reg = r.toUpperCase();
+      if (CPU.hasOwnProperty(reg)) {
+        CPU[reg] = val;
+      }
+    }
+
+    async function runProgram() {
+      if (isRunning) return;
+      isRunning = true;
+      btnRun.disabled = true;
+      execStatus.innerText = "EJECUTANDO...";
+      execStatus.style.borderColor = "var(--jersey-gold)";
+      execStatus.style.color = "var(--jersey-gold)";
+      
+      termLogs.innerHTML = "";
+      logTerm(`&gt; Iniciando ejecución (delay: ${(stepDelay/1000).toFixed(1)}s)...`, "info");
+
+      prepareProgram();
+
+      while (isRunning && !CPU.isHalted && CPU.PC < CPU.instructions.length) {
+        const currentLineNum = CPU.PC + 1;
+        const lineText = CPU.instructions[CPU.PC];
+
+        highlightRow(CPU.PC);
+
+        if (!lineText || lineText.startsWith(';')) {
+          CPU.PC++;
+          continue;
+        }
+
+        logTerm(`[Línea ${currentLineNum}] Ejecutando: <strong>${lineText}</strong>`, "executing");
+
+        const clean = lineText.replace(/,/g, ' ').replace(/\s+/g, ' ').trim();
+        const tokens = clean.split(' ');
+        const op = tokens[0].toUpperCase();
+        const arg1 = tokens[1];
+        const arg2 = tokens[2];
+
+        let nextPC = CPU.PC + 1;
+
+        switch (op) {
+          case 'IN': {
+            const port = arg1 ? arg1.toUpperCase() : 'PE';
+            logTerm(`[Línea ${currentLineNum}] Esperando dato por puerto ${port}...`, "prompt");
+            const inputVal = await promptUserValue(`Ingrese dato para ${port}`);
+            CPU.A = inputVal;
+            updateCPUHeader();
+            logTerm(`→ Acumulador (A) = ${CPU.A}`);
+            break;
+          }
+
+          case 'OUT': {
+            const port = arg1 ? arg1.toUpperCase() : 'PS';
+            logTerm(`[SALIDA ${port}] ➔ Resultado: <strong>${CPU.A}</strong>`, "output");
+            break;
+          }
+
+          case 'LDA': {
+            const val = CPU.memory[arg1] !== undefined ? CPU.memory[arg1] : 0;
+            CPU.A = val;
+            updateCPUHeader();
+            logTerm(`→ A = [${arg1}] (${val})`);
+            break;
+          }
+
+          case 'STA': {
+            CPU.memory[arg1] = CPU.A;
+            logTerm(`→ Variable '${arg1}' = ${CPU.A}`);
+            break;
+          }
+
+          case 'MVI': {
+            const reg = arg1.toUpperCase();
+            const val = parseVal(arg2);
+            setReg(reg, val);
+            updateCPUHeader();
+            logTerm(`→ Registro ${reg} = ${val}`);
+            break;
+          }
+
+          case 'MOV': {
+            const dest = arg1.toUpperCase();
+            const src = arg2.toUpperCase();
+            const val = getReg(src);
+            setReg(dest, val);
+            updateCPUHeader();
+            logTerm(`→ MOV ${dest} ← ${src} (${val})`);
+            break;
+          }
+
+          case 'ADD': {
+            let val = 0;
+            const target = arg1.toUpperCase();
+            if (['A', 'B', 'C', 'D', 'E', 'H', 'L'].includes(target)) {
+              val = getReg(target);
+            } else {
+              val = CPU.memory[arg1] !== undefined ? CPU.memory[arg1] : 0;
+            }
+            CPU.A += val;
+            updateCPUHeader();
+            logTerm(`→ Suma realizada: A = ${CPU.A}`);
+            break;
+          }
+
+          case 'SUB': {
+            let val = 0;
+            const target = arg1.toUpperCase();
+            if (['A', 'B', 'C', 'D', 'E', 'H', 'L'].includes(target)) {
+              val = getReg(target);
+            } else {
+              val = CPU.memory[arg1] !== undefined ? CPU.memory[arg1] : 0;
+            }
+            CPU.A -= val;
+            updateCPUHeader();
+            logTerm(`→ Resta realizada: A = ${CPU.A}`);
+            break;
+          }
+
+          case 'ADI': {
+            const val = parseVal(arg1);
+            CPU.A += val;
+            updateCPUHeader();
+            logTerm(`→ ADI ${val}: A = ${CPU.A}`);
+            break;
+          }
+
+          case 'SUI': {
+            const val = parseVal(arg1);
+            CPU.A -= val;
+            updateCPUHeader();
+            logTerm(`→ SUI ${val}: A = ${CPU.A}`);
+            break;
+          }
+
+          case 'JMP': {
+            const target = (arg1 || '').toLowerCase();
+            if (CPU.labels[target] !== undefined) {
+              nextPC = CPU.labels[target];
+              logTerm(`→ JMP: Salto a '${arg1}' (Línea ${nextPC + 1})`, "info");
+            } else {
+              logTerm(`Error: Etiqueta '${arg1}' no existe`, "halt");
+            }
+            break;
+          }
+
+          case 'JZ': {
+            const target = (arg1 || '').toLowerCase();
+            if (CPU.Z === 1) {
+              if (CPU.labels[target] !== undefined) {
+                nextPC = CPU.labels[target];
+                logTerm(`→ JZ (A=0): Salto a '${arg1}' (Línea ${nextPC + 1})`, "info");
+              }
+            } else {
+              logTerm(`→ JZ (A ≠ 0): Condición no cumplida.`);
+            }
+            break;
+          }
+
+          case 'JM': {
+            const target = (arg1 || '').toLowerCase();
+            if (CPU.S === 1) {
+              if (CPU.labels[target] !== undefined) {
+                nextPC = CPU.labels[target];
+                logTerm(`→ JM (A<0): Salto a '${arg1}' (Línea ${nextPC + 1})`, "info");
+              }
+            } else {
+              logTerm(`→ JM (A ≥ 0): Condición no cumplida.`);
+            }
+            break;
+          }
+
+          case 'HLT': {
+            CPU.isHalted = true;
+            logTerm(`[Línea ${currentLineNum}] HLT: Fin de ejecución.`, "halt");
+            break;
+          }
+
+          default:
+            logTerm(`Instrucción desconocida: ${op}`, "halt");
+            break;
+        }
+
+        CPU.PC = nextPC;
+
+        if (CPU.isHalted || CPU.PC >= CPU.instructions.length) {
+          break;
+        }
+
+        await sleep(stepDelay);
+      }
+
+      finishExecution();
+    }
+
+    function finishExecution() {
+      isRunning = false;
+      btnRun.disabled = false;
+      inputContainer.classList.remove('active');
+      document.querySelectorAll('.editor-row').forEach(r => r.classList.remove('active-line'));
+      execStatus.innerText = "FINALIZADO";
+      execStatus.style.borderColor = "var(--jersey-red)";
+      execStatus.style.color = "var(--jersey-red)";
+    }
+
+    function stopAndReset() {
+      isRunning = false;
+      clearTimeout(executionTimer);
+      if (pendingInputResolve) {
+        pendingInputResolve(0);
+        pendingInputResolve = null;
+      }
+      btnRun.disabled = false;
+      inputContainer.classList.remove('active');
+      document.querySelectorAll('.editor-row').forEach(r => r.classList.remove('active-line'));
+      
+      termLogs.innerHTML = `<div class="term-line info">&gt; Consola reseteada. Lista para ejecutar.</div>`;
+      execStatus.innerText = "LISTO";
+      execStatus.style.borderColor = "var(--jersey-cyan)";
+      execStatus.style.color = "var(--jersey-cyan)";
+
+      CPU = { A:0, B:0, C:0, D:0, E:0, H:0, L:0, PC:0, Z:1, S:0, isHalted:false, memory:{}, labels:{}, instructions:[] };
+      updateCPUHeader();
+    }
+
+    btnRun.addEventListener('click', runProgram);
+    btnReset.addEventListener('click', stopAndReset);
+
+    // Cargar Ejemplos
+    function loadExample(num) {
+      stopAndReset();
+      if (num === 1) {
+        programRows = [
+          { label: '', inst: 'IN PE' },
+          { label: '', inst: 'STA, op1' },
+          { label: '', inst: 'IN PE' },
+          { label: '', inst: 'ADD op1' },
+          { label: '', inst: 'OUT PS' },
+          { label: '', inst: 'HLT' }
+        ];
+      } else if (num === 2) {
+        programRows = [
+          { label: '', inst: 'IN PE' },
+          { label: '', inst: 'SUI 0Ah' },
+          { label: '', inst: 'OUT PS' },
+          { label: '', inst: 'HLT' }
+        ];
+      } else if (num === 4) {
+        programRows = [
+          { label: 'Entrada', inst: 'IN PE' },
+          { label: '', inst: 'JZ Fin' },
+          { label: '', inst: 'ADI 05h' },
+          { label: '', inst: 'OUT PS' },
+          { label: '', inst: 'JMP Entrada' },
+          { label: 'Fin', inst: 'HLT' }
+        ];
+      } else if (num === 6) {
+        programRows = [
+          { label: '', inst: 'MVI A, 00h' },
+          { label: '', inst: 'STA, total' },
+          { label: 'Entrada', inst: 'IN PE' },
+          { label: '', inst: 'JM Fin' },
+          { label: '', inst: 'ADD total' },
+          { label: '', inst: 'STA, total' },
+          { label: '', inst: 'JMP Entrada' },
+          { label: 'Fin', inst: 'LDA, total' },
+          { label: '', inst: 'OUT PS' },
+          { label: '', inst: 'HLT' }
+        ];
+      } else if (num === 7) {
+        programRows = [
+          { label: '', inst: 'MVI B, 64h' },
+          { label: 'entrada', inst: 'IN PE' },
+          { label: '', inst: 'ADD A' },
+          { label: '', inst: 'OUT PS' },
+          { label: '', inst: 'MOV A, B' },
+          { label: '', inst: 'SUI 01h' },
+          { label: '', inst: 'JZ fin' },
+          { label: '', inst: 'MOV B, A' },
+          { label: '', inst: 'JMP entrada' },
+          { label: 'fin', inst: 'HLT' }
+        ];
+      }
+      while (programRows.length < 10) {
+        programRows.push({ label: '', inst: '' });
+      }
+      renderEditor();
+    }
+
+    loadExample(7);
+  </script>
+</body>
+</html>

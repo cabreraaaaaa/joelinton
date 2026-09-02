@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>JOELINTON // 8085 Pseudoassembler Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,20 +28,35 @@
     }
 
     html, body {
-      height: 100vh;
-      overflow: hidden;
+      height: 100%;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'JetBrains Mono', monospace;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (min-width: 993px) {
+      body {
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 992px) {
+      body {
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
+      }
     }
 
     body {
-      background-color: var(--bg-dark);
       background-image: 
         radial-gradient(circle at 10% 15%, rgba(28, 146, 210, 0.18) 0%, transparent 45%),
         radial-gradient(circle at 90% 85%, rgba(239, 68, 68, 0.14) 0%, transparent 45%),
         linear-gradient(145deg, #070509 0%, #120c15 50%, #060b13 100%);
-      color: var(--text-main);
-      font-family: 'JetBrains Mono', monospace;
-      display: flex;
-      flex-direction: column;
     }
 
     .top-jersey-stripe {
@@ -56,16 +71,50 @@
         var(--jersey-blue) 100%);
     }
 
+    .mobile-advisory-banner {
+      display: none;
+      background: linear-gradient(90deg, rgba(234, 179, 8, 0.15), rgba(56, 189, 248, 0.15));
+      border-bottom: 1px solid rgba(234, 179, 8, 0.35);
+      padding: 10px 14px;
+      font-size: 0.76rem;
+      color: #fef08a;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .close-banner-btn {
+      background: transparent;
+      border: 1px solid var(--jersey-gold);
+      color: var(--jersey-gold);
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 992px) {
+      .mobile-advisory-banner {
+        display: flex;
+      }
+    }
+
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.6rem 2rem;
+      padding: 0.6rem 1.8rem;
       border-bottom: 1px solid var(--border-color);
       background: rgba(9, 7, 12, 0.88);
       backdrop-filter: blur(12px);
       flex-shrink: 0;
       gap: 1rem;
+      position: relative;
     }
 
     .brand-group {
@@ -83,6 +132,7 @@
       color: transparent;
       -webkit-text-stroke: 1.5px var(--jersey-gold);
       text-transform: uppercase;
+      text-decoration: none;
     }
 
     .badge-tag {
@@ -100,7 +150,7 @@
     .top-status-bar {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       background: rgba(0, 0, 0, 0.45);
       padding: 4px 10px;
       border-radius: 8px;
@@ -111,10 +161,10 @@
     .status-chip {
       display: flex;
       align-items: center;
-      gap: 5px;
-      font-size: 0.75rem;
+      gap: 4px;
+      font-size: 0.74rem;
       background: rgba(255, 255, 255, 0.04);
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 4px;
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
@@ -122,14 +172,14 @@
     .status-chip .chip-lbl {
       color: var(--text-muted);
       font-weight: 700;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
     }
 
     .status-chip .chip-val {
       font-weight: bold;
       color: var(--jersey-cyan);
       font-family: 'Chakra Petch', sans-serif;
-      min-width: 18px;
+      min-width: 16px;
       text-align: center;
     }
 
@@ -138,24 +188,19 @@
       background: rgba(234, 179, 8, 0.1);
     }
     .status-chip.acc .chip-lbl { color: var(--jersey-gold); }
-    .status-chip.acc .chip-val { color: #fff; font-size: 0.85rem; }
+    .status-chip.acc .chip-val { color: #fff; font-size: 0.82rem; }
 
-    .status-chip.flag-z {
-      border-color: rgba(56, 189, 248, 0.4);
-    }
-    .status-chip.flag-s {
-      border-color: rgba(239, 68, 68, 0.4);
-    }
+    .status-chip.flag-z { border-color: rgba(56, 189, 248, 0.4); }
+    .status-chip.flag-s { border-color: rgba(239, 68, 68, 0.4); }
     .status-chip.flag-s .chip-lbl { color: var(--jersey-red); }
 
     .header-controls {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       align-items: center;
       flex-shrink: 0;
     }
 
-    /* CONTROL INTERACTIVO DE DELAY */
     .delay-control {
       display: flex;
       align-items: center;
@@ -171,13 +216,13 @@
       color: var(--jersey-cyan);
       font-weight: 700;
       white-space: nowrap;
-      min-width: 60px;
+      min-width: 55px;
     }
 
     .delay-slider {
       -webkit-appearance: none;
       appearance: none;
-      width: 75px;
+      width: 70px;
       height: 4px;
       border-radius: 2px;
       background: rgba(255, 255, 255, 0.2);
@@ -198,17 +243,18 @@
 
     .btn {
       font-family: 'Montserrat', sans-serif;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 700;
-      letter-spacing: 1.2px;
+      letter-spacing: 1.1px;
       text-transform: uppercase;
-      padding: 0.5rem 1.1rem;
+      padding: 0.48rem 1rem;
       border-radius: 30px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
     }
 
     .btn-gold {
@@ -217,7 +263,6 @@
       color: var(--jersey-gold);
       box-shadow: 0 0 10px rgba(234, 179, 8, 0.15);
     }
-
     .btn-gold:hover:not(:disabled) {
       background: var(--jersey-gold);
       color: #000;
@@ -229,9 +274,28 @@
       border: 1.5px solid var(--jersey-red);
       color: var(--jersey-red);
     }
-
     .btn-red:hover:not(:disabled) {
       background: var(--jersey-red);
+      color: #fff;
+    }
+
+    .btn-cyan {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1.5px solid var(--jersey-cyan);
+      color: var(--jersey-cyan);
+    }
+    .btn-cyan:hover {
+      background: var(--jersey-cyan);
+      color: #000;
+    }
+
+    .btn-clean {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      color: var(--text-muted);
+    }
+    .btn-clean:hover {
+      border-color: #fff;
       color: #fff;
     }
 
@@ -242,15 +306,20 @@
 
     main {
       flex: 1;
-      padding: 1rem 2rem;
+      padding: 1rem 1.8rem;
       display: grid;
       grid-template-columns: 1.05fr 0.95fr;
       gap: 1.2rem;
       max-width: 1800px;
       margin: 0 auto;
       width: 100%;
-      height: calc(100vh - 105px);
       min-height: 0;
+    }
+
+    @media (min-width: 993px) {
+      main {
+        height: calc(100vh - 105px);
+      }
     }
 
     .panel {
@@ -262,12 +331,11 @@
       flex-direction: column;
       overflow: hidden;
       backdrop-filter: blur(8px);
-      height: 100%;
       min-height: 0;
     }
 
     .panel-header {
-      padding: 0.65rem 1rem;
+      padding: 0.6rem 1rem;
       background: rgba(18, 14, 22, 0.95);
       border-bottom: 1px solid var(--border-color);
       display: flex;
@@ -279,7 +347,7 @@
     .panel-title {
       font-family: 'Chakra Petch', sans-serif;
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       letter-spacing: 1.5px;
       color: var(--jersey-gold);
       display: flex;
@@ -309,7 +377,6 @@
       min-height: 0;
     }
 
-    /* FILAS ESTRUCTURADAS DEL EDITOR */
     .editor-rows-container {
       flex: 1;
       overflow-y: auto;
@@ -331,7 +398,7 @@
     }
 
     .editor-row.active-line {
-      background: rgba(234, 179, 8, 0.12) !important;
+      background: rgba(234, 179, 8, 0.14) !important;
       border-left: 3px solid var(--jersey-gold);
     }
 
@@ -408,27 +475,6 @@
       color: var(--jersey-gold);
     }
 
-    .row-actions {
-      display: flex;
-      gap: 6px;
-    }
-
-    .btn-row-action {
-      background: rgba(56, 189, 248, 0.1);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      color: var(--jersey-cyan);
-      border-radius: 4px;
-      padding: 3px 8px;
-      font-size: 0.7rem;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .btn-row-action:hover {
-      background: var(--jersey-cyan);
-      color: #000;
-    }
-
-    /* CONSOLA DE EJECUCIÓN */
     .console-terminal {
       display: flex;
       flex-direction: column;
@@ -566,7 +612,7 @@
     }
 
     footer {
-      padding: 0.4rem 2rem;
+      padding: 0.4rem 1.8rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -575,21 +621,242 @@
       color: #64748b;
       flex-shrink: 0;
     }
+
+    /* ========================================================
+       SISTEMA DE TOUR CON CANVAS RECORTE EXACTO (SVG / CANVAS HOLE)
+       ======================================================== */
+    /* Canvas que cubre la pantalla y corta una ventana transparente exacta sobre el elemento */
+    #tour-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9998;
+      pointer-events: none;
+      display: none;
+    }
+
+    /* Cuadro de borde y pulso dorado exterior sin tapar el contenido */
+    .tour-spotlight-frame {
+      position: fixed;
+      border-radius: 8px;
+      border: 2px solid var(--jersey-gold);
+      box-shadow: 0 0 20px rgba(234, 179, 8, 0.8), inset 0 0 10px rgba(234, 179, 8, 0.2);
+      z-index: 9999;
+      pointer-events: none;
+      display: none;
+      transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* Puntero animado radar */
+    .tour-pointer {
+      position: fixed;
+      z-index: 10001;
+      pointer-events: none;
+      display: none;
+      transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+      animation: pointerBounce 1.2s infinite ease-in-out;
+    }
+
+    .pointer-pulse-dot {
+      width: 20px;
+      height: 20px;
+      background: var(--jersey-red);
+      border: 2px solid #fff;
+      border-radius: 50%;
+      position: relative;
+      box-shadow: 0 0 14px var(--jersey-red);
+    }
+
+    .pointer-pulse-dot::after {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: -6px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--jersey-red);
+      animation: radarPing 1.2s infinite ease-out;
+    }
+
+    @keyframes pointerBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+
+    @keyframes radarPing {
+      0% { transform: scale(0.6); opacity: 1; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+
+    /* Tarjeta explicativa */
+    .tour-card {
+      position: fixed;
+      z-index: 10002;
+      background: #141019;
+      border: 1.5px solid var(--jersey-gold);
+      border-radius: 12px;
+      padding: 18px 20px;
+      max-width: 420px;
+      width: 90vw;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.95), 0 0 20px rgba(234, 179, 8, 0.35);
+      display: none;
+      transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .tour-step-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 700;
+      color: var(--jersey-cyan);
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .tour-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--jersey-gold);
+      margin-bottom: 8px;
+    }
+
+    .tour-desc {
+      font-size: 0.84rem;
+      line-height: 1.45;
+      color: #e2e8f0;
+      margin-bottom: 14px;
+    }
+
+    .tour-nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 10px;
+    }
+
+    .btn-tour-skip {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .btn-tour-skip:hover { color: #fff; text-decoration: underline; }
+
+    .btn-tour-next {
+      background: var(--jersey-gold);
+      color: #000;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.76rem;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      letter-spacing: 1px;
+    }
+    .btn-tour-next:hover { background: #fef08a; }
+
+    @media (max-width: 992px) {
+      header {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 10px 14px;
+        gap: 10px;
+      }
+      .brand-group {
+        justify-content: space-between;
+        width: 100%;
+      }
+      .top-status-bar {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        padding: 6px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .header-controls {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        width: 100%;
+      }
+      .delay-control {
+        flex: 1;
+        justify-content: space-between;
+      }
+      main {
+        grid-template-columns: 1fr;
+        padding: 10px;
+        gap: 14px;
+        height: auto;
+      }
+      .panel {
+        height: 480px;
+      }
+      .table-headings, .editor-row {
+        grid-template-columns: 35px 110px 1fr;
+      }
+      .row-input {
+        font-size: 0.84rem;
+        padding: 4px 6px;
+      }
+      .editor-bottom-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+      .quick-bar {
+        overflow-x: auto;
+        white-space: nowrap;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+      }
+      .btn-clean {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+      }
+      footer {
+        flex-direction: column;
+        gap: 6px;
+        text-align: center;
+        padding: 10px;
+      }
+      .tour-card {
+        left: 5vw !important;
+        right: 5vw !important;
+        width: 90vw !important;
+      }
+    }
   </style>
 </head>
 <body>
 
   <div class="top-jersey-stripe"></div>
 
+  <div class="mobile-advisory-banner" id="mobile-banner">
+    <span>💡 <strong>Consejo:</strong> Para una experiencia completa de desarrollo y debug, te sugerimos abrir este estudio en una computadora.</span>
+    <button class="close-banner-btn" onclick="document.getElementById('mobile-banner').style.display='none'" title="Cerrar">×</button>
+  </div>
+
   <header>
     <div class="brand-group">
-      <h1 class="brand-title">JOELINTON</h1>
-      <span class="badge-tag">8085 STUDIO</span>
+      <a href="index.html" class="brand-title">JOELINTON</a>
+      <span class="badge-tag">.vercel.app</span>
     </div>
 
-    <!-- BARRA SUPERIOR DE REGISTROS Y FLAGS -->
-    <div class="top-status-bar">
-      <div class="status-chip acc" title="Acumulador">
+    <!-- REGISTROS SUPERIORES (PASO 5 DEL TOUR) -->
+    <div class="top-status-bar" id="tour-step-registers">
+      <div class="status-chip acc" title="Acumulador Principal">
         <span class="chip-lbl">ACC (A):</span>
         <span class="chip-val" id="chip-a">0</span>
       </div>
@@ -617,36 +884,38 @@
         <span class="chip-lbl">L:</span>
         <span class="chip-val" id="chip-l">0</span>
       </div>
-      <div class="status-chip flag-z" title="Zero Flag">
-        <span class="chip-lbl">Z:</span>
+      <div class="status-chip flag-z" title="Flag Zero: Se pone en 1 si el Acumulador A vale 0">
+        <span class="chip-lbl">Z (Cero):</span>
         <span class="chip-val" id="chip-z">1</span>
       </div>
-      <div class="status-chip flag-s" title="Sign Flag">
-        <span class="chip-lbl">S:</span>
+      <div class="status-chip flag-s" title="Flag Sign: Se pone en 1 si el Acumulador A es negativo">
+        <span class="chip-lbl">S (Neg):</span>
         <span class="chip-val" id="chip-s">0</span>
       </div>
     </div>
 
     <div class="header-controls">
-      <!-- CONTROL INTERACTIVO DEL SLIDER (1s a 5s) -->
-      <div class="delay-control">
+      <!-- CONTROL DELAY (PASO 2 DEL TOUR) -->
+      <div class="delay-control" id="tour-step-delay">
         <span class="delay-label" id="delay-display">⏱ 2.0s</span>
         <input type="range" class="delay-slider" id="delay-slider" min="1.0" max="5.0" step="0.5" value="2.0">
       </div>
 
+      <!-- BOTÓN EJECUTAR (PASO 3 DEL TOUR) -->
       <button class="btn btn-gold" id="btn-run">▶ EJECUTAR</button>
       <button class="btn btn-red" id="btn-reset">■ RESET</button>
+      <button class="btn btn-cyan" onclick="startInteractiveTour()" title="Ver tour animado">? TOUR GUIADO</button>
     </div>
   </header>
 
   <main>
-    <!-- PANEL IZQUIERDO: PROGRAMA FUENTE -->
-    <div class="panel">
+    <!-- PANEL IZQUIERDO: PROGRAMA FUENTE (PASO 1 DEL TOUR) -->
+    <div class="panel" id="tour-step-editor">
       <div class="panel-header">
         <div class="panel-title">
           <span>&gt;_</span> PROGRAMA FUENTE
         </div>
-        <span style="font-size:0.75rem; color: var(--text-muted);">UNPSJB - Elementos de Informática</span>
+        <span style="font-size:0.72rem; color: var(--text-muted);">UNPSJB // Modos y Sintaxis</span>
       </div>
 
       <div class="table-headings">
@@ -656,29 +925,26 @@
       </div>
 
       <div class="editor-wrapper">
-        <div class="editor-rows-container" id="editor-container">
-          <!-- Las filas se renderizan dinámicamente -->
-        </div>
+        <div class="editor-rows-container" id="editor-container"></div>
 
         <div class="editor-bottom-bar">
           <div class="quick-bar">
             <span style="color: var(--text-muted); font-size: 0.7rem;">Ejemplos:</span>
-            <button class="quick-btn" onclick="loadExample(1)">1. Sumar 2 Números</button>
+            <button class="quick-btn" onclick="loadExample(1)">1. Suma 2 Números</button>
             <button class="quick-btn" onclick="loadExample(2)">2. Restar 10 (0Ah)</button>
             <button class="quick-btn" onclick="loadExample(4)">4. Iterar hasta 0</button>
             <button class="quick-btn" onclick="loadExample(6)">6. Sumatoria 'total'</button>
             <button class="quick-btn" onclick="loadExample(7)">7. Contador B</button>
           </div>
-          <div class="row-actions">
-            <button class="btn-row-action" onclick="addNewRow()">+ Fila</button>
-            <button class="btn-row-action" onclick="removeLastRow()">- Fila</button>
+          <div>
+            <button class="btn btn-clean" onclick="clearCodeEditor()">🗑 LIMPIAR CÓDIGO</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- PANEL DERECHO: CONSOLA DE EJECUCIÓN -->
-    <div class="panel">
+    <!-- PANEL DERECHO: CONSOLA DE EJECUCIÓN (PASO 4 DEL TOUR) -->
+    <div class="panel" id="tour-step-console">
       <div class="panel-header">
         <div class="panel-title">
           <span>🖥</span> CONSOLA DE EJECUCIÓN
@@ -688,7 +954,7 @@
 
       <div class="console-terminal">
         <div class="terminal-body" id="term-logs">
-          <div class="term-line info">&gt; Consola lista. Haz clic en cualquier casilla para editar directamente.</div>
+          <div class="term-line info">&gt; Consola lista. Escribe tus mnemónicos o carga un ejemplo y presiona EJECUTAR.</div>
         </div>
 
         <div class="interactive-input-row" id="input-container">
@@ -701,15 +967,29 @@
   </main>
 
   <footer>
-    <div>JOELINTON PSEUDOASSEMBLER STUDIO // SET 8085</div>
+    <div>JOELINTON.vercel.app // SET 8085</div>
     <div>SOPORTE: IN, OUT, LDA, STA, MOV, MVI, ADD, SUB, ADI, SUI, JMP, JZ, JM, HLT</div>
   </footer>
 
+  <!-- CANVAS Y ELEMENTOS DEL TOUR -->
+  <canvas id="tour-canvas"></canvas>
+  <div class="tour-spotlight-frame" id="tour-spotlight"></div>
+  <div class="tour-pointer" id="tour-pointer">
+    <div class="pointer-pulse-dot"></div>
+  </div>
+  <div class="tour-card" id="tour-card">
+    <div class="tour-step-badge" id="tour-badge">PASO 1 DE 5</div>
+    <div class="tour-title" id="tour-title">Título del paso</div>
+    <div class="tour-desc" id="tour-desc">Descripción paso a paso</div>
+    <div class="tour-nav-row">
+      <button class="btn-tour-skip" onclick="endInteractiveTour()">Omitir</button>
+      <button class="btn-tour-next" id="tour-next-btn" onclick="nextTourStep()">Siguiente →</button>
+    </div>
+  </div>
+
   <script>
-    // DATOS DE LAS LÍNEAS DEL EDITOR
     let programRows = [];
 
-    // ESTADO CPU
     let CPU = {
       A: 0, B: 0, C: 0, D: 0, E: 0, H: 0, L: 0,
       PC: 0, Z: 1, S: 0, isHalted: false,
@@ -719,14 +999,12 @@
     let isRunning = false;
     let executionTimer = null;
     let pendingInputResolve = null;
-    let stepDelay = 2000; // milisegundos
+    let stepDelay = 2000;
 
-    // Elementos DOM
     const editorContainer = document.getElementById('editor-container');
     const termLogs = document.getElementById('term-logs');
     const execStatus = document.getElementById('exec-status');
 
-    // Chips
     const chipA = document.getElementById('chip-a');
     const chipB = document.getElementById('chip-b');
     const chipC = document.getElementById('chip-c');
@@ -737,13 +1015,11 @@
     const chipZ = document.getElementById('chip-z');
     const chipS = document.getElementById('chip-s');
 
-    // Input interactivo
     const inputContainer = document.getElementById('input-container');
     const userInput = document.getElementById('user-input');
     const btnSubmitVal = document.getElementById('btn-submit-val');
     const promptLabel = document.getElementById('prompt-label');
 
-    // Control Delay
     const delaySlider = document.getElementById('delay-slider');
     const delayDisplay = document.getElementById('delay-display');
 
@@ -756,7 +1032,6 @@
     const btnRun = document.getElementById('btn-run');
     const btnReset = document.getElementById('btn-reset');
 
-    // RENDERIZADOR DE FILAS DEL EDITOR (Cada fila es un input individual)
     function renderEditor() {
       editorContainer.innerHTML = '';
       programRows.forEach((row, index) => {
@@ -770,7 +1045,6 @@
           <input type="text" class="row-input row-inst-input" id="inst-input-${index}" value="${row.inst || ''}" placeholder="instrucción" spellcheck="false">
         `;
 
-        // Eventos para actualizar los datos en memoria
         const labelInp = rowEl.querySelector('.row-label-input');
         const instInp = rowEl.querySelector('.row-inst-input');
 
@@ -782,7 +1056,6 @@
           programRows[index].inst = e.target.value;
         });
 
-        // Navegación intuitiva con teclado (Flechas Arriba/Abajo y Enter)
         labelInp.addEventListener('keydown', (e) => handleKeyNav(e, index, 'label'));
         instInp.addEventListener('keydown', (e) => handleKeyNav(e, index, 'inst'));
 
@@ -797,11 +1070,12 @@
           const next = document.getElementById(`${type}-input-${index + 1}`);
           if (next) next.focus();
         } else if (e.key === 'Enter') {
-          addNewRow();
+          programRows.push({ label: '', inst: '' });
+          renderEditor();
           setTimeout(() => {
             const next = document.getElementById(`${type}-input-${index + 1}`);
             if (next) next.focus();
-          }, 50);
+          }, 40);
         }
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
@@ -818,16 +1092,14 @@
       }
     }
 
-    function addNewRow() {
-      programRows.push({ label: '', inst: '' });
-      renderEditor();
-    }
-
-    function removeLastRow() {
-      if (programRows.length > 1) {
-        programRows.pop();
-        renderEditor();
+    function clearCodeEditor() {
+      stopAndReset();
+      programRows = [];
+      for (let i = 0; i < 10; i++) {
+        programRows.push({ label: '', inst: '' });
       }
+      renderEditor();
+      logTerm("&gt; Editor limpiado. Puedes escribir nuevo código.", "info");
     }
 
     function highlightRow(index) {
@@ -881,7 +1153,6 @@
         inputContainer.classList.add('active');
         userInput.value = '';
         userInput.focus();
-
         pendingInputResolve = resolve;
       });
     }
@@ -1158,7 +1429,169 @@
     btnRun.addEventListener('click', runProgram);
     btnReset.addEventListener('click', stopAndReset);
 
-    // Cargar Ejemplos
+    // ========================================================
+    // TOUR INTERACTIVO CON CANVAS TRANSPARENTE
+    // ========================================================
+    let currentTourStep = 0;
+
+    const tourSteps = [
+      {
+        elementId: 'tour-step-editor',
+        badge: 'PASO 1 DE 5',
+        title: 'Editor de Código en 2 Columnas',
+        desc: 'Aquí escribes tu programa fuente. La primera columna es para <strong>Etiquetas</strong> (destinos de saltos como <em>entrada</em> o <em>fin</em>). La segunda es para los <strong>Mnemónicos</strong> del 8085 (<em>IN PE</em>, <em>ADD A</em>, <em>OUT PS</em>, <em>HLT</em>). Al presionar <strong>Enter</strong> creas una fila nueva automáticamente.'
+      },
+      {
+        elementId: 'tour-step-delay',
+        badge: 'PASO 2 DE 5',
+        title: 'Regulador de Velocidad (Delay)',
+        desc: 'Este slider te permite graduar el tiempo de espera entre cada instrucción de <strong>1.0s a 5.0s</strong>. Así puedes ver con calma la evolución interna del programa instrucción por instrucción.'
+      },
+      {
+        elementId: 'btn-run',
+        badge: 'PASO 3 DE 5',
+        title: 'Ejecución y Reset',
+        desc: 'Presiona <strong>▶ EJECUTAR</strong> para comenzar la simulación secuencial. Si deseas frenar el proceso en cualquier momento o reiniciar todos los valores, usa <strong>■ RESET</strong>.'
+      },
+      {
+        elementId: 'tour-step-console',
+        badge: 'PASO 4 DE 5',
+        title: 'Consola Interactiva y Puertos I/O',
+        desc: 'Funciona como un feed en vivo: indica qué línea se está ejecutando. Cuando el código tenga un <code>IN PE</code> o <code>IN PS</code>, la consola se pausará y te pedirá ingresar el número por pantalla antes de seguir.'
+      },
+      {
+        elementId: 'tour-step-registers',
+        badge: 'PASO 5 DE 5 (IMPORTANTE)',
+        title: 'Registros de la CPU y Banderas (Flags)',
+        desc: '¡El corazón del procesador 8085!<br><br>' +
+              '• <strong>ACC (A):</strong> El Acumulador principal donde ocurren las sumas, restas y lecturas.<br>' +
+              '• <strong>B, C, D, E, H, L:</strong> Registros de propósito general para guardar datos o contadores.<br>' +
+              '• <strong>Flag Z (Zero):</strong> Vale <strong>1</strong> si el resultado en el Acumulador es 0. Es indispensable para que <code>JZ</code> sepa si debe saltar.<br>' +
+              '• <strong>Flag S (Sign):</strong> Vale <strong>1</strong> si el valor de A es negativo (&lt; 0), permitiendo a <code>JM</code> tomar decisiones.'
+      }
+    ];
+
+    const tourCanvas = document.getElementById('tour-canvas');
+    const ctx = tourCanvas.getContext('2d');
+    const tourSpotlight = document.getElementById('tour-spotlight');
+    const tourPointer = document.getElementById('tour-pointer');
+    const tourCard = document.getElementById('tour-card');
+    const tourBadge = document.getElementById('tour-badge');
+    const tourTitle = document.getElementById('tour-title');
+    const tourDesc = document.getElementById('tour-desc');
+    const tourNextBtn = document.getElementById('tour-next-btn');
+
+    function resizeCanvas() {
+      tourCanvas.width = window.innerWidth;
+      tourCanvas.height = window.innerHeight;
+    }
+
+    function drawMaskWithHole(rect) {
+      resizeCanvas();
+      ctx.clearRect(0, 0, tourCanvas.width, tourCanvas.height);
+
+      // Fondo oscuro
+      ctx.fillStyle = 'rgba(3, 2, 6, 0.82)';
+      ctx.fillRect(0, 0, tourCanvas.width, tourCanvas.height);
+
+      // Recorte 100% transparente para dejar ver el elemento enfocado exactamente como es
+      const pad = 6;
+      ctx.clearRect(rect.left - pad, rect.top - pad, rect.width + (pad * 2), rect.height + (pad * 2));
+    }
+
+    function startInteractiveTour() {
+      currentTourStep = 0;
+      tourCanvas.style.display = 'block';
+      tourSpotlight.style.display = 'block';
+      tourPointer.style.display = 'block';
+      tourCard.style.display = 'block';
+      showTourStep(currentTourStep);
+    }
+
+    function showTourStep(stepIndex) {
+      const step = tourSteps[stepIndex];
+      const targetEl = document.getElementById(step.elementId);
+      if (!targetEl) return;
+
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      setTimeout(() => {
+        const rect = targetEl.getBoundingClientRect();
+        const pad = 6;
+
+        // Dibujar el orificio transparente en el Canvas
+        drawMaskWithHole(rect);
+
+        // Marco exterior dorado
+        tourSpotlight.style.top = `${rect.top - pad}px`;
+        tourSpotlight.style.left = `${rect.left - pad}px`;
+        tourSpotlight.style.width = `${rect.width + (pad * 2)}px`;
+        tourSpotlight.style.height = `${rect.height + (pad * 2)}px`;
+
+        // Puntero animado radar
+        tourPointer.style.top = `${rect.top - 16}px`;
+        tourPointer.style.left = `${rect.left + (rect.width / 2) - 10}px`;
+
+        // Datos del paso
+        tourBadge.innerText = step.badge;
+        tourTitle.innerText = step.title;
+        tourDesc.innerHTML = step.desc;
+
+        if (stepIndex === tourSteps.length - 1) {
+          tourNextBtn.innerText = '¡FINALIZAR GUÍA!';
+        } else {
+          tourNextBtn.innerText = 'Siguiente →';
+        }
+
+        // Posicionar tarjeta flotante
+        const cardWidth = 380;
+        let cardTop = rect.bottom + 18;
+        let cardLeft = rect.left;
+
+        if (cardTop + 240 > window.innerHeight) {
+          cardTop = Math.max(15, rect.top - 250);
+        }
+        if (cardLeft + cardWidth > window.innerWidth) {
+          cardLeft = window.innerWidth - cardWidth - 20;
+        }
+        if (cardLeft < 15) cardLeft = 15;
+
+        tourCard.style.top = `${cardTop}px`;
+        tourCard.style.left = `${cardLeft}px`;
+      }, 100);
+    }
+
+    function nextTourStep() {
+      currentTourStep++;
+      if (currentTourStep < tourSteps.length) {
+        showTourStep(currentTourStep);
+      } else {
+        endInteractiveTour();
+      }
+    }
+
+    function endInteractiveTour() {
+      tourCanvas.style.display = 'none';
+      tourSpotlight.style.display = 'none';
+      tourPointer.style.display = 'none';
+      tourCard.style.display = 'none';
+      ctx.clearRect(0, 0, tourCanvas.width, tourCanvas.height);
+      localStorage.setItem('has_seen_interactive_tour_v4', 'true');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const hasSeen = localStorage.getItem('has_seen_interactive_tour_v4');
+      if (!hasSeen) {
+        setTimeout(startInteractiveTour, 700);
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (tourCanvas.style.display === 'block') {
+        showTourStep(currentTourStep);
+      }
+    });
+
     function loadExample(num) {
       stopAndReset();
       if (num === 1) {

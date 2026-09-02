@@ -123,30 +123,6 @@
             color: var(--accent-gold);
         }
 
-        .brand-watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 3.2rem;
-            font-weight: 900;
-            color: rgba(255, 255, 255, 0.03);
-            letter-spacing: 4px;
-            pointer-events: none;
-            user-select: none;
-        }
-
-        .brand-title {
-            font-size: 1.7rem;
-            font-weight: 900;
-            letter-spacing: 3px;
-            color: transparent;
-            -webkit-text-stroke: 1.5px var(--accent-gold);
-            text-transform: uppercase;
-            position: relative;
-            z-index: 1;
-        }
-
         .status-badge {
             display: flex;
             align-items: center;
@@ -278,7 +254,7 @@
 
         /* ESPACIO DE TRABAJO ORIGINAL DE PC (Flexbox con divisor redimensionable) */
         .workspace {
-            padding: 0 2rem 1.2rem;
+            padding: 0 2rem 0.6rem;
             width: 100%;
             flex: 1;
             display: flex;
@@ -811,6 +787,28 @@
             cursor: not-allowed;
         }
 
+        /* PIE DE PÁGINA DISCRETO ALINEADO A LA IZQUIERDA */
+        .site-footer {
+            padding: 0.35rem 2rem 0.45rem;
+            background: #090b0d;
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            font-size: 0.78rem;
+            flex-shrink: 0;
+        }
+
+        .footer-brand {
+            color: #e2a84b;
+            font-weight: 500;
+        }
+
+        .footer-domain {
+            color: #7b889b;
+            font-weight: 400;
+        }
+
         /* =======================================================
            REGLAS EXCLUSIVAS PARA MÓVILES (max-width: 768px)
            La versión de escritorio queda 100% intacta.
@@ -822,16 +820,6 @@
 
             header {
                 padding: 0.5rem 0.8rem;
-            }
-
-            .brand-watermark {
-                display: none;
-            }
-
-            .brand-title {
-                font-size: 1.15rem;
-                letter-spacing: 1px;
-                -webkit-text-stroke: 1px var(--accent-gold);
             }
 
             .status-badge {
@@ -890,7 +878,7 @@
             }
 
             .workspace {
-                padding: 0 0.8rem 0.8rem;
+                padding: 0 0.8rem 0.4rem;
                 flex-direction: column;
             }
 
@@ -940,6 +928,11 @@
                 width: 300px;
                 max-width: 85vw;
             }
+
+            .site-footer {
+                padding: 0.35rem 0.8rem 0.45rem;
+                font-size: 0.7rem;
+            }
         }
     </style>
 </head>
@@ -958,8 +951,6 @@
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                     Inicio
                 </a>
-                <span class="brand-watermark">56</span>
-                <h1 class="brand-title">JOELINTON</h1>
             </div>
 
             <div id="status-badge" class="status-badge status-ok">
@@ -1077,12 +1068,17 @@
         </div>
     </main>
 
+    <!-- Pie de página alineado a la izquierda -->
+    <footer class="site-footer">
+        <span class="footer-brand">Joelinton<span class="footer-domain">.vercel.app</span></span>
+    </footer>
+
     <script>
         const META_KEYWORDS = [
             'comienza', 'constantes', 'entonces', 'escribir', 'escribirln',
             'hacer', 'hasta', 'leer', 'mientras', 'opcion', 'opción', 'de',
             'para', 'repetir', 'si', 'sino', 'termina', 'variables',
-            'finsi', 'programa', 'tipos'
+            'finsi', 'programa', 'tipos', 'fin'
         ];
 
         const INITIAL_TEMPLATE = ``;
@@ -1990,60 +1986,71 @@
             return args;
         }
 
-        function evaluateExpression(expr, memory, constants, declaredVars) {
-            expr = expr.trim();
-            if (!expr) return 0;
+function evaluateExpression(expr, memory, constants, declaredVars) {
+    expr = expr.trim();
+    if (!expr) return 0;
 
-            expr = expr.replace(/[“”«»]/g, '"');
+    expr = expr.replace(/[“”«»]/g, '"');
 
-            if ((expr.startsWith('"') && expr.endsWith('"')) || (expr.startsWith("'") && expr.endsWith("'"))) {
-                return expr.slice(1, -1);
-            }
+    if ((expr.startsWith('"') && expr.endsWith('"')) || (expr.startsWith("'") && expr.endsWith("'"))) {
+        return expr.slice(1, -1);
+    }
 
-            const scope = { ...constants, ...memory };
+    const scope = { ...constants, ...memory };
 
-            let jsExpr = expr
-                .replace(/\bdiv\b/gi, '/')
-                .replace(/\bmod\b/gi, '%')
-                .replace(/\by\b/gi, '&&')
-                .replace(/\bo\b/gi, '||')
-                .replace(/\bno\b/gi, '!')
-                .replace(/<>/g, '!=')
-                .replace(/=/g, '===');
+    let jsExpr = expr
+        // 1. Soporte para símbolos matemáticos Unicode
+        .replace(/≥/g, '>=')
+        .replace(/≤/g, '<=')
+        .replace(/≠/g, '!=')
 
-            jsExpr = jsExpr.replace(/([a-zA-ZáéíóúÁÉÍÓÚñÑ_][a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_]*)/g, (match) => {
-                const key = match.toLowerCase();
-                if (key in scope) {
-                    const val = scope[key];
-                    if (typeof val === 'number' || typeof val === 'boolean') {
-                        return val;
-                    } else {
-                        return JSON.stringify(val);
-                    }
-                }
-                return match;
-            });
+        // 2. Metapalabras y operadores lógicos
+        .replace(/\bdiv\b/gi, '/')
+        .replace(/\bmod\b/gi, '%')
+        .replace(/\by\b/gi, '&&')
+        .replace(/\bo\b/gi, '||')
+        .replace(/\bno\b/gi, '!')
+        .replace(/<>/g, '!=')
 
-            try {
-                const result = Function(`"use strict"; return (${jsExpr})`)();
-                
-                if (result === false && expr.includes('=')) {
-                    const eqParts = expr.split('=');
-                    if (eqParts.length === 2) {
-                        const leftVal = evaluateExpression(eqParts[0], memory, constants, declaredVars);
-                        const rightVal = evaluateExpression(eqParts[1], memory, constants, declaredVars);
-                        if (typeof leftVal === 'string' && typeof rightVal === 'string') {
-                            return leftVal.trim().toUpperCase() === rightVal.trim().toUpperCase();
-                        }
-                    }
-                }
-                return result;
-            } catch (err) {
-                const low = expr.toLowerCase();
-                if (low in scope) return scope[low];
-                return expr;
+        // 3. Reemplazar operadores relacionales compuestos ANTES del '=' individual
+        .replace(/>=/g, '>=')
+        .replace(/<=/g, '<=')
+        .replace(/(?<![<>!=])=(?!=)/g, '==='); // Convierte '=' en '===' solo si no es >=, <=, != ni ==
+
+    // Reemplazo de identificadores por sus valores en memoria
+    jsExpr = jsExpr.replace(/([a-zA-ZáéíóúÁÉÍÓÚñÑ_][a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_]*)/g, (match) => {
+        const key = match.toLowerCase();
+        if (key in scope) {
+            const val = scope[key];
+            if (typeof val === 'number' || typeof val === 'boolean') {
+                return val;
+            } else {
+                return JSON.stringify(val);
             }
         }
+        return match;
+    });
+
+    try {
+        const result = Function(`"use strict"; return (${jsExpr})`)();
+        
+        if (result === false && expr.includes('=') && !expr.includes('>=') && !expr.includes('<=') && !expr.includes('!=')) {
+            const eqParts = expr.split('=');
+            if (eqParts.length === 2) {
+                const leftVal = evaluateExpression(eqParts[0], memory, constants, declaredVars);
+                const rightVal = evaluateExpression(eqParts[1], memory, constants, declaredVars);
+                if (typeof leftVal === 'string' && typeof rightVal === 'string') {
+                    return leftVal.trim().toUpperCase() === rightVal.trim().toUpperCase();
+                }
+            }
+        }
+        return result;
+    } catch (err) {
+        const low = expr.toLowerCase();
+        if (low in scope) return scope[low];
+        return expr;
+    }
+}
 
         async function executeCode() {
             updateEditor();

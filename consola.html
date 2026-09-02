@@ -2,13 +2,11 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Joelinton - UNPSJB Pseudocode Studio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="icon" href="azul.ico" type="image/x-icon">
-    
     <style>
         :root {
             --bg-deep: #0e1114;
@@ -51,6 +49,37 @@
             background-image: 
                 radial-gradient(circle at 85% 15%, rgba(104, 14, 29, 0.35) 0%, transparent 45%),
                 radial-gradient(circle at 15% 85%, rgba(226, 168, 75, 0.05) 0%, transparent 40%);
+        }
+
+        /* Banner de recomendación para teléfonos */
+        .mobile-notice {
+            display: none;
+            background: linear-gradient(90deg, #241103 0%, #1a080c 100%);
+            border-bottom: 1px solid var(--border-gold);
+            padding: 0.45rem 0.8rem;
+            font-size: 0.72rem;
+            color: #fde047;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            z-index: 50;
+        }
+
+        .mobile-notice span {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            line-height: 1.25;
+        }
+
+        .btn-close-notice {
+            background: transparent;
+            border: none;
+            color: #fde047;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0 0.3rem;
+            line-height: 1;
         }
 
         header {
@@ -242,6 +271,12 @@
             margin: 0 0.25rem;
         }
 
+        /* TABS PARA MÓVIL (ocultas en PC) */
+        .mobile-tabs-bar {
+            display: none;
+        }
+
+        /* ESPACIO DE TRABAJO ORIGINAL DE PC (Flexbox con divisor redimensionable) */
         .workspace {
             padding: 0 2rem 1.2rem;
             width: 100%;
@@ -257,7 +292,6 @@
             cursor: col-resize;
         }
 
-        .workspace.resizing iframe,
         .workspace.resizing textarea {
             pointer-events: none;
         }
@@ -305,6 +339,7 @@
             display: none;
         }
 
+        /* Barra de redimensionamiento */
         .workspace-resizer {
             width: 12px;
             margin: 0 4px;
@@ -372,6 +407,7 @@
             background: rgba(255, 255, 255, 0.05);
         }
 
+        /* Banner Desplegable de Proyectos */
         .drawer-overlay {
             position: fixed;
             top: 0;
@@ -500,7 +536,6 @@
             padding-right: 4px;
         }
 
-        /* Barra de scroll personalizada y delgada para la lista de proyectos */
         .projects-list::-webkit-scrollbar {
             width: 5px;
         }
@@ -776,28 +811,146 @@
             cursor: not-allowed;
         }
 
-        @media (max-width: 1024px) {
-            body {
-                overflow-y: auto;
-                height: auto;
+        /* =======================================================
+           REGLAS EXCLUSIVAS PARA MÓVILES (max-width: 768px)
+           La versión de escritorio queda 100% intacta.
+           ======================================================= */
+        @media (max-width: 768px) {
+            .mobile-notice {
+                display: flex;
             }
-            .workspace {
-                flex-direction: column;
-                height: auto;
+
+            header {
+                padding: 0.5rem 0.8rem;
             }
-            .workspace-resizer {
+
+            .brand-watermark {
                 display: none;
             }
+
+            .brand-title {
+                font-size: 1.15rem;
+                letter-spacing: 1px;
+                -webkit-text-stroke: 1px var(--accent-gold);
+            }
+
+            .status-badge {
+                padding: 0.25rem 0.55rem;
+                font-size: 0.68rem;
+            }
+
+            .toolbar {
+                padding: 0.4rem 0.8rem;
+                gap: 0.4rem;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .toolbar::-webkit-scrollbar {
+                display: none;
+            }
+
+            .btn {
+                font-size: 0.75rem;
+                padding: 0.38rem 0.7rem;
+                flex-shrink: 0;
+            }
+
+            .mobile-tabs-bar {
+                display: flex;
+                padding: 0.3rem 0.8rem 0;
+                gap: 0.4rem;
+                background: transparent;
+                flex-shrink: 0;
+            }
+
+            .tab-btn {
+                flex: 1;
+                padding: 0.55rem;
+                background: #121519;
+                border: 1px solid var(--border-subtle);
+                border-bottom: none;
+                border-radius: 8px 8px 0 0;
+                color: var(--text-secondary);
+                font-family: var(--font-main);
+                font-size: 0.78rem;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.45rem;
+                cursor: pointer;
+            }
+
+            .tab-btn.active {
+                background: var(--bg-card);
+                color: var(--accent-gold);
+                border-color: var(--accent-gold);
+            }
+
+            .workspace {
+                padding: 0 0.8rem 0.8rem;
+                flex-direction: column;
+            }
+
+            .workspace-resizer {
+                display: none !important;
+            }
+
+            #editor-card,
             #terminal-card {
-                flex: none;
+                flex: 1 1 100% !important;
                 width: 100% !important;
-                height: 400px;
-                margin-top: 1rem;
+                max-width: 100% !important;
+                min-width: 0 !important;
+                display: none;
+                border-radius: 0 0 8px 8px;
+            }
+
+            .workspace[data-tab="editor"] #editor-card {
+                display: flex;
+            }
+
+            .workspace[data-tab="terminal"] #terminal-card {
+                display: flex;
+            }
+
+            #btn-toggle-terminal {
+                display: none;
+            }
+
+            #code-highlight, #code-input {
+                font-size: 0.84rem;
+                padding: 0.6rem;
+            }
+
+            .line-numbers {
+                width: 38px;
+                font-size: 0.84rem;
+                padding: 0.6rem 0.15rem 0.6rem 0;
+            }
+
+            .terminal {
+                font-size: 0.84rem;
+                padding: 0.8rem;
+            }
+
+            .projects-drawer {
+                width: 300px;
+                max-width: 85vw;
             }
         }
     </style>
 </head>
 <body>
+
+    <!-- Aviso exclusivo de versión móvil -->
+    <div class="mobile-notice" id="mobile-notice">
+        <span>💻 <b>Tip:</b> Para una experiencia de programación y tipado más cómoda, recomendamos usar una computadora.</span>
+        <button class="btn-close-notice" id="btn-close-notice" title="Cerrar">&times;</button>
+    </div>
+
     <header>
         <div class="header-container">
             <div class="brand-title-wrap">
@@ -846,6 +999,19 @@
         </button>
     </div>
 
+    <!-- Pestañas solo activas en versión móvil -->
+    <div class="mobile-tabs-bar">
+        <button class="tab-btn active" id="tab-editor-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            Editor Pseudocódigo
+        </button>
+        <button class="tab-btn" id="tab-terminal-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+            Consola Unificada
+        </button>
+    </div>
+
+    <!-- Banner lateral de Proyectos -->
     <div class="drawer-overlay" id="drawer-overlay"></div>
     <aside class="projects-drawer" id="projects-drawer">
         <div class="drawer-header">
@@ -871,7 +1037,7 @@
         </div>
     </aside>
 
-    <main class="workspace" id="workspace">
+    <main class="workspace" id="workspace" data-tab="editor">
         <div class="card" id="editor-card">
             <div class="card-header">
                 <div class="card-title">
@@ -948,9 +1114,35 @@
         const btnSaveProject = document.getElementById('btn-save-project');
         const projectsList = document.getElementById('projects-list');
 
+        const tabEditorBtn = document.getElementById('tab-editor-btn');
+        const tabTerminalBtn = document.getElementById('tab-terminal-btn');
+        const mobileNotice = document.getElementById('mobile-notice');
+        const btnCloseNotice = document.getElementById('btn-close-notice');
+
+        // Cierre del aviso móvil
+        btnCloseNotice.addEventListener('click', () => {
+            mobileNotice.style.display = 'none';
+        });
+
+        // Alternancia de pestañas en versión móvil
+        function setMobileTab(tab) {
+            workspace.setAttribute('data-tab', tab);
+            if (tab === 'editor') {
+                tabEditorBtn.classList.add('active');
+                tabTerminalBtn.classList.remove('active');
+            } else {
+                tabTerminalBtn.classList.add('active');
+                tabEditorBtn.classList.remove('active');
+            }
+        }
+
+        tabEditorBtn.addEventListener('click', () => setMobileTab('editor'));
+        tabTerminalBtn.addEventListener('click', () => setMobileTab('terminal'));
+
         let currentActiveProject = null;
         let lastTerminalWidth = 420;
 
+        // Redimensionamiento interactivo de la consola en PC
         let isResizing = false;
 
         workspaceResizer.addEventListener('mousedown', (e) => {
@@ -1051,6 +1243,7 @@
                     updateEditor();
                     renderProjectsList();
                     closeDrawer();
+                    if (window.innerWidth <= 768) setMobileTab('editor');
                     printTerm(`Proyecto cargado: "${name}".`, 'sys');
                 });
 
@@ -1113,6 +1306,7 @@
             codeInput.value = '';
             updateEditor();
             clearTerminal();
+            if (window.innerWidth <= 768) setMobileTab('editor');
             printTerm('Nuevo proyecto creado. Editor limpio.', 'sys');
         });
 
@@ -1451,6 +1645,9 @@
                         printTerm(`  [Línea ${w.line}] -> ${w.msg}`, 'warn');
                     });
                 }
+            }
+            if (window.innerWidth <= 768) {
+                setMobileTab('terminal');
             }
         }
 
@@ -1851,7 +2048,9 @@
         async function executeCode() {
             updateEditor();
 
-            if (terminalCard.classList.contains('collapsed')) {
+            if (window.innerWidth <= 768) {
+                setMobileTab('terminal');
+            } else if (terminalCard.classList.contains('collapsed')) {
                 terminalCard.classList.remove('collapsed');
                 workspaceResizer.style.display = 'flex';
                 terminalCard.style.flex = `0 0 ${lastTerminalWidth}px`;

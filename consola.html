@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Joelinton - UNPSJB Pseudocode Studio</title>
-    <link rel="icon" href="azul.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -52,7 +51,6 @@
                 radial-gradient(circle at 15% 85%, rgba(226, 168, 75, 0.05) 0%, transparent 40%);
         }
 
-        /* Banner de recomendación para teléfonos */
         .mobile-notice {
             display: none;
             background: linear-gradient(90deg, #241103 0%, #1a080c 100%);
@@ -248,12 +246,10 @@
             margin: 0 0.25rem;
         }
 
-        /* TABS PARA MÓVIL (ocultas en PC) */
         .mobile-tabs-bar {
             display: none;
         }
 
-        /* ESPACIO DE TRABAJO ORIGINAL DE PC (Flexbox con divisor redimensionable) */
         .workspace {
             padding: 0 2rem 0.6rem;
             width: 100%;
@@ -316,7 +312,6 @@
             display: none;
         }
 
-        /* Barra de redimensionamiento */
         .workspace-resizer {
             width: 12px;
             margin: 0 4px;
@@ -384,7 +379,6 @@
             background: rgba(255, 255, 255, 0.05);
         }
 
-        /* Banner Desplegable de Proyectos */
         .drawer-overlay {
             position: fixed;
             top: 0;
@@ -513,22 +507,10 @@
             padding-right: 4px;
         }
 
-        .projects-list::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        .projects-list::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .projects-list::-webkit-scrollbar-thumb {
-            background: var(--border-subtle);
-            border-radius: 4px;
-        }
-
-        .projects-list::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-gold);
-        }
+        .projects-list::-webkit-scrollbar { width: 5px; }
+        .projects-list::-webkit-scrollbar-track { background: transparent; }
+        .projects-list::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 4px; }
+        .projects-list::-webkit-scrollbar-thumb:hover { background: var(--accent-gold); }
 
         .project-item {
             display: flex;
@@ -550,10 +532,6 @@
             background: rgba(226, 168, 75, 0.1);
             border-color: rgba(226, 168, 75, 0.5);
             color: var(--text-primary);
-        }
-
-        .project-item:active {
-            background: rgba(226, 168, 75, 0.18);
         }
 
         .project-item.active {
@@ -788,7 +766,6 @@
             cursor: not-allowed;
         }
 
-        /* PIE DE PÁGINA DISCRETO ALINEADO A LA IZQUIERDA */
         .site-footer {
             padding: 0.35rem 2rem 0.45rem;
             background: #090b0d;
@@ -800,34 +777,13 @@
             flex-shrink: 0;
         }
 
-        .footer-brand {
-            color: #e2a84b;
-            font-weight: 500;
-        }
+        .footer-brand { color: #e2a84b; font-weight: 500; }
+        .footer-domain { color: #7b889b; font-weight: 400; }
 
-        .footer-domain {
-            color: #7b889b;
-            font-weight: 400;
-        }
-
-        /* =======================================================
-           REGLAS EXCLUSIVAS PARA MÓVILES (max-width: 768px)
-           La versión de escritorio queda 100% intacta.
-           ======================================================= */
         @media (max-width: 768px) {
-            .mobile-notice {
-                display: flex;
-            }
-
-            header {
-                padding: 0.5rem 0.8rem;
-            }
-
-            .status-badge {
-                padding: 0.25rem 0.55rem;
-                font-size: 0.68rem;
-            }
-
+            .mobile-notice { display: flex; }
+            header { padding: 0.5rem 0.8rem; }
+            .status-badge { padding: 0.25rem 0.55rem; font-size: 0.68rem; }
             .toolbar {
                 padding: 0.4rem 0.8rem;
                 gap: 0.4rem;
@@ -835,17 +791,8 @@
                 flex-wrap: nowrap;
                 -webkit-overflow-scrolling: touch;
             }
-
-            .toolbar::-webkit-scrollbar {
-                display: none;
-            }
-
-            .btn {
-                font-size: 0.75rem;
-                padding: 0.38rem 0.7rem;
-                flex-shrink: 0;
-            }
-
+            .toolbar::-webkit-scrollbar { display: none; }
+            .btn { font-size: 0.75rem; padding: 0.38rem 0.7rem; flex-shrink: 0; }
             .mobile-tabs-bar {
                 display: flex;
                 padding: 0.3rem 0.8rem 0;
@@ -853,7 +800,6 @@
                 background: transparent;
                 flex-shrink: 0;
             }
-
             .tab-btn {
                 flex: 1;
                 padding: 0.55rem;
@@ -871,24 +817,14 @@
                 gap: 0.45rem;
                 cursor: pointer;
             }
-
             .tab-btn.active {
                 background: var(--bg-card);
                 color: var(--accent-gold);
                 border-color: var(--accent-gold);
             }
-
-            .workspace {
-                padding: 0 0.8rem 0.4rem;
-                flex-direction: column;
-            }
-
-            .workspace-resizer {
-                display: none !important;
-            }
-
-            #editor-card,
-            #terminal-card {
+            .workspace { padding: 0 0.8rem 0.4rem; flex-direction: column; }
+            .workspace-resizer { display: none !important; }
+            #editor-card, #terminal-card {
                 flex: 1 1 100% !important;
                 width: 100% !important;
                 max-width: 100% !important;
@@ -896,52 +832,21 @@
                 display: none;
                 border-radius: 0 0 8px 8px;
             }
-
-            .workspace[data-tab="editor"] #editor-card {
-                display: flex;
-            }
-
-            .workspace[data-tab="terminal"] #terminal-card {
-                display: flex;
-            }
-
-            #btn-toggle-terminal {
-                display: none;
-            }
-
-            #code-highlight, #code-input {
-                font-size: 0.84rem;
-                padding: 0.6rem;
-            }
-
-            .line-numbers {
-                width: 38px;
-                font-size: 0.84rem;
-                padding: 0.6rem 0.15rem 0.6rem 0;
-            }
-
-            .terminal {
-                font-size: 0.84rem;
-                padding: 0.8rem;
-            }
-
-            .projects-drawer {
-                width: 300px;
-                max-width: 85vw;
-            }
-
-            .site-footer {
-                padding: 0.35rem 0.8rem 0.45rem;
-                font-size: 0.7rem;
-            }
+            .workspace[data-tab="editor"] #editor-card { display: flex; }
+            .workspace[data-tab="terminal"] #terminal-card { display: flex; }
+            #btn-toggle-terminal { display: none; }
+            #code-highlight, #code-input { font-size: 0.84rem; padding: 0.6rem; }
+            .line-numbers { width: 38px; font-size: 0.84rem; padding: 0.6rem 0.15rem 0.6rem 0; }
+            .terminal { font-size: 0.84rem; padding: 0.8rem; }
+            .projects-drawer { width: 300px; max-width: 85vw; }
+            .site-footer { padding: 0.35rem 0.8rem 0.45rem; font-size: 0.7rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Aviso exclusivo de versión móvil -->
     <div class="mobile-notice" id="mobile-notice">
-        <span>💻 <b>Tip:</b> Para una experiencia de programación y tipado más cómoda, recomendamos usar una computadora.</span>
+        <span>💻 <b>Tip:</b> Para una experiencia más cómoda de desarrollo, recomendamos usar una computadora.</span>
         <button class="btn-close-notice" id="btn-close-notice" title="Cerrar">&times;</button>
     </div>
 
@@ -991,7 +896,6 @@
         </button>
     </div>
 
-    <!-- Pestañas solo activas en versión móvil -->
     <div class="mobile-tabs-bar">
         <button class="tab-btn active" id="tab-editor-btn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
@@ -1003,7 +907,6 @@
         </button>
     </div>
 
-    <!-- Banner lateral de Proyectos -->
     <div class="drawer-overlay" id="drawer-overlay"></div>
     <aside class="projects-drawer" id="projects-drawer">
         <div class="drawer-header">
@@ -1069,20 +972,18 @@
         </div>
     </main>
 
-    <!-- Pie de página alineado a la izquierda -->
     <footer class="site-footer">
         <span class="footer-brand">Joelinton<span class="footer-domain">.vercel.app</span></span>
     </footer>
 
     <script>
         const META_KEYWORDS = [
-            'comienza', 'constantes', 'entonces', 'escribir', 'escribirln',
+            'comienza', 'constantes', 'constante', 'entonces', 'escribir', 'escribirln',
             'hacer', 'hasta', 'leer', 'mientras', 'opcion', 'opción', 'de',
-            'para', 'repetir', 'si', 'sino', 'termina', 'variables',
-            'finsi', 'programa', 'tipos', 'fin'
+            'para', 'repetir', 'si', 'sino', 'termina', 'variables', 'variable',
+            'finsi', 'finpara', 'finmientras', 'programa', 'tipos', 'tipo', 'fin',
+            'procedimiento', 'funcion', 'función', 'arreglo'
         ];
-
-        const INITIAL_TEMPLATE = ``;
 
         const codeInput = document.getElementById('code-input');
         const codeHighlight = document.getElementById('code-highlight');
@@ -1116,12 +1017,10 @@
         const mobileNotice = document.getElementById('mobile-notice');
         const btnCloseNotice = document.getElementById('btn-close-notice');
 
-        // Cierre del aviso móvil
         btnCloseNotice.addEventListener('click', () => {
             mobileNotice.style.display = 'none';
         });
 
-        // Alternancia de pestañas en versión móvil
         function setMobileTab(tab) {
             workspace.setAttribute('data-tab', tab);
             if (tab === 'editor') {
@@ -1138,8 +1037,6 @@
 
         let currentActiveProject = null;
         let lastTerminalWidth = 420;
-
-        // Redimensionamiento interactivo de la consola en PC
         let isResizing = false;
 
         workspaceResizer.addEventListener('mousedown', (e) => {
@@ -1154,7 +1051,6 @@
             if (!isResizing) return;
             const containerRect = workspace.getBoundingClientRect();
             let newTerminalWidth = containerRect.right - e.clientX;
-
             const minWidth = 180;
             const maxWidth = containerRect.width - 260;
 
@@ -1274,7 +1170,6 @@
             }
 
             const projects = getSavedProjects();
-
             if (projects.hasOwnProperty(name)) {
                 const confirmOverwrite = confirm(`El proyecto "${name}" ya existe. ¿Deseas sobreescribirlo?`);
                 if (!confirmOverwrite) return;
@@ -1289,7 +1184,6 @@
             projectNameInput.value = '';
             updateEditor();
             closeDrawer();
-
             printTerm(`Proyecto guardado con éxito: "${name}". Editor limpio.`, 'success');
         });
 
@@ -1309,316 +1203,277 @@
 
         renderProjectsList();
 
-        let currentValidation = { status: 'ok', errors: [], warnings: [], declaredVars: {}, declaredConsts: {} };
+        let currentValidation = { status: 'ok', errors: [], warnings: [], declaredVars: {}, declaredConsts: {}, declaredTypes: {}, subprograms: {} };
 
         function extractReadVarNames(content) {
             let str = content.trim();
             if (str.startsWith('(') && str.endsWith(')')) {
                 str = str.substring(1, str.length - 1).trim();
             }
-            return str.split(',').map(v => v.trim().toLowerCase()).filter(v => v !== '');
+            return parseArguments(str);
+        }
+
+        function parseArguments(str) {
+            const args = [];
+            let curr = '';
+            let inQuotes = false;
+            let quoteChar = '';
+            let parenCount = 0;
+
+            for (let i = 0; i < str.length; i++) {
+                const ch = str[i];
+                if ((ch === '"' || ch === "'") && (i === 0 || str[i-1] !== '\\')) {
+                    if (!inQuotes) {
+                        inQuotes = true;
+                        quoteChar = ch;
+                    } else if (quoteChar === ch) {
+                        inQuotes = false;
+                    }
+                }
+                if (!inQuotes) {
+                    if (ch === '(') parenCount++;
+                    else if (ch === ')') parenCount--;
+                }
+                if (ch === ',' && !inQuotes && parenCount === 0) {
+                    args.push(curr.trim());
+                    curr = '';
+                } else {
+                    curr += ch;
+                }
+            }
+            if (curr.trim()) args.push(curr.trim());
+            return args;
+        }
+
+        function parseTypeDefinition(line, constants) {
+            const clean = line.replace(/\{[^}]*\}/g, '').trim();
+            const parts = clean.split('=');
+            if (parts.length !== 2) return null;
+
+            const typeName = parts[0].trim().toLowerCase();
+            const def = parts[1].trim();
+
+            const arrMatch = def.match(/^arreglo\s*\(\s*([a-zA-Z0-9_]+)\s*\)\s+de\s+([a-zA-Z0-9_]+)$/i);
+            if (arrMatch) {
+                let sizeToken = arrMatch[1].trim().toLowerCase();
+                let elemType = arrMatch[2].trim().toLowerCase();
+
+                let size = null;
+                if (/^\d+$/.test(sizeToken)) {
+                    size = parseInt(sizeToken, 10);
+                } else if (constants && constants[sizeToken] !== undefined) {
+                    size = parseInt(constants[sizeToken], 10);
+                }
+
+                return {
+                    name: typeName,
+                    kind: 'arreglo',
+                    sizeToken: sizeToken,
+                    size: size,
+                    elemType: elemType
+                };
+            }
+            return { name: typeName, kind: 'simple', raw: def };
+        }
+
+        function parseSubprogramHeader(line) {
+            const clean = line.replace(/\{[^}]*\}/g, '').trim();
+            const isFunc = /^funci[oó]n\b/i.test(clean);
+            const isProc = /^procedimiento\b/i.test(clean);
+
+            if (!isFunc && !isProc) return null;
+
+            const kind = isFunc ? 'funcion' : 'procedimiento';
+            let afterKeyword = clean.replace(/^(procedimiento|funci[oó]n)\s+/i, '').trim();
+
+            let returnType = null;
+            if (isFunc) {
+                const colonIdx = afterKeyword.lastIndexOf(':');
+                if (colonIdx !== -1) {
+                    returnType = afterKeyword.substring(colonIdx + 1).trim().toLowerCase();
+                    afterKeyword = afterKeyword.substring(0, colonIdx).trim();
+                }
+            }
+
+            const parenOpen = afterKeyword.indexOf('(');
+            const parenClose = afterKeyword.lastIndexOf(')');
+
+            let name = '';
+            let rawParams = '';
+
+            if (parenOpen !== -1 && parenClose !== -1 && parenClose > parenOpen) {
+                name = afterKeyword.substring(0, parenOpen).trim().toLowerCase();
+                rawParams = afterKeyword.substring(parenOpen + 1, parenClose).trim();
+            } else {
+                name = afterKeyword.trim().toLowerCase();
+            }
+
+            const params = [];
+            if (rawParams) {
+                const paramClauses = rawParams.split(';');
+                for (const clause of paramClauses) {
+                    const trimmedClause = clause.trim();
+                    if (!trimmedClause || !trimmedClause.includes(':')) continue;
+
+                    const cParts = trimmedClause.split(':');
+                    let paramNamesPart = cParts[0].trim();
+                    let restPart = cParts[1].trim();
+
+                    let mode = 'E';
+                    let typeName = restPart;
+
+                    const modeBeforeMatch = paramNamesPart.match(/\b(E\/S|E|S)\b$/i);
+                    if (modeBeforeMatch) {
+                        mode = modeBeforeMatch[1].toUpperCase();
+                        paramNamesPart = paramNamesPart.substring(0, paramNamesPart.length - mode[0].length).trim();
+                    } else {
+                        const modeAfterMatch = restPart.match(/^(E\/S|E|S)\s+(.+)$/i);
+                        if (modeAfterMatch) {
+                            mode = modeAfterMatch[1].toUpperCase();
+                            typeName = modeAfterMatch[2].trim();
+                        }
+                    }
+
+                    const names = paramNamesPart.split(',').map(n => n.trim().toLowerCase()).filter(n => n);
+                    for (const pName of names) {
+                        params.push({
+                            name: pName,
+                            mode: mode,
+                            type: typeName.toLowerCase()
+                        });
+                    }
+                }
+            }
+
+            return { kind, name, params, returnType };
         }
 
         function validateSyntax(code) {
             const lines = code.split('\n');
             const errors = [];
             const warnings = [];
+
             const declaredConsts = {};
+            const declaredTypes = {};
             const declaredVars = {};
-            const loopControlVars = new Set();
+            const subprograms = {};
 
-            let hasComienza = false;
-            let hasTermina = false;
-            let section = '';
-            let inBody = false;
+            let currentSection = 'header';
+            let currentSubprogram = null;
+            let inSubVars = false;
+            let hasMainComienza = false;
+            let hasMainTermina = false;
 
-            const SECTION_ORDER = { 'constantes': 1, 'tipos': 2, 'variables': 3 };
-            let lastHeaderOrder = 0;
-            let seenSections = new Set();
-
-            const blockStack = [];
-
-            lines.forEach((raw) => {
+            lines.forEach((raw, idx) => {
                 let l = raw.trim().replace(/\{[^}]*\}/g, '').trim();
                 const cIdx = l.indexOf('//');
                 if (cIdx !== -1) l = l.substring(0, cIdx).trim();
-                const m = l.match(/^para\s+([a-zA-Z0-9_]+)\s*(?:<-|:=)/i);
-                if (m) {
-                    loopControlVars.add(m[1].toLowerCase());
+                if (!l) return;
+
+                const low = l.toLowerCase();
+                if (low === 'constantes' || low === 'constante') { currentSection = 'constantes'; return; }
+                if (low === 'tipos' || low === 'tipo') { currentSection = 'tipos'; return; }
+                if (low === 'variables' || low === 'variable') { currentSection = 'variables'; return; }
+                if (low.startsWith('procedimiento') || low.startsWith('funcion') || low.startsWith('función')) { currentSection = 'sub'; return; }
+                if (low.startsWith('comienza')) { currentSection = 'body'; return; }
+
+                if (currentSection === 'constantes') {
+                    const sepMatch = l.match(/[:=]/);
+                    if (sepMatch) {
+                        const parts = l.split(sepMatch[0]);
+                        const cName = parts[0].trim().toLowerCase();
+                        let rawVal = parts[1].trim();
+                        let parsedVal = rawVal;
+                        if (/^[+-]?\d+$/.test(rawVal)) parsedVal = parseInt(rawVal, 10);
+                        else if (/^[+-]?\d+\.\d+$/.test(rawVal)) parsedVal = parseFloat(rawVal);
+                        declaredConsts[cName] = parsedVal;
+                    }
+                } else if (currentSection === 'tipos') {
+                    const tDef = parseTypeDefinition(l, declaredConsts);
+                    if (tDef) declaredTypes[tDef.name] = tDef;
                 }
             });
+
+            currentSection = 'header';
 
             lines.forEach((raw, idx) => {
                 const lineNum = idx + 1;
-                const leadingSpaces = raw.match(/^\s*/)[0];
-                const indentCount = leadingSpaces.replace(/\t/g, '    ').length;
+                let l = raw.trim().replace(/\{[^}]*\}/g, '').trim();
+                const cIdx = l.indexOf('//');
+                if (cIdx !== -1) l = l.substring(0, cIdx).trim();
+                if (!l) return;
 
-                let line = raw.trim();
-                if (!line) return;
+                const low = l.toLowerCase();
+                if (low.startsWith('programa')) return;
 
-                if (line.startsWith('{') && line.endsWith('}')) return;
-                if (line.startsWith('//')) return;
-
-                line = line.replace(/\{[^}]*\}/g, '').trim();
-                const commIdx = line.indexOf('//');
-                if (commIdx !== -1) line = line.substring(0, commIdx).trim();
-                if (!line) return;
-
-                const lower = line.toLowerCase();
-
-                if (lower.startsWith('programa')) { section = 'header'; return; }
-
-                if (lower === 'constantes' || lower === 'tipos' || lower === 'variables') {
-                    if (hasComienza) {
-                        errors.push({ line: lineNum, msg: `La sección "${lower}" debe declararse antes de "comienza".` });
-                        return;
-                    }
-                    if (seenSections.has(lower)) {
-                        errors.push({ line: lineNum, msg: `Sección "${lower}" duplicada.` });
-                        return;
-                    }
-                    seenSections.add(lower);
-                    const currentOrder = SECTION_ORDER[lower];
-                    if (currentOrder < lastHeaderOrder) {
-                        errors.push({ line: lineNum, msg: `Orden de encabezado inválido: las secciones deben respetar el orden [constantes -> tipos -> variables].` });
-                    }
-                    lastHeaderOrder = currentOrder;
-                    section = lower;
+                if (low === 'constantes' || low === 'constante') { currentSection = 'constantes'; return; }
+                if (low === 'tipos' || low === 'tipo') { currentSection = 'tipos'; return; }
+                if (low === 'variables' || low === 'variable') {
+                    if (currentSubprogram) inSubVars = true;
+                    else currentSection = 'variables';
                     return;
                 }
 
-                if (lower === 'comienza') {
-                    if (hasComienza) errors.push({ line: lineNum, msg: 'Metapalabra "comienza" duplicada.' });
-                    hasComienza = true;
-                    inBody = true;
-                    section = 'body';
-                    return;
-                }
-
-                if (lower === 'termina') {
-                    if (!hasComienza) errors.push({ line: lineNum, msg: 'Falta "comienza" antes de "termina".' });
-                    hasTermina = true;
-                    inBody = false;
-                    section = 'end';
-                    return;
-                }
-
-                if (inBody && indentCount === 0 && lower !== 'termina') {
-                    warnings.push({ line: lineNum, msg: 'Falta sangría/tabulación: las instrucciones internas deben estar tabuladas.' });
-                }
-
-                if (section === 'constantes') {
-                    if (!line.includes(':') && !line.includes('=')) {
-                        errors.push({ line: lineNum, msg: 'Falta ":" o "=" para definir la constante.' });
+                if (low.startsWith('procedimiento') || low.startsWith('funcion') || low.startsWith('función')) {
+                    const sub = parseSubprogramHeader(l);
+                    if (!sub) {
+                        errors.push({ line: lineNum, msg: 'Cabecera de subprograma inválida.' });
                     } else {
-                        const sepMatch = line.match(/[:=]/);
-                        const sepIdx = line.indexOf(sepMatch[0]);
-                        const cName = line.substring(0, sepIdx).trim().toLowerCase();
-                        let rawVal = line.substring(sepIdx + 1).trim();
-
-                        let parsedVal = rawVal;
-                        if (/^[+-]?\d+$/.test(rawVal)) {
-                            parsedVal = parseInt(rawVal, 10);
-                        } else if (/^[+-]?\d+\.\d+$/.test(rawVal)) {
-                            parsedVal = parseFloat(rawVal);
-                        } else if (/^(verdadero|true)$/i.test(rawVal)) {
-                            parsedVal = true;
-                        } else if (/^(falso|false)$/i.test(rawVal)) {
-                            parsedVal = false;
-                        } else if ((rawVal.startsWith('"') && rawVal.endsWith('"')) || (rawVal.startsWith("'") && rawVal.endsWith("'"))) {
-                            parsedVal = rawVal.slice(1, -1);
-                        }
-
-                        if (cName) declaredConsts[cName] = parsedVal;
+                        currentSubprogram = {
+                            ...sub,
+                            localVars: {},
+                            bodyLines: [],
+                            startLine: lineNum
+                        };
+                        subprograms[sub.name] = currentSubprogram;
+                        inSubVars = false;
+                        currentSection = 'sub';
                     }
                     return;
                 }
 
-                if (section === 'tipos') {
-                    return;
-                }
-
-                if (section === 'variables') {
-                    if (line.includes(':')) {
-                        const parts = line.split(':');
-                        const varNamePart = parts[0].trim();
-                        const rawTipo = parts[1].trim().toLowerCase();
-
-                        if (!rawTipo) {
-                            errors.push({ line: lineNum, msg: `Falta definir el tipo de dato tras ":" para "${varNamePart}".` });
-                            return;
-                        }
-
-                        let tipoDato = null;
-                        if (rawTipo.includes('entero')) tipoDato = 'entero';
-                        else if (rawTipo.includes('real') || rawTipo.includes('flotante') || rawTipo.includes('float')) tipoDato = 'real';
-                        else if (rawTipo.includes('cadena') || rawTipo.includes('texto') || rawTipo.includes('string')) tipoDato = 'cadena';
-                        else if (rawTipo.includes('caracter')) tipoDato = 'caracter';
-                        else if (rawTipo.includes('logico') || rawTipo.includes('booleano')) tipoDato = 'logico';
-
-                        if (!tipoDato) {
-                            errors.push({ line: lineNum, msg: `Tipo de dato inválido o desconocido: "${parts[1].trim()}".` });
-                            return;
-                        }
-
-                        const vList = varNamePart.split(',').map(v => v.trim().toLowerCase());
-                        vList.forEach(v => {
-                            if (v && /^[a-zA-ZáéíóúÁÉÍÓÚñÑ_][a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_]*$/.test(v)) {
-                                declaredVars[v] = tipoDato;
-                            }
-                        });
-                    } else {
-                        errors.push({ line: lineNum, msg: 'Declaración inválida: se esperaba "nombre_variable : tipo"' });
+                if (currentSection === 'variables' && !currentSubprogram) {
+                    if (l.includes(':')) {
+                        const parts = l.split(':');
+                        const vList = parts[0].split(',').map(v => v.trim().toLowerCase());
+                        const tipo = parts[1].trim().toLowerCase();
+                        vList.forEach(v => { if (v) declaredVars[v] = tipo; });
                     }
                     return;
                 }
 
-                if (inBody) {
-                    if (lower.startsWith('escribir') || lower.startsWith('escribirln')) {
-                        const match = line.match(/^(escribir|escribirln)\s*\(([\s\S]*)\)$/i);
-                        if (!match) errors.push({ line: lineNum, msg: 'Falta paréntesis en escribir: escribir(...)' });
+                if (currentSubprogram && inSubVars) {
+                    if (low.startsWith('comienza')) {
+                        inSubVars = false;
+                    } else if (l.includes(':')) {
+                        const parts = l.split(':');
+                        const vList = parts[0].split(',').map(v => v.trim().toLowerCase());
+                        const tipo = parts[1].trim().toLowerCase();
+                        vList.forEach(v => { if (v) currentSubprogram.localVars[v] = tipo; });
                         return;
                     }
-
-                    if (lower === 'leer' || lower.startsWith('leer ') || lower.startsWith('leer(')) {
-                        const content = line.substring(4).trim();
-                        if (!content) {
-                            errors.push({ line: lineNum, msg: 'Falta indicar la(s) variable(s) a leer: leer <variable>' });
-                        } else {
-                            const vars = extractReadVarNames(content);
-                            if (vars.length === 0) {
-                                errors.push({ line: lineNum, msg: 'Variable vacía en instrucción leer.' });
-                            }
-                            vars.forEach(varName => {
-                                if (!(varName in declaredVars) && !loopControlVars.has(varName)) {
-                                    errors.push({ line: lineNum, msg: `Variable "${varName}" no declarada. Debe declararse en la sección "variables".` });
-                                }
-                            });
-                        }
-                        return;
-                    }
-
-                    if (lower === 'repetir') {
-                        blockStack.push({ type: 'repetir', line: lineNum });
-                        return;
-                    }
-
-                    if (lower.startsWith('hasta ')) {
-                        const top = blockStack.pop();
-                        if (!top || top.type !== 'repetir') {
-                            errors.push({ line: lineNum, msg: '"hasta <condicion>" sin un bloque "repetir" abierto.' });
-                        }
-                        return;
-                    }
-
-                    if (lower.startsWith('opcion') || lower.startsWith('opción')) {
-                        if (!lower.endsWith('de')) {
-                            errors.push({ line: lineNum, msg: 'Falta la metapalabra "de" en "opcion <var> de".' });
-                        }
-                        blockStack.push({ type: 'opcion', line: lineNum });
-                        return;
-                    }
-
-                    if (lower === 'termina opcion' || lower === 'termina opción') {
-                        const top = blockStack.pop();
-                        if (!top || top.type !== 'opcion') {
-                            errors.push({ line: lineNum, msg: '"termina opcion" sin bloque "opcion" abierto.' });
-                        }
-                        return;
-                    }
-
-                    if (/^\d+\s*:/.test(line)) return;
-
-                    if (lower.startsWith('para ')) {
-                        if (!lower.includes('hasta') || !lower.includes('hacer')) {
-                            errors.push({ line: lineNum, msg: 'Estructura "para" incompleta: para <var> <- <ini> hasta <fin> hacer' });
-                        }
-                        blockStack.push({ type: 'para', line: lineNum });
-                        return;
-                    }
-
-                    if (lower === 'fin para' || lower === 'finpara') {
-                        const top = blockStack.pop();
-                        if (!top || top.type !== 'para') {
-                            errors.push({ line: lineNum, msg: '"fin para" sin un "para" correspondiente.' });
-                        }
-                        return;
-                    }
-
-                    if (lower.startsWith('mientras ')) {
-                        if (!lower.endsWith('hacer')) {
-                            errors.push({ line: lineNum, msg: 'Falta la metapalabra "hacer" en "mientras <cond> hacer".' });
-                        }
-                        blockStack.push({ type: 'mientras', line: lineNum });
-                        return;
-                    }
-
-                    if (lower === 'fin mientras' || lower === 'finmientras') {
-                        const top = blockStack.pop();
-                        if (!top || top.type !== 'mientras') {
-                            errors.push({ line: lineNum, msg: '"fin mientras" sin un "mientras" correspondiente.' });
-                        }
-                        return;
-                    }
-
-                    if (lower.startsWith('si ')) {
-                        if (!lower.includes('entonces')) {
-                            errors.push({ line: lineNum, msg: 'Falta la metapalabra "entonces" en "si <cond> entonces".' });
-                        }
-                        blockStack.push({ type: 'si', line: lineNum });
-                        return;
-                    }
-
-                    if (lower === 'sino') {
-                        const top = blockStack[blockStack.length - 1];
-                        if (!top || top.type !== 'si') {
-                            errors.push({ line: lineNum, msg: '"sino" sin bloque "si" correspondiente.' });
-                        }
-                        return;
-                    }
-
-                    if (lower === 'fin si' || lower === 'finsi') {
-                        const top = blockStack.pop();
-                        if (!top || top.type !== 'si') {
-                            errors.push({ line: lineNum, msg: '"fin si" sin bloque "si" correspondiente.' });
-                        }
-                        return;
-                    }
-
-                    if (line.includes('<-') || line.includes(':=')) {
-                        const sep = line.includes('<-') ? '<-' : ':=';
-                        const parts = line.split(sep);
-                        const target = parts[0].trim().toLowerCase();
-                        const expr = parts[1] ? parts[1].trim() : '';
-                        if (!target) {
-                            errors.push({ line: lineNum, msg: 'Falta variable destino antes de "<-".' });
-                        } else if (!(target in declaredVars) && !loopControlVars.has(target)) {
-                            errors.push({ line: lineNum, msg: `Variable "${target}" no declarada en "variables".` });
-                        }
-                        if (!expr) errors.push({ line: lineNum, msg: `Falta expresión tras "<-" para ${target}.` });
-                        return;
-                    }
-
-                    errors.push({ line: lineNum, msg: `Instrucción no válida: "${line}".` });
                 }
+
+                if (currentSubprogram) {
+                    if (low.startsWith('termina')) {
+                        currentSubprogram = null;
+                        return;
+                    }
+                    return;
+                }
+
+                if (low.startsWith('comienza')) { hasMainComienza = true; currentSection = 'main_body'; return; }
+                if (low.startsWith('termina')) { hasMainTermina = true; currentSection = 'end'; return; }
             });
 
-            if (!hasComienza) errors.push({ line: lines.length, msg: 'Falta la metapalabra "comienza".' });
-            if (!hasTermina) errors.push({ line: lines.length, msg: 'Falta la metapalabra "termina" al final.' });
-            if (blockStack.length > 0) {
-                const unclosed = blockStack.pop();
-                if (unclosed.type === 'repetir') {
-                    errors.push({ line: unclosed.line, msg: 'Bloque "repetir" no fue cerrado (falta "hasta <condicion>").' });
-                } else {
-                    errors.push({ line: unclosed.line, msg: `Bloque "${unclosed.type}" no cerrado.` });
-                }
-            }
+            if (!hasMainComienza) errors.push({ line: lines.length, msg: 'Falta la metapalabra "comienza" del programa principal.' });
+            if (!hasMainTermina) errors.push({ line: lines.length, msg: 'Falta la metapalabra "termina" del programa principal.' });
 
             let status = 'ok';
             if (errors.length > 0) status = 'error';
             else if (warnings.length > 0) status = 'warn';
 
-            return { status, errors, warnings, declaredVars, declaredConsts, loopControlVars };
+            return { status, errors, warnings, declaredVars, declaredConsts, declaredTypes, subprograms };
         }
 
         function runDiagnosticReport() {
@@ -1626,26 +1481,15 @@
             printTerm('--- INFORME DE DIAGNÓSTICO & DEBUG ---', 'debug');
 
             if (val.status === 'ok') {
-                printTerm('✔ No se encontraron errores de sintaxis.', 'success');
-                printTerm('✔ La estructura y sangría cumplen las normas de EPyA.', 'success');
-                printTerm('✔ Código listo para ser ejecutado con el botón "Ejecutar" o F5.', 'sys');
+                printTerm('✔ Sintaxis y estructura validadas con éxito.', 'success');
+                printTerm(`✔ Vectores y tipos registrados: ${Object.keys(val.declaredTypes).length}`, 'sys');
+                printTerm(`✔ Procedimientos y funciones registrados: ${Object.keys(val.subprograms).length}`, 'sys');
+                printTerm('✔ Algoritmo listo para ejecutar.', 'sys');
             } else {
-                if (val.errors.length > 0) {
-                    printTerm(`✖ Se encontraron ${val.errors.length} error(es) bloqueante(s):`, 'error');
-                    val.errors.forEach(err => {
-                        printTerm(`  [Línea ${err.line}] -> ${err.msg}`, 'error');
-                    });
-                }
-                if (val.warnings.length > 0) {
-                    printTerm(`⚠ Se encontraron ${val.warnings.length} advertencia(s) de formato:`, 'warn');
-                    val.warnings.forEach(w => {
-                        printTerm(`  [Línea ${w.line}] -> ${w.msg}`, 'warn');
-                    });
-                }
+                val.errors.forEach(err => printTerm(`  [Línea ${err.line}] -> ${err.msg}`, 'error'));
+                val.warnings.forEach(w => printTerm(`  [Línea ${w.line}] -> ${w.msg}`, 'warn'));
             }
-            if (window.innerWidth <= 768) {
-                setMobileTab('terminal');
-            }
+            if (window.innerWidth <= 768) setMobileTab('terminal');
         }
 
         btnDiagnostico.addEventListener('click', runDiagnosticReport);
@@ -1668,7 +1512,6 @@
                 linesHtml += `<div class="line-num-item">${dot}${i}</div>`;
             }
             lineNumbers.innerHTML = linesHtml;
-
             codeHighlight.innerHTML = highlightSyntax(text) + '\n';
         }
 
@@ -1703,77 +1546,27 @@
         }
 
         function highlightSyntax(code) {
-            const tokens = [];
             const regex = /(\{[^}]*\})|(\/\/.*)|("(?:\\[\s\S]|[^"\\])*")|('(?:\\[\s\S]|[^'\\])*')|(<-|<=|>=|<>|:=|[+\-*\/%=<>,:;()[\]])|(\b\d+(?:\.\d+)?\b)|([a-zA-ZáéíóúÁÉÍÓÚñÑ_][a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_]*)|(\s+)|(.)/g;
-
+            const tokens = [];
             let match;
             while ((match = regex.exec(code)) !== null) {
                 const [full, curlyComment, lineComment, str1, str2, op, num, ident, ws, other] = match;
-                if (curlyComment || lineComment) {
-                    tokens.push(`<span class="token-comment">${escapeHTML(curlyComment || lineComment)}</span>`);
-                } else if (str1 || str2) {
-                    tokens.push(`<span class="token-str">${escapeHTML(str1 || str2)}</span>`);
-                } else if (op) {
-                    tokens.push(`<span class="token-op">${escapeHTML(op)}</span>`);
-                } else if (num) {
-                    tokens.push(`<span class="token-num">${escapeHTML(num)}</span>`);
-                } else if (ident) {
-                    const lower = ident.toLowerCase();
-                    if (META_KEYWORDS.includes(lower)) {
-                        tokens.push(`<span class="kw-meta">${escapeHTML(ident)}</span>`);
-                    } else {
-                        tokens.push(escapeHTML(ident));
-                    }
-                } else if (ws) {
-                    tokens.push(escapeHTML(ws));
-                } else if (other) {
-                    tokens.push(escapeHTML(other));
-                }
+                if (curlyComment || lineComment) tokens.push(`<span class="token-comment">${escapeHTML(curlyComment || lineComment)}</span>`);
+                else if (str1 || str2) tokens.push(`<span class="token-str">${escapeHTML(str1 || str2)}</span>`);
+                else if (op) tokens.push(`<span class="token-op">${escapeHTML(op)}</span>`);
+                else if (num) tokens.push(`<span class="token-num">${escapeHTML(num)}</span>`);
+                else if (ident) {
+                    if (META_KEYWORDS.includes(ident.toLowerCase())) tokens.push(`<span class="kw-meta">${escapeHTML(ident)}</span>`);
+                    else tokens.push(escapeHTML(ident));
+                } else if (ws) tokens.push(escapeHTML(ws));
+                else if (other) tokens.push(escapeHTML(other));
             }
             return tokens.join('');
         }
 
-        const ROOT_KEYWORDS = ['variables', 'constantes', 'tipos', 'programa', 'comienza', 'termina'];
-
-        function autoAlignRootKeywords() {
-            const start = codeInput.selectionStart;
-            const text = codeInput.value;
-            const lines = text.split('\n');
-
-            let currentPos = 0;
-            let cursorLineIdx = -1;
-            for (let i = 0; i < lines.length; i++) {
-                const lineLen = lines[i].length + 1;
-                if (start >= currentPos && start <= currentPos + lines[i].length) {
-                    cursorLineIdx = i;
-                    break;
-                }
-                currentPos += lineLen;
-            }
-
-            if (cursorLineIdx !== -1) {
-                const raw = lines[cursorLineIdx];
-                const trimmed = raw.trim().toLowerCase();
-
-                if (ROOT_KEYWORDS.includes(trimmed) && /^\s+/.test(raw)) {
-                    lines[cursorLineIdx] = raw.trim();
-                    codeInput.value = lines.join('\n');
-                    let newPos = 0;
-                    for (let i = 0; i < cursorLineIdx; i++) {
-                        newPos += lines[i].length + 1;
-                    }
-                    newPos += lines[cursorLineIdx].length;
-                    codeInput.selectionStart = codeInput.selectionEnd = newPos;
-                }
-            }
-        }
-
-        codeInput.addEventListener('input', () => {
-            autoAlignRootKeywords();
-            updateEditor();
-        });
+        codeInput.addEventListener('input', updateEditor);
         codeInput.addEventListener('scroll', syncScroll);
-        
+
         codeInput.addEventListener('keydown', (e) => {
             if (e.key === 'Tab') {
                 e.preventDefault();
@@ -1790,15 +1583,11 @@
                 let indent = matchIndent ? matchIndent[1] : '';
 
                 const curTrimmed = curLine.trim().toLowerCase();
-
                 if (curTrimmed === 'comienza' || curTrimmed === 'variables' || curTrimmed === 'constantes' || curTrimmed === 'tipos' ||
                     curTrimmed === 'repetir' || curTrimmed.endsWith('hacer') || curTrimmed.endsWith('entonces') || curTrimmed.endsWith('de')) {
-                    indent = '    ';
+                    indent += '    ';
                 }
-
-                if (curTrimmed === 'termina') {
-                    indent = '';
-                }
+                if (curTrimmed === 'termina') indent = '';
 
                 e.preventDefault();
                 const end = codeInput.selectionEnd;
@@ -1808,52 +1597,26 @@
             }
         });
 
-        codeInput.value = INITIAL_TEMPLATE;
-        updateEditor();
-
         function printTerm(msg, type = 'normal') {
             const line = document.createElement('div');
             line.className = 'terminal-line';
-            
             let prefix = '&gt;';
             let contentClass = '';
-            
-            if (type === 'sys') {
-                prefix = '[SYS]';
-                contentClass = 'terminal-sys';
-            } else if (type === 'error') {
-                prefix = '[ERROR]';
-                contentClass = 'terminal-error';
-            } else if (type === 'warn') {
-                prefix = '[AVISO]';
-                contentClass = 'terminal-warn';
-            } else if (type === 'debug') {
-                prefix = '[DEBUG]';
-                contentClass = 'terminal-debug';
-            } else if (type === 'prompt') {
-                prefix = '[ENTRADA]';
-                contentClass = 'terminal-prompt';
-            } else if (type === 'success') {
-                prefix = '[SYS]';
-                contentClass = 'terminal-success';
-            } else if (type === 'input') {
-                prefix = '&gt;';
-                contentClass = 'terminal-user-input';
-            }
+            if (type === 'sys') { prefix = '[SYS]'; contentClass = 'terminal-sys'; }
+            else if (type === 'error') { prefix = '[ERROR]'; contentClass = 'terminal-error'; }
+            else if (type === 'warn') { prefix = '[AVISO]'; contentClass = 'terminal-warn'; }
+            else if (type === 'debug') { prefix = '[DEBUG]'; contentClass = 'terminal-debug'; }
+            else if (type === 'prompt') { prefix = '[ENTRADA]'; contentClass = 'terminal-prompt'; }
+            else if (type === 'success') { prefix = '[SYS]'; contentClass = 'terminal-success'; }
+            else if (type === 'input') { prefix = '&gt;'; contentClass = 'terminal-user-input'; }
 
             line.innerHTML = `<span class="terminal-prefix">${prefix}</span> <span class="${contentClass}">${msg}</span>`;
             terminalOut.appendChild(line);
             terminalOut.scrollTop = terminalOut.scrollHeight;
         }
 
-        function clearTerminal() {
-            terminalOut.innerHTML = '';
-        }
-
-        btnClear.addEventListener('click', () => {
-            clearTerminal();
-            printTerm('Consola limpia.', 'sys');
-        });
+        function clearTerminal() { terminalOut.innerHTML = ''; }
+        btnClear.addEventListener('click', () => { clearTerminal(); printTerm('Consola limpia.', 'sys'); });
 
         let isRunning = false;
         let waitingForInput = null;
@@ -1861,91 +1624,63 @@
 
         function promptConsoleStrict(varName, expectedType, execId) {
             return new Promise((resolve, reject) => {
-                const typeLabel = expectedType ? `[Tipo: ${expectedType}]` : '';
+                const typeLabel = (expectedType && expectedType !== 'general') ? `[Tipo: ${expectedType}]` : '';
 
                 function ask(isRetry = false) {
                     if (execId !== executionAbortController) {
-                        reject(new Error("Ejecución cancelada por un nuevo reinicio."));
+                        reject(new Error("Ejecución cancelada por reinicio."));
                         return;
                     }
 
-                    if (!isRetry) {
-                        printTerm(`Esperando dato para variable "${varName}" ${typeLabel}:`, 'prompt');
-                    }
+                    if (!isRetry) printTerm(`Esperando dato para "${varName}" ${typeLabel}:`, 'prompt');
                     termInput.disabled = false;
-                    termInput.placeholder = `Escribe el valor para ${varName} y presiona Enter...`;
+                    termInput.placeholder = `Escribe el valor y presiona Enter...`;
                     termInput.focus();
 
                     waitingForInput = (val) => {
                         if (execId !== executionAbortController) {
-                            reject(new Error("Ejecución cancelada por un nuevo reinicio."));
+                            reject(new Error("Ejecución cancelada por reinicio."));
                             return;
                         }
-
                         const trimmed = val.trim();
 
                         if (expectedType === 'entero') {
-                            const isInteger = /^[+-]?\d+$/.test(trimmed);
-                            if (!isInteger) {
-                                printTerm(`ERROR DE TIPO: "${val}" contiene caracteres no válidos. Se esperaba un número ENTERO. Ingréselo nuevamente:`, 'error');
+                            if (!/^[+-]?\d+$/.test(trimmed)) {
+                                printTerm(`ERROR DE TIPO: "${val}" no es un número ENTERO válido. Reintente:`, 'error');
                                 ask(true);
                                 return;
                             }
                             termInput.disabled = true;
-                            termInput.placeholder = "Ejecutando...";
                             termInput.value = '';
                             resolve(parseInt(trimmed, 10));
                             return;
                         }
 
-                        if (expectedType === 'real') {
+                        if (expectedType === 'real' || expectedType === 'flotante') {
                             const num = Number(trimmed);
                             if (isNaN(num) || trimmed === '') {
-                                printTerm(`ERROR DE TIPO: "${val}" contiene caracteres no válidos. Se esperaba un número REAL. Ingréselo nuevamente:`, 'error');
+                                printTerm(`ERROR DE TIPO: "${val}" no es un número REAL válido. Reintente:`, 'error');
                                 ask(true);
                                 return;
                             }
                             termInput.disabled = true;
-                            termInput.placeholder = "Ejecutando...";
                             termInput.value = '';
                             resolve(num);
                             return;
                         }
 
-                        if (expectedType === 'caracter') {
-                            if (trimmed.length !== 1) {
-                                printTerm(`ERROR DE TIPO: Se esperaba exactamente 1 caracter. Ingréselo nuevamente:`, 'error');
-                                ask(true);
-                                return;
-                            }
-                            termInput.disabled = true;
-                            termInput.placeholder = "Ejecutando...";
-                            termInput.value = '';
-                            resolve(trimmed);
-                            return;
-                        }
-
-                        if (expectedType === 'logico') {
-                            const low = trimmed.toLowerCase();
-                            if (low !== 'verdadero' && low !== 'falso' && low !== 'true' && low !== 'false') {
-                                printTerm(`ERROR DE TIPO: Se esperaba "verdadero" o "falso". Ingréselo nuevamente:`, 'error');
-                                ask(true);
-                                return;
-                            }
-                            termInput.disabled = true;
-                            termInput.placeholder = "Ejecutando...";
-                            termInput.value = '';
-                            resolve(low === 'verdadero' || low === 'true');
-                            return;
-                        }
-
+             // Tipo general o cadena (convierte a número si es numérico)
                         termInput.disabled = true;
-                        termInput.placeholder = "Ejecutando...";
                         termInput.value = '';
-                        resolve(trimmed);
+                        if (/^[+-]?\d+$/.test(trimmed)) {
+                            resolve(parseInt(trimmed, 10));
+                        } else if (/^[+-]?\d*(\.\d+)?$/.test(trimmed) && !isNaN(parseFloat(trimmed))) {
+                            resolve(parseFloat(trimmed));
+                        } else {
+                            resolve(trimmed);
+                        }
                     };
                 }
-
                 ask(false);
             });
         }
@@ -1960,200 +1695,192 @@
             }
         });
 
-        function parseArguments(str) {
-            const args = [];
-            let curr = '';
-            let inQuotes = false;
-            let quoteChar = '';
+        // ---------------- MOTOR DE EJECUCIÓN (INTÉRPRETE) ----------------
 
-            for (let i = 0; i < str.length; i++) {
-                const ch = str[i];
-                if ((ch === '"' || ch === "'") && (i === 0 || str[i-1] !== '\\')) {
-                    if (!inQuotes) {
-                        inQuotes = true;
-                        quoteChar = ch;
-                    } else if (quoteChar === ch) {
-                        inQuotes = false;
-                    }
+        function resolveVariableRef(targetExpr, memory, constants, declaredTypes, subprograms) {
+            let clean = targetExpr.trim();
+            const parenMatch = clean.match(/^([a-zA-ZáéíóúÁÉÍÓÚñÑ_][a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_]*)\s*\((.+)\)$/);
+
+            if (parenMatch) {
+                const baseName = parenMatch[1].trim().toLowerCase();
+                if (subprograms && subprograms[baseName] && subprograms[baseName].kind === 'funcion') {
+                    return { isIndexed: false, baseName: baseName, index: null };
                 }
-                if (ch === ',' && !inQuotes) {
-                    args.push(curr.trim());
-                    curr = '';
-                } else {
-                    curr += ch;
-                }
+                const innerExpr = parenMatch[2].trim();
+                const indexVal = Number(evaluateExpressionAdvanced(innerExpr, memory, constants, declaredTypes, subprograms));
+                return { isIndexed: true, baseName: baseName, index: Math.trunc(indexVal) };
             }
-            if (curr.trim()) args.push(curr.trim());
-            return args;
+            return { isIndexed: false, baseName: clean.toLowerCase(), index: null };
         }
 
-function evaluateExpression(expr, memory, constants, declaredVars) {
-    expr = expr.trim();
-    if (!expr) return 0;
-
-    expr = expr.replace(/[“”«»]/g, '"');
-
-    if ((expr.startsWith('"') && expr.endsWith('"')) || (expr.startsWith("'") && expr.endsWith("'"))) {
-        return expr.slice(1, -1);
-    }
-
-    const scope = { ...constants, ...memory };
-
-    let jsExpr = expr
-        // 1. Soporte para símbolos matemáticos Unicode
-        .replace(/≥/g, '>=')
-        .replace(/≤/g, '<=')
-        .replace(/≠/g, '!=')
-
-        // 2. Metapalabras y operadores lógicos
-        .replace(/\bdiv\b/gi, '/')
-        .replace(/\bmod\b/gi, '%')
-        .replace(/\by\b/gi, '&&')
-        .replace(/\bo\b/gi, '||')
-        .replace(/\bno\b/gi, '!')
-        .replace(/<>/g, '!=')
-
-        // 3. Reemplazar operadores relacionales compuestos ANTES del '=' individual
-        .replace(/>=/g, '>=')
-        .replace(/<=/g, '<=')
-        .replace(/(?<![<>!=])=(?!=)/g, '==='); // Convierte '=' en '===' solo si no es >=, <=, != ni ==
-
-    // Reemplazo de identificadores por sus valores en memoria
-    jsExpr = jsExpr.replace(/([a-zA-ZáéíóúÁÉÍÓÚñÑ_][a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_]*)/g, (match) => {
-        const key = match.toLowerCase();
-        if (key in scope) {
-            const val = scope[key];
-            if (typeof val === 'number' || typeof val === 'boolean') {
-                return val;
+        function assignToMemory(targetRef, val, memory, declaredTypes) {
+            const base = targetRef.baseName;
+            if (targetRef.isIndexed) {
+                const idx = targetRef.index;
+                if (isNaN(idx) || idx < 1) {
+                    throw new Error(`Índice inválido: ${targetRef.index} para el arreglo "${base}". Los índices inician en 1.`);
+                }
+                if (!memory[base] || !Array.isArray(memory[base])) {
+                    memory[base] = [];
+                }
+                memory[base][idx] = val;
             } else {
-                return JSON.stringify(val);
+                memory[base] = val;
             }
         }
-        return match;
-    });
 
-    try {
-        const result = Function(`"use strict"; return (${jsExpr})`)();
-        
-        if (result === false && expr.includes('=') && !expr.includes('>=') && !expr.includes('<=') && !expr.includes('!=')) {
-            const eqParts = expr.split('=');
-            if (eqParts.length === 2) {
-                const leftVal = evaluateExpression(eqParts[0], memory, constants, declaredVars);
-                const rightVal = evaluateExpression(eqParts[1], memory, constants, declaredVars);
-                if (typeof leftVal === 'string' && typeof rightVal === 'string') {
-                    return leftVal.trim().toUpperCase() === rightVal.trim().toUpperCase();
+        function evaluateExpressionAdvanced(expr, memory, constants, declaredTypes, subprograms) {
+            expr = (expr || '').toString().trim();
+            if (!expr) return 0;
+            expr = expr.replace(/[“”«»]/g, '"');
+
+            if ((expr.startsWith('"') && expr.endsWith('"')) || (expr.startsWith("'") && expr.endsWith("'"))) {
+                return expr.slice(1, -1);
+            }
+
+            const callPattern = /([a-zA-ZáéíóúÁÉÍÓÚñÑ_][a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_]*)\s*\(([^()]+)\)/g;
+            let iter = 0;
+            while (callPattern.test(expr)) {
+                iter++;
+                if (iter > 50) break;
+                expr = expr.replace(callPattern, (match, name, argsStr) => {
+                    const ident = name.toLowerCase();
+                    if (subprograms && subprograms[ident] && subprograms[ident].kind === 'funcion') {
+                        const sub = subprograms[ident];
+                        const args = parseArguments(argsStr).map(arg => evaluateExpressionAdvanced(arg, memory, constants, declaredTypes, subprograms));
+                        const ret = executeSubprogramSync(sub, args, memory, constants, declaredTypes, subprograms);
+                        return (typeof ret === 'string') ? JSON.stringify(ret) : ret;
+                    }
+
+                    const idxVal = Number(evaluateExpressionAdvanced(argsStr, memory, constants, declaredTypes, subprograms));
+                    if (memory[ident] && Array.isArray(memory[ident])) {
+                        const elem = memory[ident][Math.trunc(idxVal)];
+                        const resolved = (elem !== undefined) ? elem : 0;
+                        return (typeof resolved === 'string') ? JSON.stringify(resolved) : resolved;
+                    }
+                    return match;
+                });
+            }
+
+            const scope = { ...constants, ...memory };
+            let jsExpr = expr
+                .replace(/≥/g, '>=')
+                .replace(/≤/g, '<=')
+                .replace(/≠/g, '!=')
+                .replace(/\bdiv\b/gi, '/')
+                .replace(/\bmod\b/gi, '%')
+                .replace(/\by\b/gi, '&&')
+                .replace(/\bo\b/gi, '||')
+                .replace(/\bno\b/gi, '!')
+                .replace(/<>/g, '!=')
+                .replace(/>=/g, '>=')
+                .replace(/<=/g, '<=')
+                .replace(/(?<![<>!=])=(?!=)/g, '===');
+
+            jsExpr = jsExpr.replace(/([a-zA-ZáéíóúÁÉÍÓÚñÑ_][a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_]*)/g, (match) => {
+                const key = match.toLowerCase();
+                if (key in scope) {
+                    const val = scope[key];
+                    if (typeof val === 'number' || typeof val === 'boolean') return val;
+                    if (typeof val === 'string') return JSON.stringify(val);
                 }
-            }
-        }
-        return result;
-    } catch (err) {
-        const low = expr.toLowerCase();
-        if (low in scope) return scope[low];
-        return expr;
-    }
-}
-
-        async function executeCode() {
-            updateEditor();
-
-            if (window.innerWidth <= 768) {
-                setMobileTab('terminal');
-            } else if (terminalCard.classList.contains('collapsed')) {
-                terminalCard.classList.remove('collapsed');
-                workspaceResizer.style.display = 'flex';
-                terminalCard.style.flex = `0 0 ${lastTerminalWidth}px`;
-                btnToggleTerminal.title = 'Minimizar Consola';
-                toggleTermIcon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
-            }
-
-            executionAbortController++;
-            const currentExecId = executionAbortController;
-            waitingForInput = null;
-
-            const check = validateSyntax(codeInput.value);
-            if (check.status === 'error') {
-                clearTerminal();
-                printTerm('NO SE PUEDE EJECUTAR: Errores sintácticos presentes.', 'error');
-                check.errors.forEach(err => printTerm(`Línea ${err.line}: ${err.msg}`, 'error'));
-                btnRun.disabled = false;
-                isRunning = false;
-                return;
-            }
-
-            isRunning = true;
-            btnRun.disabled = false;
-            clearTerminal();
-            printTerm('Iniciando ejecución...', 'sys');
-
-            const source = codeInput.value;
-            const rawLines = source.split('\n');
-
-            const memory = {};
-            const constants = check.declaredConsts;
-            const declaredVars = check.declaredVars;
-
-            let inBody = false;
-            const bodyLines = [];
-
-            for (let i = 0; i < rawLines.length; i++) {
-                let l = rawLines[i].trim();
-                if (!l) continue;
-                if (l.startsWith('{') && l.endsWith('}')) continue;
-                l = l.replace(/\{[^}]*\}/g, '').trim();
-                const commIdx = l.indexOf('//');
-                if (commIdx !== -1) l = l.substring(0, commIdx).trim();
-                if (!l) continue;
-
-                const lower = l.toLowerCase();
-
-                if (lower === 'comienza') { inBody = true; continue; }
-                if (lower === 'termina') { inBody = false; break; }
-
-                if (inBody) {
-                    bodyLines.push({ text: l, lineNum: i + 1 });
-                }
-            }
+                return match;
+            });
 
             try {
-                await executeBlock(bodyLines, 0, bodyLines.length, memory, constants, declaredVars, currentExecId);
-                if (currentExecId === executionAbortController) {
-                    printTerm('Ejecución finalizada con éxito.', 'success');
-                }
+                return Function(`"use strict"; return (${jsExpr})`)();
             } catch (err) {
-                if (currentExecId === executionAbortController) {
-                    printTerm(`Error en ejecución: ${err.message}`, 'error');
-                }
-            } finally {
-                if (currentExecId === executionAbortController) {
-                    isRunning = false;
-                    btnRun.disabled = false;
-                    termInput.disabled = true;
-                    termInput.placeholder = "Esperando ejecución...";
-                }
+                const low = expr.toLowerCase();
+                if (low in scope) return scope[low];
+                return expr;
             }
         }
 
-        async function executeBlock(lines, start, end, memory, constants, declaredVars, execId) {
-            let i = start;
-            let loopSafety = 0;
+        function executeSubprogramSync(sub, actualArgValues, parentMemory, constants, declaredTypes, subprograms) {
+            const localMemory = {};
+            sub.params.forEach((param, i) => {
+                const val = actualArgValues[i];
+                localMemory[param.name] = (val !== undefined) ? (Array.isArray(val) ? [...val] : val) : 0;
+            });
+            Object.keys(sub.localVars).forEach(v => { localMemory[v] = 0; });
 
+            let returnVal = 0;
+            for (let lineObj of sub.bodyLines) {
+                const raw = lineObj.text;
+                const low = raw.toLowerCase();
+
+                if (raw.includes('<-') || raw.includes(':=')) {
+                    const sep = raw.includes('<-') ? '<-' : ':=';
+                    const parts = raw.split(sep);
+                    const targetRef = resolveVariableRef(parts[0], localMemory, constants, declaredTypes, subprograms);
+                    const val = evaluateExpressionAdvanced(parts[1].trim(), localMemory, constants, declaredTypes, subprograms);
+                    if (!targetRef.isIndexed && targetRef.baseName === sub.name) {
+                        returnVal = val;
+                    } else {
+                        assignToMemory(targetRef, val, localMemory, declaredTypes);
+                    }
+                }
+            }
+            return returnVal;
+        }
+
+        async function callProcedureAsync(procName, argsRawStr, memory, constants, declaredTypes, subprograms, execId) {
+            const sub = subprograms[procName];
+            if (!sub) throw new Error(`Procedimiento desconocido: "${procName}".`);
+
+            const rawArgTokens = parseArguments(argsRawStr);
+            const localMemory = {};
+            const refBindings = [];
+
+            sub.params.forEach((param, idx) => {
+                const rawArg = (rawArgTokens[idx] || '').trim();
+                const argLow = rawArg.toLowerCase();
+                const isOut = (param.mode === 'S' || param.mode === 'E/S');
+
+                if (param.mode === 'E' || param.mode === 'E/S') {
+                    if (memory[argLow] !== undefined) {
+                        localMemory[param.name] = Array.isArray(memory[argLow]) ? [...memory[argLow]] : memory[argLow];
+                    } else {
+                        localMemory[param.name] = evaluateExpressionAdvanced(rawArg, memory, constants, declaredTypes, subprograms);
+                    }
+                } else {
+                    localMemory[param.name] = (param.type && param.type.includes('tvec')) ? [] : 0;
+                }
+
+                if (isOut) {
+                    refBindings.push({ formal: param.name, actual: argLow });
+                }
+            });
+
+            Object.keys(sub.localVars).forEach(v => { localMemory[v] = 0; });
+
+            await executeSubprogramBlock(sub.bodyLines, 0, sub.bodyLines.length, localMemory, constants, declaredTypes, subprograms, execId);
+
+            refBindings.forEach(binding => {
+                if (Array.isArray(localMemory[binding.formal])) {
+                    memory[binding.actual] = [...localMemory[binding.formal]];
+                } else {
+                    memory[binding.actual] = localMemory[binding.formal];
+                }
+            });
+        }
+
+        async function executeSubprogramBlock(lines, start, end, memory, constants, declaredTypes, subprograms, execId) {
+            let i = start;
             while (i < end) {
                 if (execId !== executionAbortController) return;
 
-                loopSafety++;
-                if (loopSafety > 100000) throw new Error("Posible bucle infinito detectado (>100,000 iteraciones).");
-
                 const lineObj = lines[i];
-                const rawLine = lineObj.text;
-                const lower = rawLine.toLowerCase();
+                const raw = lineObj.text;
+                const low = raw.toLowerCase();
 
-                if (lower.startsWith('escribir') || lower.startsWith('escribirln')) {
-                    const match = rawLine.match(/^(escribir|escribirln)\s*\(([\s\S]*)\)$/i);
+                if (low.startsWith('escribir') || low.startsWith('escribirln')) {
+                    const match = raw.match(/^(escribir|escribirln)\s*\(([\s\S]*)\)$/i);
                     if (match) {
                         const args = parseArguments(match[2]);
                         let out = '';
                         for (const arg of args) {
-                            const val = evaluateExpression(arg, memory, constants, declaredVars);
+                            const val = evaluateExpressionAdvanced(arg, memory, constants, declaredTypes, subprograms);
                             out += (val !== undefined ? val : '') + ' ';
                         }
                         printTerm(out.trim());
@@ -2162,99 +1889,57 @@ function evaluateExpression(expr, memory, constants, declaredVars) {
                     continue;
                 }
 
-                if (lower === 'leer' || lower.startsWith('leer ') || lower.startsWith('leer(')) {
-                    const content = rawLine.substring(4).trim();
+                if (low === 'leer' || low.startsWith('leer ') || low.startsWith('leer(')) {
+                    const content = raw.substring(4).trim();
                     const varNames = extractReadVarNames(content);
-                    for (const varName of varNames) {
-                        if (varName) {
-                            const expectedType = declaredVars[varName] || 'real';
-                            const inputVal = await promptConsoleStrict(varName, expectedType, execId);
-                            memory[varName] = inputVal;
-                        }
+                    for (const item of varNames) {
+                        const targetRef = resolveVariableRef(item, memory, constants, declaredTypes, subprograms);
+                        const inputVal = await promptConsoleStrict(item, 'general', execId);
+                        assignToMemory(targetRef, inputVal, memory, declaredTypes);
                     }
                     i++;
                     continue;
                 }
 
-                if (lower === 'repetir') {
+                if (low === 'repetir') {
                     let depth = 1;
                     let j = i + 1;
                     let conditionStr = '';
-
                     while (j < end && depth > 0) {
                         const curLow = lines[j].text.toLowerCase();
                         if (curLow === 'repetir') depth++;
                         if (curLow.startsWith('hasta ')) {
                             depth--;
                             if (depth === 0) {
-                                conditionStr = lines[j].text.substring(5).trim();
+                                conditionStr = lines[j].text.replace(/^hasta(\s+que)?\s*/i, '').trim();
                                 break;
                             }
                         }
                         j++;
                     }
 
-                    const innerRepeatLines = lines.slice(i + 1, j);
-                    let repeatIter = 0;
+                    const innerLines = lines.slice(i + 1, j);
                     let condMet = false;
-
+                    let iterCount = 0;
                     do {
                         if (execId !== executionAbortController) return;
-                        repeatIter++;
-                        if (repeatIter > 50000) throw new Error("Bucle 'repetir...hasta' infinito.");
-                        await executeBlock(innerRepeatLines, 0, innerRepeatLines.length, memory, constants, declaredVars, execId);
-                        condMet = Boolean(evaluateExpression(conditionStr, memory, constants, declaredVars));
+                        iterCount++;
+                        if (iterCount > 50000) throw new Error("Bucle 'repetir...hasta que' excedió las iteraciones de seguridad.");
+                        await executeSubprogramBlock(innerLines, 0, innerLines.length, memory, constants, declaredTypes, subprograms, execId);
+                        condMet = Boolean(evaluateExpressionAdvanced(conditionStr, memory, constants, declaredTypes, subprograms));
                     } while (!condMet);
 
                     i = j + 1;
                     continue;
                 }
 
-                if (lower.startsWith('opcion') || lower.startsWith('opción')) {
-                    const optMatch = rawLine.match(/^opci[oó]n\s+(.*?)\s+de$/i);
-                    const optVar = optMatch ? optMatch[1].trim() : '';
-                    const optVal = evaluateExpression(optVar, memory, constants, declaredVars);
-
-                    let depth = 1;
-                    let j = i + 1;
-                    const cases = [];
-
-                    while (j < end && depth > 0) {
-                        const curLow = lines[j].text.toLowerCase();
-                        if (curLow.startsWith('opcion') || curLow.startsWith('opción')) depth++;
-                        if (curLow === 'termina opcion' || curLow === 'termina opción') {
-                            depth--;
-                            if (depth === 0) break;
-                        }
-                        if (depth === 1 && /^\d+\s*:/.test(lines[j].text)) {
-                            cases.push({ lineIndex: j, text: lines[j].text });
-                        }
-                        j++;
-                    }
-
-                    for (const c of cases) {
-                        const caseParts = c.text.split(':');
-                        const caseVal = Number(caseParts[0].trim());
-                        if (caseVal === Number(optVal)) {
-                            const statement = caseParts.slice(1).join(':').trim();
-                            if (statement) {
-                                await executeBlock([{ text: statement, lineNum: lines[c.lineIndex].lineNum }], 0, 1, memory, constants, declaredVars, execId);
-                            }
-                            break;
-                        }
-                    }
-
-                    i = j + 1;
-                    continue;
-                }
-
-                if (lower.startsWith('para ')) {
-                    const matchPara = rawLine.match(/^para\s+([a-zA-Z0-9_]+)\s*(?:<-|:=)\s*(.*?)\s+hasta\s+(.*?)\s+hacer$/i);
+                if (low.startsWith('para ')) {
+                    const matchPara = raw.match(/^para\s+([a-zA-Z0-9_]+)\s*(?:<-|:=)\s*(.*?)\s+hasta\s+(.*?)\s+hacer$/i);
                     if (!matchPara) throw new Error(`Sintaxis inválida en "para" (Línea ${lineObj.lineNum})`);
 
                     const ctrlVar = matchPara[1].trim().toLowerCase();
-                    const startVal = Number(evaluateExpression(matchPara[2], memory, constants, declaredVars));
-                    const endVal = Number(evaluateExpression(matchPara[3], memory, constants, declaredVars));
+                    const startVal = Number(evaluateExpressionAdvanced(matchPara[2], memory, constants, declaredTypes, subprograms));
+                    const endVal = Number(evaluateExpressionAdvanced(matchPara[3], memory, constants, declaredTypes, subprograms));
 
                     let depth = 1;
                     let j = i + 1;
@@ -2269,21 +1954,18 @@ function evaluateExpression(expr, memory, constants, declaredVars) {
                     }
 
                     const innerParaLines = lines.slice(i + 1, j);
-
                     for (let val = startVal; val <= endVal; val++) {
                         if (execId !== executionAbortController) return;
                         memory[ctrlVar] = val;
-                        await executeBlock(innerParaLines, 0, innerParaLines.length, memory, constants, declaredVars, execId);
+                        await executeSubprogramBlock(innerParaLines, 0, innerParaLines.length, memory, constants, declaredTypes, subprograms, execId);
                     }
-
                     i = j + 1;
                     continue;
                 }
 
-                if (lower.startsWith('mientras ')) {
-                    const matchM = rawLine.match(/^mientras\s+(.*?)\s+hacer$/i);
+                if (low.startsWith('mientras ')) {
+                    const matchM = raw.match(/^mientras\s+(.*?)\s+hacer$/i);
                     if (!matchM) throw new Error(`Sintaxis inválida en "mientras" (Línea ${lineObj.lineNum})`);
-
                     const conditionStr = matchM[1].trim();
 
                     let depth = 1;
@@ -2300,28 +1982,24 @@ function evaluateExpression(expr, memory, constants, declaredVars) {
 
                     const innerWhileLines = lines.slice(i + 1, j);
                     let whileIter = 0;
-
-                    while (Boolean(evaluateExpression(conditionStr, memory, constants, declaredVars))) {
+                    while (Boolean(evaluateExpressionAdvanced(conditionStr, memory, constants, declaredTypes, subprograms))) {
                         if (execId !== executionAbortController) return;
                         whileIter++;
                         if (whileIter > 50000) throw new Error("Bucle 'mientras' infinito.");
-                        await executeBlock(innerWhileLines, 0, innerWhileLines.length, memory, constants, declaredVars, execId);
+                        await executeSubprogramBlock(innerWhileLines, 0, innerWhileLines.length, memory, constants, declaredTypes, subprograms, execId);
                     }
-
                     i = j + 1;
                     continue;
                 }
 
-                if (lower.startsWith('si ')) {
-                    const matchSi = rawLine.match(/^si\s+(.*?)\s+entonces$/i);
+                if (low.startsWith('si ')) {
+                    const matchSi = raw.match(/^si\s+(.*?)\s+entonces$/i);
                     if (!matchSi) throw new Error(`Sintaxis inválida en "si" (Línea ${lineObj.lineNum})`);
-
-                    const condition = Boolean(evaluateExpression(matchSi[1].trim(), memory, constants, declaredVars));
+                    const condition = Boolean(evaluateExpressionAdvanced(matchSi[1].trim(), memory, constants, declaredTypes, subprograms));
 
                     let depth = 1;
                     let j = i + 1;
                     let elseIndex = -1;
-
                     while (j < end && depth > 0) {
                         const curLow = lines[j].text.toLowerCase();
                         if (curLow.startsWith('si ')) depth++;
@@ -2335,53 +2013,32 @@ function evaluateExpression(expr, memory, constants, declaredVars) {
 
                     if (condition) {
                         const thenEnd = (elseIndex !== -1) ? elseIndex : j;
-                        await executeBlock(lines.slice(i + 1, thenEnd), 0, thenEnd - (i + 1), memory, constants, declaredVars, execId);
+                        await executeSubprogramBlock(lines.slice(i + 1, thenEnd), 0, thenEnd - (i + 1), memory, constants, declaredTypes, subprograms, execId);
                     } else if (elseIndex !== -1) {
-                        await executeBlock(lines.slice(elseIndex + 1, j), 0, j - (elseIndex + 1), memory, constants, declaredVars, execId);
+                        await executeSubprogramBlock(lines.slice(elseIndex + 1, j), 0, j - (elseIndex + 1), memory, constants, declaredTypes, subprograms, execId);
                     }
-
                     i = j + 1;
                     continue;
                 }
 
-                if (rawLine.includes('<-') || rawLine.includes(':=')) {
-                    const sep = rawLine.includes('<-') ? '<-' : ':=';
-                    const parts = rawLine.split(sep);
-                    const target = parts[0].trim().toLowerCase();
-                    const expr = parts[1] ? parts[1].trim() : '';
-                    if (!target) {
-                        throw new Error(`Falta variable destino antes de "<-" (Línea ${lineObj.lineNum})`);
+                // Invocación a procedimiento: nombre(arg1, arg2)
+                const procCallMatch = raw.match(/^([a-zA-ZáéíóúÁÉÍÓÚñÑ_][a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_]*)\s*\((.*)\)$/);
+                if (procCallMatch && !raw.includes('<-') && !raw.includes(':=')) {
+                    const callName = procCallMatch[1].trim().toLowerCase();
+                    if (subprograms && subprograms[callName] && subprograms[callName].kind === 'procedimiento') {
+                        await callProcedureAsync(callName, procCallMatch[2], memory, constants, declaredTypes, subprograms, execId);
+                        i++;
+                        continue;
                     }
-                    const val = evaluateExpression(parts[1].trim(), memory, constants, declaredVars);
+                }
 
-                    const targetType = declaredVars[target];
-
-                    if (targetType === 'entero') {
-                        if (typeof val !== 'number') {
-                            throw new Error(`Incompatibilidad de tipos: no se puede asignar un valor no numérico a la variable entera "${target}".`);
-                        }
-                        memory[target] = Math.trunc(val);
-                    } else if (targetType === 'real') {
-                        if (typeof val !== 'number') {
-                            throw new Error(`Incompatibilidad de tipos: la variable real "${target}" solo acepta números.`);
-                        }
-                        memory[target] = val;
-                    } else if (targetType === 'logico') {
-                        if (typeof val !== 'boolean') {
-                            throw new Error(`Incompatibilidad de tipos: la variable lógica "${target}" solo acepta valores booleanos (verdadero/falso).`);
-                        }
-                        memory[target] = val;
-                    } else if (targetType === 'caracter') {
-                        if (typeof val !== 'string' || val.length !== 1) {
-                            throw new Error(`Incompatibilidad de tipos: la variable caracter "${target}" solo acepta exactamente 1 caracter.`);
-                        }
-                        memory[target] = val;
-                    } else if (targetType === 'cadena') {
-                        memory[target] = String(val);
-                    } else {
-                        memory[target] = val;
-                    }
-
+                // Asignación: variable <- valor o vector(i) <- valor
+                if (raw.includes('<-') || raw.includes(':=')) {
+                    const sep = raw.includes('<-') ? '<-' : ':=';
+                    const parts = raw.split(sep);
+                    const targetRef = resolveVariableRef(parts[0], memory, constants, declaredTypes, subprograms);
+                    const val = evaluateExpressionAdvanced(parts[1].trim(), memory, constants, declaredTypes, subprograms);
+                    assignToMemory(targetRef, val, memory, declaredTypes);
                     i++;
                     continue;
                 }
@@ -2389,6 +2046,117 @@ function evaluateExpression(expr, memory, constants, declaredVars) {
                 i++;
             }
         }
+
+async function executeCode() {
+    updateEditor();
+
+    if (window.innerWidth <= 768) setMobileTab('terminal');
+    else if (terminalCard.classList.contains('collapsed')) {
+        terminalCard.classList.remove('collapsed');
+        workspaceResizer.style.display = 'flex';
+        terminalCard.style.flex = `0 0 ${lastTerminalWidth}px`;
+        btnToggleTerminal.title = 'Minimizar Consola';
+        toggleTermIcon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>';
+    }
+
+    executionAbortController++;
+    const currentExecId = executionAbortController;
+    waitingForInput = null;
+
+    const check = validateSyntax(codeInput.value);
+    if (check.status === 'error') {
+        clearTerminal();
+        printTerm('NO SE PUEDE EJECUTAR: Existen errores de sintaxis.', 'error');
+        check.errors.forEach(err => printTerm(`Línea ${err.line}: ${err.msg}`, 'error'));
+        btnRun.disabled = false;
+        isRunning = false;
+        return;
+    }
+
+    isRunning = true;
+    btnRun.disabled = false;
+    clearTerminal();
+    printTerm('Iniciando ejecución...', 'sys');
+
+    const source = codeInput.value;
+    const rawLines = source.split('\n');
+
+    const memory = {};
+    const constants = check.declaredConsts;
+    const declaredTypes = check.declaredTypes;
+    const subprograms = check.subprograms;
+
+    // Resetear cuerpos de subprogramas
+    Object.keys(subprograms).forEach(k => {
+        subprograms[k].bodyLines = [];
+    });
+
+    let currentSub = null;
+    let mainStarted = false;
+    const mainBodyLines = [];
+
+    for (let i = 0; i < rawLines.length; i++) {
+        let l = rawLines[i].trim().replace(/\{[^}]*\}/g, '').trim();
+        const cIdx = l.indexOf('//');
+        if (cIdx !== -1) l = l.substring(0, cIdx).trim();
+        if (!l) continue;
+
+        const low = l.toLowerCase();
+
+        // 1. Detectar cabecera de subprograma
+        if (low.startsWith('procedimiento') || low.startsWith('funcion') || low.startsWith('función')) {
+            const parsedHeader = parseSubprogramHeader(l);
+            if (parsedHeader && subprograms[parsedHeader.name]) {
+                currentSub = subprograms[parsedHeader.name];
+            }
+            continue;
+        }
+
+        // 2. Líneas del subprograma
+        if (currentSub) {
+            if (low.startsWith('termina')) {
+                currentSub = null;
+            } else if (!low.startsWith('comienza') && !low.startsWith('variables') && !low.startsWith('variable') && !l.includes(':')) {
+                currentSub.bodyLines.push({ text: l, lineNum: i + 1 });
+            }
+            continue;
+        }
+
+        // 3. Detectar 'comienza' del Programa Principal (el que queda fuera de cualquier subprograma)
+        if (!mainStarted && low.startsWith('comienza')) {
+            mainStarted = true;
+            continue;
+        }
+
+        // 4. Fin del programa principal
+        if (mainStarted && low.startsWith('termina')) {
+            break;
+        }
+
+        // 5. Líneas del cuerpo del programa principal
+        if (mainStarted) {
+            mainBodyLines.push({ text: l, lineNum: i + 1 });
+        }
+    }
+
+    try {
+        await executeSubprogramBlock(mainBodyLines, 0, mainBodyLines.length, memory, constants, declaredTypes, subprograms, currentExecId);
+        if (currentExecId === executionAbortController) {
+            printTerm('Ejecución finalizada con éxito.', 'success');
+        }
+    } catch (err) {
+        if (currentExecId === executionAbortController) {
+            printTerm(`Error en ejecución: ${err.message}`, 'error');
+        }
+    } finally {
+        if (currentExecId === executionAbortController) {
+            isRunning = false;
+            btnRun.disabled = false;
+            termInput.disabled = true;
+            termInput.placeholder = "Esperando ejecución...";
+        }
+    }
+}
 
         btnRun.addEventListener('click', executeCode);
 
@@ -2398,6 +2166,9 @@ function evaluateExpression(expr, memory, constants, declaredVars) {
                 executeCode();
             }
         });
+
+        codeInput.value = '';
+        updateEditor();
     </script>
 </body>
 </html>

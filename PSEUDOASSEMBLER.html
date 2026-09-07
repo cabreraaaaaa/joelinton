@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Pseudoassembler Studio</title>
-  <link rel="icon" href="azul.ico" type="image/x-icon">
+  <title>8085 Pseudoassembler Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=JetBrains+Mono:wght@400;600;700&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
@@ -72,39 +71,6 @@
         var(--jersey-blue) 100%);
     }
 
-    .mobile-advisory-banner {
-      display: none;
-      background: linear-gradient(90deg, rgba(234, 179, 8, 0.15), rgba(56, 189, 248, 0.15));
-      border-bottom: 1px solid rgba(234, 179, 8, 0.35);
-      padding: 10px 14px;
-      font-size: 0.76rem;
-      color: #fef08a;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .close-banner-btn {
-      background: transparent;
-      border: 1px solid var(--jersey-gold);
-      color: var(--jersey-gold);
-      border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    @media (max-width: 992px) {
-      .mobile-advisory-banner {
-        display: flex;
-      }
-    }
-
     header {
       display: flex;
       justify-content: space-between;
@@ -120,29 +86,44 @@
 
     .brand-group {
       display: flex;
-      align-items: baseline;
-      gap: 10px;
+      align-items: center;
+      gap: 12px;
       flex-shrink: 0;
     }
 
-    .brand-title {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 1.6rem;
-      font-weight: 900;
-      letter-spacing: 3px;
-      color: transparent;
-      -webkit-text-stroke: 1.5px var(--jersey-gold);
-      text-transform: uppercase;
+    .home-btn-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(234, 179, 8, 0.1);
+      border: 1.5px solid var(--jersey-gold);
+      color: var(--jersey-gold);
       text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .home-btn-link:hover {
+      background: var(--jersey-gold);
+      color: #000;
+      box-shadow: 0 0 12px rgba(234, 179, 8, 0.4);
+    }
+
+    .home-btn-link svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
     }
 
     .badge-tag {
       font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      padding: 2px 7px;
+      padding: 4px 9px;
       border-radius: 4px;
-      background: rgba(28, 146, 210, 0.2);
+      background: rgba(28, 146, 210, 0.15);
       border: 1px solid var(--jersey-cyan);
       color: var(--jersey-cyan);
       letter-spacing: 1px;
@@ -278,16 +259,6 @@
     .btn-red:hover:not(:disabled) {
       background: var(--jersey-red);
       color: #fff;
-    }
-
-    .btn-cyan {
-      background: rgba(56, 189, 248, 0.15);
-      border: 1.5px solid var(--jersey-cyan);
-      color: var(--jersey-cyan);
-    }
-    .btn-cyan:hover {
-      background: var(--jersey-cyan);
-      color: #000;
     }
 
     .btn-clean {
@@ -445,35 +416,51 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 6px 12px;
-      background: rgba(0,0,0,0.4);
-      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 8px 12px;
+      background: rgba(0,0,0,0.5);
+      border-top: 1px solid rgba(255,255,255,0.08);
       flex-shrink: 0;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 8px;
     }
 
-    .quick-bar {
+    .project-bar {
       display: flex;
       gap: 6px;
       align-items: center;
       flex-wrap: wrap;
     }
 
-    .quick-btn {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: var(--text-muted);
-      border-radius: 4px;
-      padding: 3px 8px;
-      font-size: 0.7rem;
-      cursor: pointer;
+    .project-select {
+      background: rgba(18, 14, 22, 0.95);
+      border: 1px solid var(--jersey-cyan);
+      color: #f1f5f9;
       font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
     }
 
-    .quick-btn:hover {
+    .project-select:hover {
       border-color: var(--jersey-gold);
+    }
+
+    .btn-proj {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--jersey-gold);
       color: var(--jersey-gold);
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 0.72rem;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+    .btn-proj:hover {
+      background: var(--jersey-gold);
+      color: #000;
     }
 
     .console-terminal {
@@ -592,10 +579,6 @@
       outline: none;
     }
 
-    .term-input:focus {
-      box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
-    }
-
     .btn-send {
       background: var(--jersey-cyan);
       color: #000;
@@ -608,10 +591,6 @@
       font-size: 0.75rem;
     }
 
-    .btn-send:hover {
-      background: #7dd3fc;
-    }
-
     footer {
       padding: 0.4rem 1.8rem;
       display: flex;
@@ -622,150 +601,6 @@
       color: #64748b;
       flex-shrink: 0;
     }
-
-    /* ========================================================
-       SISTEMA DE TOUR CON CANVAS RECORTE EXACTO (SVG / CANVAS HOLE)
-       ======================================================== */
-    /* Canvas que cubre la pantalla y corta una ventana transparente exacta sobre el elemento */
-    #tour-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 9998;
-      pointer-events: none;
-      display: none;
-    }
-
-    /* Cuadro de borde y pulso dorado exterior sin tapar el contenido */
-    .tour-spotlight-frame {
-      position: fixed;
-      border-radius: 8px;
-      border: 2px solid var(--jersey-gold);
-      box-shadow: 0 0 20px rgba(234, 179, 8, 0.8), inset 0 0 10px rgba(234, 179, 8, 0.2);
-      z-index: 9999;
-      pointer-events: none;
-      display: none;
-      transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-    }
-
-    /* Puntero animado radar */
-    .tour-pointer {
-      position: fixed;
-      z-index: 10001;
-      pointer-events: none;
-      display: none;
-      transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-      animation: pointerBounce 1.2s infinite ease-in-out;
-    }
-
-    .pointer-pulse-dot {
-      width: 20px;
-      height: 20px;
-      background: var(--jersey-red);
-      border: 2px solid #fff;
-      border-radius: 50%;
-      position: relative;
-      box-shadow: 0 0 14px var(--jersey-red);
-    }
-
-    .pointer-pulse-dot::after {
-      content: '';
-      position: absolute;
-      top: -6px;
-      left: -6px;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      border: 2px solid var(--jersey-red);
-      animation: radarPing 1.2s infinite ease-out;
-    }
-
-    @keyframes pointerBounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-7px); }
-    }
-
-    @keyframes radarPing {
-      0% { transform: scale(0.6); opacity: 1; }
-      100% { transform: scale(1.6); opacity: 0; }
-    }
-
-    /* Tarjeta explicativa */
-    .tour-card {
-      position: fixed;
-      z-index: 10002;
-      background: #141019;
-      border: 1.5px solid var(--jersey-gold);
-      border-radius: 12px;
-      padding: 18px 20px;
-      max-width: 420px;
-      width: 90vw;
-      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.95), 0 0 20px rgba(234, 179, 8, 0.35);
-      display: none;
-      transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-    }
-
-    .tour-step-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.72rem;
-      font-family: 'Chakra Petch', sans-serif;
-      font-weight: 700;
-      color: var(--jersey-cyan);
-      letter-spacing: 1px;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-    }
-
-    .tour-title {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 800;
-      font-size: 1.05rem;
-      color: var(--jersey-gold);
-      margin-bottom: 8px;
-    }
-
-    .tour-desc {
-      font-size: 0.84rem;
-      line-height: 1.45;
-      color: #e2e8f0;
-      margin-bottom: 14px;
-    }
-
-    .tour-nav-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding-top: 10px;
-    }
-
-    .btn-tour-skip {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      cursor: pointer;
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .btn-tour-skip:hover { color: #fff; text-decoration: underline; }
-
-    .btn-tour-next {
-      background: var(--jersey-gold);
-      color: #000;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.76rem;
-      font-weight: bold;
-      cursor: pointer;
-      font-family: 'Montserrat', sans-serif;
-      letter-spacing: 1px;
-    }
-    .btn-tour-next:hover { background: #fef08a; }
 
     @media (max-width: 992px) {
       header {
@@ -783,7 +618,6 @@
         flex-wrap: nowrap;
         white-space: nowrap;
         padding: 6px;
-        -webkit-overflow-scrolling: touch;
       }
       .header-controls {
         flex-wrap: wrap;
@@ -815,27 +649,11 @@
         align-items: stretch;
         gap: 8px;
       }
-      .quick-bar {
-        overflow-x: auto;
-        white-space: nowrap;
-        flex-wrap: nowrap;
-        padding-bottom: 4px;
-      }
-      .btn-clean {
-        width: 100%;
-        text-align: center;
-        justify-content: center;
-      }
       footer {
         flex-direction: column;
         gap: 6px;
         text-align: center;
         padding: 10px;
-      }
-      .tour-card {
-        left: 5vw !important;
-        right: 5vw !important;
-        width: 90vw !important;
       }
     }
   </style>
@@ -844,19 +662,18 @@
 
   <div class="top-jersey-stripe"></div>
 
-  <div class="mobile-advisory-banner" id="mobile-banner">
-    <span>💡 <strong>Consejo:</strong> Para una experiencia completa de desarrollo y debug, te sugerimos abrir este estudio en una computadora.</span>
-    <button class="close-banner-btn" onclick="document.getElementById('mobile-banner').style.display='none'" title="Cerrar">×</button>
-  </div>
-
   <header>
     <div class="brand-group">
-      <a href="index.html" class="brand-title">HOME</a>
-      <span class="badge-tag">SET 8085</span>
+      <a href="index.html" class="home-btn-link" title="Volver al Inicio">
+        <svg viewBox="0 0 24 24">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+      </a>
+      <span class="badge-tag">8085 STUDIO</span>
     </div>
 
-    <!-- REGISTROS SUPERIORES (PASO 5 DEL TOUR) -->
-    <div class="top-status-bar" id="tour-step-registers">
+    <!-- REGISTROS SUPERIORES -->
+    <div class="top-status-bar">
       <div class="status-chip acc" title="Acumulador Principal">
         <span class="chip-lbl">ACC (A):</span>
         <span class="chip-val" id="chip-a">0</span>
@@ -885,33 +702,30 @@
         <span class="chip-lbl">L:</span>
         <span class="chip-val" id="chip-l">0</span>
       </div>
-      <div class="status-chip flag-z" title="Flag Zero: Se pone en 1 si el Acumulador A vale 0">
+      <div class="status-chip flag-z" title="Flag Zero">
         <span class="chip-lbl">Z (Cero):</span>
-        <span class="chip-val" id="chip-z">1</span>
+        <span class="chip-val" id="chip-z">0</span>
       </div>
-      <div class="status-chip flag-s" title="Flag Sign: Se pone en 1 si el Acumulador A es negativo">
+      <div class="status-chip flag-s" title="Flag Sign">
         <span class="chip-lbl">S (Neg):</span>
         <span class="chip-val" id="chip-s">0</span>
       </div>
     </div>
 
     <div class="header-controls">
-      <!-- CONTROL DELAY (PASO 2 DEL TOUR) -->
-      <div class="delay-control" id="tour-step-delay">
+      <div class="delay-control">
         <span class="delay-label" id="delay-display">⏱ 2.0s</span>
-        <input type="range" class="delay-slider" id="delay-slider" min="1.0" max="5.0" step="0.5" value="2.0">
+        <input type="range" class="delay-slider" id="delay-slider" min="0.2" max="5.0" step="0.2" value="2.0">
       </div>
 
-      <!-- BOTÓN EJECUTAR (PASO 3 DEL TOUR) -->
       <button class="btn btn-gold" id="btn-run">▶ EJECUTAR</button>
       <button class="btn btn-red" id="btn-reset">■ RESET</button>
-      <button class="btn btn-cyan" onclick="startInteractiveTour()" title="Ver tour animado">? TOUR GUIADO</button>
     </div>
   </header>
 
   <main>
-    <!-- PANEL IZQUIERDO: PROGRAMA FUENTE (PASO 1 DEL TOUR) -->
-    <div class="panel" id="tour-step-editor">
+    <!-- PROGRAMA FUENTE -->
+    <div class="panel">
       <div class="panel-header">
         <div class="panel-title">
           <span>&gt;_</span> PROGRAMA FUENTE
@@ -929,23 +743,23 @@
         <div class="editor-rows-container" id="editor-container"></div>
 
         <div class="editor-bottom-bar">
-          <div class="quick-bar">
-            <span style="color: var(--text-muted); font-size: 0.7rem;">Ejemplos:</span>
-            <button class="quick-btn" onclick="loadExample(1)">1. Suma 2 Números</button>
-            <button class="quick-btn" onclick="loadExample(2)">2. Restar 10 (0Ah)</button>
-            <button class="quick-btn" onclick="loadExample(4)">4. Iterar hasta 0</button>
-            <button class="quick-btn" onclick="loadExample(6)">6. Sumatoria 'total'</button>
-            <button class="quick-btn" onclick="loadExample(7)">7. Contador B</button>
+          <div class="project-bar">
+            <span style="color: var(--jersey-gold); font-size: 0.72rem; font-weight: bold;">PROYECTOS:</span>
+            <select id="project-selector" class="project-select">
+              <option value="">-- Seleccionar --</option>
+            </select>
+            <button class="btn-proj" onclick="saveCurrentProject()">💾 Guardar</button>
+            <button class="btn-proj" style="border-color:var(--jersey-red); color:var(--jersey-red);" onclick="deleteSelectedProject()">🗑 Borrar</button>
           </div>
           <div>
-            <button class="btn btn-clean" onclick="clearCodeEditor()">🗑 LIMPIAR CÓDIGO</button>
+            <button class="btn btn-clean" onclick="clearCodeEditor()">Limpiar Editor</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- PANEL DERECHO: CONSOLA DE EJECUCIÓN (PASO 4 DEL TOUR) -->
-    <div class="panel" id="tour-step-console">
+    <!-- CONSOLA DE EJECUCIÓN -->
+    <div class="panel">
       <div class="panel-header">
         <div class="panel-title">
           <span>🖥</span> CONSOLA DE EJECUCIÓN
@@ -955,7 +769,7 @@
 
       <div class="console-terminal">
         <div class="terminal-body" id="term-logs">
-          <div class="term-line info">&gt; Consola lista. Escribe tus mnemónicos o carga un ejemplo y presiona EJECUTAR.</div>
+          <div class="term-line info">&gt; Consola lista. Escribe tus mnemónicos y presiona EJECUTAR.</div>
         </div>
 
         <div class="interactive-input-row" id="input-container">
@@ -972,28 +786,12 @@
     <div>SOPORTE: IN, OUT, LDA, STA, MOV, MVI, ADD, SUB, ADI, SUI, JMP, JZ, JM, HLT</div>
   </footer>
 
-  <!-- CANVAS Y ELEMENTOS DEL TOUR -->
-  <canvas id="tour-canvas"></canvas>
-  <div class="tour-spotlight-frame" id="tour-spotlight"></div>
-  <div class="tour-pointer" id="tour-pointer">
-    <div class="pointer-pulse-dot"></div>
-  </div>
-  <div class="tour-card" id="tour-card">
-    <div class="tour-step-badge" id="tour-badge">PASO 1 DE 5</div>
-    <div class="tour-title" id="tour-title">Título del paso</div>
-    <div class="tour-desc" id="tour-desc">Descripción paso a paso</div>
-    <div class="tour-nav-row">
-      <button class="btn-tour-skip" onclick="endInteractiveTour()">Omitir</button>
-      <button class="btn-tour-next" id="tour-next-btn" onclick="nextTourStep()">Siguiente →</button>
-    </div>
-  </div>
-
   <script>
     let programRows = [];
 
     let CPU = {
       A: 0, B: 0, C: 0, D: 0, E: 0, H: 0, L: 0,
-      PC: 0, Z: 1, S: 0, isHalted: false,
+      PC: 0, Z: 0, S: 0, isHalted: false,
       memory: {}, labels: {}, instructions: []
     };
 
@@ -1023,6 +821,7 @@
 
     const delaySlider = document.getElementById('delay-slider');
     const delayDisplay = document.getElementById('delay-display');
+    const projectSelector = document.getElementById('project-selector');
 
     delaySlider.addEventListener('input', (e) => {
       const val = parseFloat(e.target.value);
@@ -1033,7 +832,7 @@
     const btnRun = document.getElementById('btn-run');
     const btnReset = document.getElementById('btn-reset');
 
-    function renderEditor() {
+    function renderEditor(focusIndex = null, focusType = null) {
       editorContainer.innerHTML = '';
       programRows.forEach((row, index) => {
         const rowEl = document.createElement('div');
@@ -1062,25 +861,43 @@
 
         editorContainer.appendChild(rowEl);
       });
+
+      if (focusIndex !== null && focusType !== null) {
+        setTimeout(() => {
+          const target = document.getElementById(`${focusType}-input-${focusIndex}`);
+          if (target) {
+            target.focus();
+            target.selectionStart = target.selectionEnd = target.value.length;
+          }
+        }, 15);
+      }
     }
 
     function handleKeyNav(e, index, type) {
-      if (e.key === 'ArrowDown' || e.key === 'Enter') {
+      if (e.key === 'Enter') {
         e.preventDefault();
+        programRows.splice(index + 1, 0, { label: '', inst: '' });
+        renderEditor(index + 1, type);
+      } else if (e.key === 'Backspace') {
+        const currentInput = document.getElementById(`${type}-input-${index}`);
+        const otherType = (type === 'label') ? 'inst' : 'label';
+        const otherInput = document.getElementById(`${otherType}-input-${index}`);
+
+        if (currentInput.value === '' && (!otherInput || otherInput.value === '') && programRows.length > 1) {
+          e.preventDefault();
+          programRows.splice(index, 1);
+          const nextFocus = Math.max(0, index - 1);
+          renderEditor(nextFocus, type);
+        }
+      } else if (e.key === 'ArrowDown') {
         if (index + 1 < programRows.length) {
+          e.preventDefault();
           const next = document.getElementById(`${type}-input-${index + 1}`);
           if (next) next.focus();
-        } else if (e.key === 'Enter') {
-          programRows.push({ label: '', inst: '' });
-          renderEditor();
-          setTimeout(() => {
-            const next = document.getElementById(`${type}-input-${index + 1}`);
-            if (next) next.focus();
-          }, 40);
         }
       } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
         if (index - 1 >= 0) {
+          e.preventDefault();
           const prev = document.getElementById(`${type}-input-${index - 1}`);
           if (prev) prev.focus();
         }
@@ -1093,14 +910,67 @@
       }
     }
 
+    function refreshProjectsList() {
+      const projects = JSON.parse(localStorage.getItem('saved_8085_projects') || '{}');
+      projectSelector.innerHTML = '<option value="">-- Seleccionar --</option>';
+      for (let name in projects) {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.innerText = name;
+        projectSelector.appendChild(opt);
+      }
+    }
+
+    function saveCurrentProject() {
+      const name = prompt("Nombre del proyecto a guardar:");
+      if (!name || !name.trim()) return;
+      const cleanName = name.trim();
+      const projects = JSON.parse(localStorage.getItem('saved_8085_projects') || '{}');
+      projects[cleanName] = programRows;
+      localStorage.setItem('saved_8085_projects', JSON.stringify(projects));
+      refreshProjectsList();
+      projectSelector.value = cleanName;
+      logTerm(`&gt; Proyecto '<strong>${cleanName}</strong>' guardado.`, 'output');
+    }
+
+    // Carga directa y automática al cambiar la opción seleccionada
+    projectSelector.addEventListener('change', () => {
+      const selected = projectSelector.value;
+      if (!selected) return;
+
+      const projects = JSON.parse(localStorage.getItem('saved_8085_projects') || '{}');
+      if (projects[selected]) {
+        stopAndReset();
+        programRows = JSON.parse(JSON.stringify(projects[selected]));
+        while (programRows.length < 15) {
+          programRows.push({ label: '', inst: '' });
+        }
+        renderEditor();
+        logTerm(`&gt; Proyecto '<strong>${selected}</strong>' cargado con éxito.`, 'info');
+      }
+    });
+
+    function deleteSelectedProject() {
+      const selected = projectSelector.value;
+      if (!selected) return;
+      if (confirm(`¿Seguro que deseas eliminar el proyecto '${selected}'?`)) {
+        const projects = JSON.parse(localStorage.getItem('saved_8085_projects') || '{}');
+        delete projects[selected];
+        localStorage.setItem('saved_8085_projects', JSON.stringify(projects));
+        refreshProjectsList();
+        logTerm(`&gt; Proyecto '${selected}' eliminado.`, 'halt');
+      }
+    }
+
     function clearCodeEditor() {
       stopAndReset();
       programRows = [];
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 15; i++) {
         programRows.push({ label: '', inst: '' });
       }
       renderEditor();
-      logTerm("&gt; Editor limpiado. Puedes escribir nuevo código.", "info");
+      projectSelector.value = "";
+      logTerm("&gt; Editor vaciado.", "info");
     }
 
     function highlightRow(index) {
@@ -1129,9 +999,11 @@
       return parseInt(valStr, 10) || 0;
     }
 
-    function updateCPUHeader() {
-      CPU.Z = CPU.A === 0 ? 1 : 0;
-      CPU.S = CPU.A < 0 ? 1 : 0;
+    function updateCPUHeader(affectFlags = false) {
+      if (affectFlags) {
+        CPU.Z = (CPU.A === 0) ? 1 : 0;
+        CPU.S = (CPU.A < 0) ? 1 : 0;
+      }
 
       chipA.innerText = CPU.A;
       chipB.innerText = CPU.B;
@@ -1179,7 +1051,7 @@
     function prepareProgram() {
       CPU = {
         A: 0, B: 0, C: 0, D: 0, E: 0, H: 0, L: 0,
-        PC: 0, Z: 1, S: 0, isHalted: false,
+        PC: 0, Z: 0, S: 0, isHalted: false,
         memory: {}, labels: {}, instructions: []
       };
 
@@ -1187,25 +1059,49 @@
         const lab = (row.label || '').trim().toLowerCase();
         const inst = (row.inst || '').trim();
 
-        if (lab) {
+        if (lab && lab !== 'etiqueta') {
           CPU.labels[lab] = i;
         }
         CPU.instructions.push(inst);
       });
 
-      updateCPUHeader();
+      updateCPUHeader(false);
+    }
+
+    function isRegister(name) {
+      return ['A', 'B', 'C', 'D', 'E', 'H', 'L'].includes((name || '').toUpperCase());
     }
 
     function getReg(r) {
-      const reg = r.toUpperCase();
+      const reg = (r || '').toUpperCase();
       if (CPU.hasOwnProperty(reg)) return CPU[reg];
       return 0;
     }
 
     function setReg(r, val) {
-      const reg = r.toUpperCase();
+      const reg = (r || '').toUpperCase();
       if (CPU.hasOwnProperty(reg)) {
         CPU[reg] = val;
+      }
+    }
+
+    function getValFromMemOrReg(target) {
+      if (!target) return 0;
+      const upper = target.toUpperCase();
+      if (isRegister(upper)) {
+        return getReg(upper);
+      }
+      const lower = target.toLowerCase();
+      return CPU.memory[lower] !== undefined ? CPU.memory[lower] : 0;
+    }
+
+    function setValToMemOrReg(target, val) {
+      if (!target) return;
+      const upper = target.toUpperCase();
+      if (isRegister(upper)) {
+        setReg(upper, val);
+      } else {
+        CPU.memory[target.toLowerCase()] = val;
       }
     }
 
@@ -1249,7 +1145,7 @@
             logTerm(`[Línea ${currentLineNum}] Esperando dato por puerto ${port}...`, "prompt");
             const inputVal = await promptUserValue(`Ingrese dato para ${port}`);
             CPU.A = inputVal;
-            updateCPUHeader();
+            updateCPUHeader(false);
             logTerm(`→ Acumulador (A) = ${CPU.A}`);
             break;
           }
@@ -1261,62 +1157,54 @@
           }
 
           case 'LDA': {
-            const val = CPU.memory[arg1] !== undefined ? CPU.memory[arg1] : 0;
+            const val = getValFromMemOrReg(arg1);
             CPU.A = val;
-            updateCPUHeader();
+            updateCPUHeader(false);
             logTerm(`→ A = [${arg1}] (${val})`);
             break;
           }
 
           case 'STA': {
-            CPU.memory[arg1] = CPU.A;
-            logTerm(`→ Variable '${arg1}' = ${CPU.A}`);
+            setValToMemOrReg(arg1, CPU.A);
+            updateCPUHeader(false);
+            logTerm(`→ Destino '${arg1}' = ${CPU.A}`);
             break;
           }
 
           case 'MVI': {
-            const reg = arg1.toUpperCase();
             const val = parseVal(arg2);
-            setReg(reg, val);
-            updateCPUHeader();
-            logTerm(`→ Registro ${reg} = ${val}`);
+            if (isRegister(arg1)) {
+              setReg(arg1, val);
+            } else {
+              setValToMemOrReg(arg1, val);
+            }
+            updateCPUHeader(false);
+            logTerm(`→ ${arg1.toUpperCase()} = ${val}`);
             break;
           }
 
           case 'MOV': {
-            const dest = arg1.toUpperCase();
             const src = arg2.toUpperCase();
+            const dest = arg1.toUpperCase();
             const val = getReg(src);
             setReg(dest, val);
-            updateCPUHeader();
+            updateCPUHeader(false);
             logTerm(`→ MOV ${dest} ← ${src} (${val})`);
             break;
           }
 
           case 'ADD': {
-            let val = 0;
-            const target = arg1.toUpperCase();
-            if (['A', 'B', 'C', 'D', 'E', 'H', 'L'].includes(target)) {
-              val = getReg(target);
-            } else {
-              val = CPU.memory[arg1] !== undefined ? CPU.memory[arg1] : 0;
-            }
+            const val = getValFromMemOrReg(arg1);
             CPU.A += val;
-            updateCPUHeader();
+            updateCPUHeader(true);
             logTerm(`→ Suma realizada: A = ${CPU.A}`);
             break;
           }
 
           case 'SUB': {
-            let val = 0;
-            const target = arg1.toUpperCase();
-            if (['A', 'B', 'C', 'D', 'E', 'H', 'L'].includes(target)) {
-              val = getReg(target);
-            } else {
-              val = CPU.memory[arg1] !== undefined ? CPU.memory[arg1] : 0;
-            }
+            const val = getValFromMemOrReg(arg1);
             CPU.A -= val;
-            updateCPUHeader();
+            updateCPUHeader(true);
             logTerm(`→ Resta realizada: A = ${CPU.A}`);
             break;
           }
@@ -1324,7 +1212,7 @@
           case 'ADI': {
             const val = parseVal(arg1);
             CPU.A += val;
-            updateCPUHeader();
+            updateCPUHeader(true);
             logTerm(`→ ADI ${val}: A = ${CPU.A}`);
             break;
           }
@@ -1332,7 +1220,7 @@
           case 'SUI': {
             const val = parseVal(arg1);
             CPU.A -= val;
-            updateCPUHeader();
+            updateCPUHeader(true);
             logTerm(`→ SUI ${val}: A = ${CPU.A}`);
             break;
           }
@@ -1423,237 +1311,19 @@
       execStatus.style.borderColor = "var(--jersey-cyan)";
       execStatus.style.color = "var(--jersey-cyan)";
 
-      CPU = { A:0, B:0, C:0, D:0, E:0, H:0, L:0, PC:0, Z:1, S:0, isHalted:false, memory:{}, labels:{}, instructions:[] };
-      updateCPUHeader();
+      CPU = { A:0, B:0, C:0, D:0, E:0, H:0, L:0, PC:0, Z:0, S:0, isHalted:false, memory:{}, labels:{}, instructions:[] };
+      updateCPUHeader(false);
     }
 
     btnRun.addEventListener('click', runProgram);
     btnReset.addEventListener('click', stopAndReset);
 
-    // ========================================================
-    // TOUR INTERACTIVO CON CANVAS TRANSPARENTE
-    // ========================================================
-    let currentTourStep = 0;
-
-    const tourSteps = [
-      {
-        elementId: 'tour-step-editor',
-        badge: 'PASO 1 DE 5',
-        title: 'Editor de Código en 2 Columnas',
-        desc: 'Aquí escribes tu programa fuente. La primera columna es para <strong>Etiquetas</strong> (destinos de saltos como <em>entrada</em> o <em>fin</em>). La segunda es para los <strong>Mnemónicos</strong> del 8085 (<em>IN PE</em>, <em>ADD A</em>, <em>OUT PS</em>, <em>HLT</em>). Al presionar <strong>Enter</strong> creas una fila nueva automáticamente.'
-      },
-      {
-        elementId: 'tour-step-delay',
-        badge: 'PASO 2 DE 5',
-        title: 'Regulador de Velocidad (Delay)',
-        desc: 'Este slider te permite graduar el tiempo de espera entre cada instrucción de <strong>1.0s a 5.0s</strong>. Así puedes ver con calma la evolución interna del programa instrucción por instrucción.'
-      },
-      {
-        elementId: 'btn-run',
-        badge: 'PASO 3 DE 5',
-        title: 'Ejecución y Reset',
-        desc: 'Presiona <strong>▶ EJECUTAR</strong> para comenzar la simulación secuencial. Si deseas frenar el proceso en cualquier momento o reiniciar todos los valores, usa <strong>■ RESET</strong>.'
-      },
-      {
-        elementId: 'tour-step-console',
-        badge: 'PASO 4 DE 5',
-        title: 'Consola Interactiva y Puertos I/O',
-        desc: 'Funciona como un feed en vivo: indica qué línea se está ejecutando. Cuando el código tenga un <code>IN PE</code> o <code>IN PS</code>, la consola se pausará y te pedirá ingresar el número por pantalla antes de seguir.'
-      },
-      {
-        elementId: 'tour-step-registers',
-        badge: 'PASO 5 DE 5 (IMPORTANTE)',
-        title: 'Registros de la CPU y Banderas (Flags)',
-        desc: '¡El corazón del procesador 8085!<br><br>' +
-              '• <strong>ACC (A):</strong> El Acumulador principal donde ocurren las sumas, restas y lecturas.<br>' +
-              '• <strong>B, C, D, E, H, L:</strong> Registros de propósito general para guardar datos o contadores.<br>' +
-              '• <strong>Flag Z (Zero):</strong> Vale <strong>1</strong> si el resultado en el Acumulador es 0. Es indispensable para que <code>JZ</code> sepa si debe saltar.<br>' +
-              '• <strong>Flag S (Sign):</strong> Vale <strong>1</strong> si el valor de A es negativo (&lt; 0), permitiendo a <code>JM</code> tomar decisiones.'
-      }
-    ];
-
-    const tourCanvas = document.getElementById('tour-canvas');
-    const ctx = tourCanvas.getContext('2d');
-    const tourSpotlight = document.getElementById('tour-spotlight');
-    const tourPointer = document.getElementById('tour-pointer');
-    const tourCard = document.getElementById('tour-card');
-    const tourBadge = document.getElementById('tour-badge');
-    const tourTitle = document.getElementById('tour-title');
-    const tourDesc = document.getElementById('tour-desc');
-    const tourNextBtn = document.getElementById('tour-next-btn');
-
-    function resizeCanvas() {
-      tourCanvas.width = window.innerWidth;
-      tourCanvas.height = window.innerHeight;
+    programRows = [];
+    for (let i = 0; i < 15; i++) {
+      programRows.push({ label: '', inst: '' });
     }
-
-    function drawMaskWithHole(rect) {
-      resizeCanvas();
-      ctx.clearRect(0, 0, tourCanvas.width, tourCanvas.height);
-
-      // Fondo oscuro
-      ctx.fillStyle = 'rgba(3, 2, 6, 0.82)';
-      ctx.fillRect(0, 0, tourCanvas.width, tourCanvas.height);
-
-      // Recorte 100% transparente para dejar ver el elemento enfocado exactamente como es
-      const pad = 6;
-      ctx.clearRect(rect.left - pad, rect.top - pad, rect.width + (pad * 2), rect.height + (pad * 2));
-    }
-
-    function startInteractiveTour() {
-      currentTourStep = 0;
-      tourCanvas.style.display = 'block';
-      tourSpotlight.style.display = 'block';
-      tourPointer.style.display = 'block';
-      tourCard.style.display = 'block';
-      showTourStep(currentTourStep);
-    }
-
-    function showTourStep(stepIndex) {
-      const step = tourSteps[stepIndex];
-      const targetEl = document.getElementById(step.elementId);
-      if (!targetEl) return;
-
-      targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-      setTimeout(() => {
-        const rect = targetEl.getBoundingClientRect();
-        const pad = 6;
-
-        // Dibujar el orificio transparente en el Canvas
-        drawMaskWithHole(rect);
-
-        // Marco exterior dorado
-        tourSpotlight.style.top = `${rect.top - pad}px`;
-        tourSpotlight.style.left = `${rect.left - pad}px`;
-        tourSpotlight.style.width = `${rect.width + (pad * 2)}px`;
-        tourSpotlight.style.height = `${rect.height + (pad * 2)}px`;
-
-        // Puntero animado radar
-        tourPointer.style.top = `${rect.top - 16}px`;
-        tourPointer.style.left = `${rect.left + (rect.width / 2) - 10}px`;
-
-        // Datos del paso
-        tourBadge.innerText = step.badge;
-        tourTitle.innerText = step.title;
-        tourDesc.innerHTML = step.desc;
-
-        if (stepIndex === tourSteps.length - 1) {
-          tourNextBtn.innerText = '¡FINALIZAR GUÍA!';
-        } else {
-          tourNextBtn.innerText = 'Siguiente →';
-        }
-
-        // Posicionar tarjeta flotante
-        const cardWidth = 380;
-        let cardTop = rect.bottom + 18;
-        let cardLeft = rect.left;
-
-        if (cardTop + 240 > window.innerHeight) {
-          cardTop = Math.max(15, rect.top - 250);
-        }
-        if (cardLeft + cardWidth > window.innerWidth) {
-          cardLeft = window.innerWidth - cardWidth - 20;
-        }
-        if (cardLeft < 15) cardLeft = 15;
-
-        tourCard.style.top = `${cardTop}px`;
-        tourCard.style.left = `${cardLeft}px`;
-      }, 100);
-    }
-
-    function nextTourStep() {
-      currentTourStep++;
-      if (currentTourStep < tourSteps.length) {
-        showTourStep(currentTourStep);
-      } else {
-        endInteractiveTour();
-      }
-    }
-
-    function endInteractiveTour() {
-      tourCanvas.style.display = 'none';
-      tourSpotlight.style.display = 'none';
-      tourPointer.style.display = 'none';
-      tourCard.style.display = 'none';
-      ctx.clearRect(0, 0, tourCanvas.width, tourCanvas.height);
-      localStorage.setItem('has_seen_interactive_tour_v4', 'true');
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const hasSeen = localStorage.getItem('has_seen_interactive_tour_v4');
-      if (!hasSeen) {
-        setTimeout(startInteractiveTour, 700);
-      }
-    });
-
-    window.addEventListener('resize', () => {
-      if (tourCanvas.style.display === 'block') {
-        showTourStep(currentTourStep);
-      }
-    });
-
-    function loadExample(num) {
-      stopAndReset();
-      if (num === 1) {
-        programRows = [
-          { label: '', inst: 'IN PE' },
-          { label: '', inst: 'STA, op1' },
-          { label: '', inst: 'IN PE' },
-          { label: '', inst: 'ADD op1' },
-          { label: '', inst: 'OUT PS' },
-          { label: '', inst: 'HLT' }
-        ];
-      } else if (num === 2) {
-        programRows = [
-          { label: '', inst: 'IN PE' },
-          { label: '', inst: 'SUI 0Ah' },
-          { label: '', inst: 'OUT PS' },
-          { label: '', inst: 'HLT' }
-        ];
-      } else if (num === 4) {
-        programRows = [
-          { label: 'Entrada', inst: 'IN PE' },
-          { label: '', inst: 'JZ Fin' },
-          { label: '', inst: 'ADI 05h' },
-          { label: '', inst: 'OUT PS' },
-          { label: '', inst: 'JMP Entrada' },
-          { label: 'Fin', inst: 'HLT' }
-        ];
-      } else if (num === 6) {
-        programRows = [
-          { label: '', inst: 'MVI A, 00h' },
-          { label: '', inst: 'STA, total' },
-          { label: 'Entrada', inst: 'IN PE' },
-          { label: '', inst: 'JM Fin' },
-          { label: '', inst: 'ADD total' },
-          { label: '', inst: 'STA, total' },
-          { label: '', inst: 'JMP Entrada' },
-          { label: 'Fin', inst: 'LDA, total' },
-          { label: '', inst: 'OUT PS' },
-          { label: '', inst: 'HLT' }
-        ];
-      } else if (num === 7) {
-        programRows = [
-          { label: '', inst: 'MVI B, 64h' },
-          { label: 'entrada', inst: 'IN PE' },
-          { label: '', inst: 'ADD A' },
-          { label: '', inst: 'OUT PS' },
-          { label: '', inst: 'MOV A, B' },
-          { label: '', inst: 'SUI 01h' },
-          { label: '', inst: 'JZ fin' },
-          { label: '', inst: 'MOV B, A' },
-          { label: '', inst: 'JMP entrada' },
-          { label: 'fin', inst: 'HLT' }
-        ];
-      }
-      while (programRows.length < 10) {
-        programRows.push({ label: '', inst: '' });
-      }
-      renderEditor();
-    }
-
-    loadExample(7);
+    renderEditor();
+    refreshProjectsList();
   </script>
 </body>
 </html>

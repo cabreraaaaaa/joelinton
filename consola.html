@@ -1349,133 +1349,157 @@
             return { kind, name, params, returnType };
         }
 
-        function validateSyntax(code) {
-            const lines = code.split('\n');
-            const errors = [];
-            const warnings = [];
+    function validateSyntax(code) {
+    const lines = code.split('\n');
+    const errors = [];
+    const warnings = [];
 
-            const declaredConsts = {};
-            const declaredTypes = {};
-            const declaredVars = {};
-            const subprograms = {};
+    const declaredConsts = {};
+    const declaredTypes = {};
+    const declaredVars = {};
+    const subprograms = {};
 
-            let currentSection = 'header';
-            let currentSubprogram = null;
-            let inSubVars = false;
-            let hasMainComienza = false;
-            let hasMainTermina = false;
+    let section = 'none';
 
-            lines.forEach((raw, idx) => {
-                let l = raw.trim().replace(/\{[^}]*\}/g, '').trim();
-                const cIdx = l.indexOf('//');
-                if (cIdx !== -1) l = l.substring(0, cIdx).trim();
-                if (!l) return;
+    // 1. PRIMERA PASADA: Registrar Constantes y Tipos (globales)
+    lines.forEach((raw) => {
+        let l = raw.trim().replace(/\{[^}]*\}/g, '').trim();
+        const cIdx = l.indexOf('//');
+        if (cIdx !== -1) l = l.substring(0, cIdx).trim();
+        if (!l) return;
 
-                const low = l.toLowerCase();
-                if (low === 'constantes' || low === 'constante') { currentSection = 'constantes'; return; }
-                if (low === 'tipos' || low === 'tipo') { currentSection = 'tipos'; return; }
-                if (low === 'variables' || low === 'variable') { currentSection = 'variables'; return; }
-                if (low.startsWith('procedimiento') || low.startsWith('funcion') || low.startsWith('función')) { currentSection = 'sub'; return; }
-                if (low.startsWith('comienza')) { currentSection = 'body'; return; }
-
-                if (currentSection === 'constantes') {
-                    const sepMatch = l.match(/[:=]/);
-                    if (sepMatch) {
-                        const parts = l.split(sepMatch[0]);
-                        const cName = parts[0].trim().toLowerCase();
-                        let rawVal = parts[1].trim();
-                        let parsedVal = rawVal;
-                        if (/^[+-]?\d+$/.test(rawVal)) parsedVal = parseInt(rawVal, 10);
-                        else if (/^[+-]?\d+\.\d+$/.test(rawVal)) parsedVal = parseFloat(rawVal);
-                        declaredConsts[cName] = parsedVal;
-                    }
-                } else if (currentSection === 'tipos') {
-                    const tDef = parseTypeDefinition(l, declaredConsts);
-                    if (tDef) declaredTypes[tDef.name] = tDef;
-                }
-            });
-
-            currentSection = 'header';
-
-            lines.forEach((raw, idx) => {
-                const lineNum = idx + 1;
-                let l = raw.trim().replace(/\{[^}]*\}/g, '').trim();
-                const cIdx = l.indexOf('//');
-                if (cIdx !== -1) l = l.substring(0, cIdx).trim();
-                if (!l) return;
-
-                const low = l.toLowerCase();
-                if (low.startsWith('programa')) return;
-
-                if (low === 'constantes' || low === 'constante') { currentSection = 'constantes'; return; }
-                if (low === 'tipos' || low === 'tipo') { currentSection = 'tipos'; return; }
-                if (low === 'variables' || low === 'variable') {
-                    if (currentSubprogram) inSubVars = true;
-                    else currentSection = 'variables';
-                    return;
-                }
-
-                if (low.startsWith('procedimiento') || low.startsWith('funcion') || low.startsWith('función')) {
-                    const sub = parseSubprogramHeader(l);
-                    if (!sub) {
-                        errors.push({ line: lineNum, msg: 'Cabecera de subprograma inválida.' });
-                    } else {
-                        currentSubprogram = {
-                            ...sub,
-                            localVars: {},
-                            bodyLines: [],
-                            startLine: lineNum
-                        };
-                        subprograms[sub.name] = currentSubprogram;
-                        inSubVars = false;
-                        currentSection = 'sub';
-                    }
-                    return;
-                }
-
-                if (currentSection === 'variables' && !currentSubprogram) {
-                    if (l.includes(':')) {
-                        const parts = l.split(':');
-                        const vList = parts[0].split(',').map(v => v.trim().toLowerCase());
-                        const tipo = parts[1].trim().toLowerCase();
-                        vList.forEach(v => { if (v) declaredVars[v] = tipo; });
-                    }
-                    return;
-                }
-
-                if (currentSubprogram && inSubVars) {
-                    if (low.startsWith('comienza')) {
-                        inSubVars = false;
-                    } else if (l.includes(':')) {
-                        const parts = l.split(':');
-                        const vList = parts[0].split(',').map(v => v.trim().toLowerCase());
-                        const tipo = parts[1].trim().toLowerCase();
-                        vList.forEach(v => { if (v) currentSubprogram.localVars[v] = tipo; });
-                        return;
-                    }
-                }
-
-                if (currentSubprogram) {
-                    if (low.startsWith('termina')) {
-                        currentSubprogram = null;
-                        return;
-                    }
-                    return;
-                }
-
-                if (low.startsWith('comienza')) { hasMainComienza = true; currentSection = 'main_body'; return; }
-                if (low.startsWith('termina')) { hasMainTermina = true; currentSection = 'end'; return; }
-            });
-
-            if (!hasMainComienza) errors.push({ line: lines.length, msg: 'Falta la metapalabra "comienza" del programa principal.' });
-            if (!hasMainTermina) errors.push({ line: lines.length, msg: 'Falta la metapalabra "termina" del programa principal.' });
-
-            let status = 'ok';
-            if (errors.length > 0) status = 'error';
-            else if (warnings.length > 0) status = 'warn';
-
-            return { status, errors, warnings, declaredVars, declaredConsts, declaredTypes, subprograms };
+        const low = l.toLowerCase();
+        if (low === 'constantes' || low === 'constante') { section = 'constantes'; return; }
+        if (low === 'tipos' || low === 'tipo') { section = 'tipos'; return; }
+        if (low === 'variables' || low === 'variable' || 
+            low.startsWith('procedimiento') || low.startsWith('funcion') || low.startsWith('función') || 
+            low.startsWith('comienza')) {
+            section = 'other';
+            return;
         }
+
+        if (section === 'constantes') {
+            const sepMatch = l.match(/[:=]/);
+            if (sepMatch) {
+                const parts = l.split(sepMatch[0]);
+                const cName = parts[0].trim().toLowerCase();
+                let rawVal = parts[1].trim();
+                let parsedVal = rawVal;
+                if (/^[+-]?\d+$/.test(rawVal)) parsedVal = parseInt(rawVal, 10);
+                else if (/^[+-]?\d+\.\d+$/.test(rawVal)) parsedVal = parseFloat(rawVal);
+                declaredConsts[cName] = parsedVal;
+            }
+        } else if (section === 'tipos') {
+            const tDef = parseTypeDefinition(l, declaredConsts);
+            if (tDef) declaredTypes[tDef.name] = tDef;
+        }
+    });
+
+    // 2. SEGUNDA PASADA: Estructura, Variables y Subprogramas
+    let currentSubprogram = null;
+    let inSubVars = false;
+    let inGlobalVars = false;
+    let hasMainComienza = false;
+    let hasMainTermina = false;
+
+    lines.forEach((raw, idx) => {
+        const lineNum = idx + 1;
+        let l = raw.trim().replace(/\{[^}]*\}/g, '').trim();
+        const cIdx = l.indexOf('//');
+        if (cIdx !== -1) l = l.substring(0, cIdx).trim();
+        if (!l) return;
+
+        const low = l.toLowerCase();
+        if (low.startsWith('programa')) return;
+
+        // Declaraciones de secciones principales
+        if (low === 'constantes' || low === 'constante' || low === 'tipos' || low === 'tipo') {
+            inGlobalVars = false;
+            return;
+        }
+
+        if (low === 'variables' || low === 'variable') {
+            if (currentSubprogram) {
+                inSubVars = true;
+            } else {
+                inGlobalVars = true;
+            }
+            return;
+        }
+
+        // Subprogramas (procedimientos / funciones)
+        if (low.startsWith('procedimiento') || low.startsWith('funcion') || low.startsWith('función')) {
+            inGlobalVars = false;
+            const sub = parseSubprogramHeader(l);
+            if (!sub) {
+                errors.push({ line: lineNum, msg: 'Cabecera de subprograma inválida.' });
+            } else {
+                currentSubprogram = {
+                    ...sub,
+                    localVars: {},
+                    bodyLines: [],
+                    startLine: lineNum
+                };
+                subprograms[sub.name] = currentSubprogram;
+                inSubVars = false;
+            }
+            return;
+        }
+
+        // Bloque Comienza / Termina
+        if (low.startsWith('comienza')) {
+            inGlobalVars = false;
+            if (currentSubprogram) {
+                inSubVars = false;
+            } else {
+                hasMainComienza = true;
+            }
+            return;
+        }
+
+        if (low.startsWith('termina')) {
+            inGlobalVars = false;
+            if (currentSubprogram) {
+                currentSubprogram = null;
+                inSubVars = false;
+            } else {
+                hasMainTermina = true;
+            }
+            return;
+        }
+
+        // Captura de variables globales
+        if (inGlobalVars && !currentSubprogram) {
+            if (l.includes(':')) {
+                const parts = l.split(':');
+                const vList = parts[0].split(',').map(v => v.trim().toLowerCase());
+                const tipo = parts[1].trim().toLowerCase();
+                vList.forEach(v => { if (v) declaredVars[v] = tipo; });
+            }
+            return;
+        }
+
+        // Captura de variables locales de subprograma
+        if (currentSubprogram && inSubVars) {
+            if (l.includes(':')) {
+                const parts = l.split(':');
+                const vList = parts[0].split(',').map(v => v.trim().toLowerCase());
+                const tipo = parts[1].trim().toLowerCase();
+                vList.forEach(v => { if (v) currentSubprogram.localVars[v] = tipo; });
+            }
+            return;
+        }
+    });
+
+    if (!hasMainComienza) errors.push({ line: lines.length, msg: 'Falta la metapalabra "comienza" del programa principal.' });
+    if (!hasMainTermina) errors.push({ line: lines.length, msg: 'Falta la metapalabra "termina" del programa principal.' });
+
+    let status = 'ok';
+    if (errors.length > 0) status = 'error';
+    else if (warnings.length > 0) status = 'warn';
+
+    return { status, errors, warnings, declaredVars, declaredConsts, declaredTypes, subprograms };
+}
 
         function runDiagnosticReport() {
             const val = validateSyntax(codeInput.value);
@@ -2115,7 +2139,7 @@ async function executeCode() {
             continue;
         }
 
-	// 2. Líneas del subprograma
+        // 2. Líneas dentro de un subprograma
         if (currentSub) {
             if (low.startsWith('termina')) {
                 currentSub = null;
@@ -2130,7 +2154,7 @@ async function executeCode() {
             continue;
         }
 
-        // 3. Detectar 'comienza' del Programa Principal (el que queda fuera de cualquier subprograma)
+        // 3. Detectar 'comienza' del Programa Principal
         if (!mainStarted && low.startsWith('comienza')) {
             mainStarted = true;
             continue;
@@ -2141,7 +2165,7 @@ async function executeCode() {
             break;
         }
 
-        // 5. Líneas del cuerpo del programa principal
+        // 5. Líneas del cuerpo principal
         if (mainStarted) {
             mainBodyLines.push({ text: l, lineNum: i + 1 });
         }

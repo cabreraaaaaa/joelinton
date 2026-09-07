@@ -1861,7 +1861,8 @@
                 if (Array.isArray(localMemory[binding.formal])) {
                     memory[binding.actual] = [...localMemory[binding.formal]];
                 } else {
-                    memory[binding.actual] = localMemory[binding.formal];
+                    const targetRef = resolveVariableRef(binding.actual, memory, constants, declaredTypes, subprograms);
+                    assignToMemory(targetRef, localMemory[binding.formal], memory, declaredTypes);
                 }
             });
         }

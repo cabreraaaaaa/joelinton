@@ -2093,6 +2093,7 @@ async function executeCode() {
     });
 
     let currentSub = null;
+    let inSubVars = false;
     let mainStarted = false;
     const mainBodyLines = [];
 
@@ -2113,11 +2114,16 @@ async function executeCode() {
             continue;
         }
 
-        // 2. Líneas del subprograma
+	// 2. Líneas del subprograma
         if (currentSub) {
             if (low.startsWith('termina')) {
                 currentSub = null;
-            } else if (!low.startsWith('comienza') && !low.startsWith('variables') && !low.startsWith('variable') && !l.includes(':')) {
+                inSubVars = false;
+            } else if (low.startsWith('variables') || low.startsWith('variable')) {
+                inSubVars = true;
+            } else if (low.startsWith('comienza')) {
+                inSubVars = false;
+            } else if (!inSubVars) {
                 currentSub.bodyLines.push({ text: l, lineNum: i + 1 });
             }
             continue;

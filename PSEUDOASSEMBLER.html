@@ -933,7 +933,6 @@
       logTerm(`&gt; Proyecto '<strong>${cleanName}</strong>' guardado.`, 'output');
     }
 
-    // Carga directa y automática al cambiar la opción seleccionada
     projectSelector.addEventListener('change', () => {
       const selected = projectSelector.value;
       if (!selected) return;
@@ -991,12 +990,15 @@
     }
 
     function parseVal(valStr) {
-      if (!valStr) return 0;
+      if (valStr === undefined || valStr === null) return 0;
       valStr = String(valStr).trim();
+      if (valStr === '') return 0;
       if (valStr.toLowerCase().endsWith('h')) {
-        return parseInt(valStr.slice(0, -1), 16);
+        const hex = parseInt(valStr.slice(0, -1), 16);
+        return isNaN(hex) ? 0 : hex;
       }
-      return parseInt(valStr, 10) || 0;
+      const parsed = parseInt(valStr, 10);
+      return isNaN(parsed) ? 0 : parsed;
     }
 
     function updateCPUHeader(affectFlags = false) {
@@ -1145,7 +1147,7 @@
             logTerm(`[Línea ${currentLineNum}] Esperando dato por puerto ${port}...`, "prompt");
             const inputVal = await promptUserValue(`Ingrese dato para ${port}`);
             CPU.A = inputVal;
-            updateCPUHeader(false);
+            updateCPUHeader(true);
             logTerm(`→ Acumulador (A) = ${CPU.A}`);
             break;
           }
@@ -1159,7 +1161,7 @@
           case 'LDA': {
             const val = getValFromMemOrReg(arg1);
             CPU.A = val;
-            updateCPUHeader(false);
+            updateCPUHeader(true);
             logTerm(`→ A = [${arg1}] (${val})`);
             break;
           }
@@ -1178,7 +1180,11 @@
             } else {
               setValToMemOrReg(arg1, val);
             }
-            updateCPUHeader(false);
+            if (arg1.toUpperCase() === 'A') {
+              updateCPUHeader(true);
+            } else {
+              updateCPUHeader(false);
+            }
             logTerm(`→ ${arg1.toUpperCase()} = ${val}`);
             break;
           }
@@ -1188,7 +1194,11 @@
             const dest = arg1.toUpperCase();
             const val = getReg(src);
             setReg(dest, val);
-            updateCPUHeader(false);
+            if (dest === 'A') {
+              updateCPUHeader(true);
+            } else {
+              updateCPUHeader(false);
+            }
             logTerm(`→ MOV ${dest} ← ${src} (${val})`);
             break;
           }
@@ -1242,6 +1252,8 @@
               if (CPU.labels[target] !== undefined) {
                 nextPC = CPU.labels[target];
                 logTerm(`→ JZ (A=0): Salto a '${arg1}' (Línea ${nextPC + 1})`, "info");
+              } else {
+                logTerm(`Error: Etiqueta '${arg1}' no existe`, "halt");
               }
             } else {
               logTerm(`→ JZ (A ≠ 0): Condición no cumplida.`);
@@ -1255,6 +1267,8 @@
               if (CPU.labels[target] !== undefined) {
                 nextPC = CPU.labels[target];
                 logTerm(`→ JM (A<0): Salto a '${arg1}' (Línea ${nextPC + 1})`, "info");
+              } else {
+                logTerm(`Error: Etiqueta '${arg1}' no existe`, "halt");
               }
             } else {
               logTerm(`→ JM (A ≥ 0): Condición no cumplida.`);

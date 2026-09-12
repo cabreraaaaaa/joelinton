@@ -1,0 +1,440 @@
+ :root {
+            --bg-primary: #19171b;      
+            --accent-gold: #d29f22;     
+            --accent-cyan: #38bdf8;
+            --accent-burgundy: #5d0018; 
+            --text-light: #ffffff;
+            --secondary-dark: #252628;
+            --text-muted: #8a7fa4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-light);
+            line-height: 1.4;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--bg-primary) 50%, var(--accent-burgundy) 100%);
+        }
+
+        .hero-timer-vertical-wrap {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(-50%);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800; 
+            color: rgba(255, 255, 255, 0.025); 
+            line-height: 0.65; 
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .clock-digit-row {
+            font-size: 75vw;
+            letter-spacing: -20px;
+            white-space: nowrap;
+            text-transform: uppercase;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 32px;
+            width: 100%;
+            max-width: 820px;
+            padding: 0 10px;
+        }
+
+        .hero-content h1 { 
+            font-size: clamp(3.2rem, 14vw, 8rem);
+            font-weight: 800; 
+            margin: 0; 
+            letter-spacing: -1px; 
+            text-transform: uppercase;
+            color: transparent;
+            -webkit-text-stroke: 1.5px rgba(210, 159, 34, 0.85); 
+            animation: fadeInUp 0.8s ease-out both; 
+            animation-delay: 0.2s; 
+        }
+
+        /* --- TARJETAS DE ACCESO DIRECTO --- */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
+            animation: fadeInUp 0.8s ease-out both;
+            animation-delay: 0.4s;
+        }
+
+        .tool-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 22px;
+            border-radius: 18px;
+            text-decoration: none;
+            text-align: left;
+            background: rgba(25, 23, 27, 0.75);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .tool-details {
+            flex-grow: 1;
+        }
+
+        .tool-category {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 2px;
+        }
+
+        .tool-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .tool-arrow {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        /* Estilo Pseudo (Dorado) */
+        .tool-pseudo {
+            border-color: rgba(210, 159, 34, 0.35);
+        }
+        .tool-pseudo .tool-icon-box {
+            background: rgba(210, 159, 34, 0.12);
+            color: var(--accent-gold);
+        }
+        .tool-pseudo .tool-category {
+            color: var(--accent-gold);
+        }
+        .tool-pseudo .tool-arrow {
+            color: var(--accent-gold);
+        }
+        .tool-pseudo:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 10px 30px rgba(210, 159, 34, 0.25);
+            background: rgba(210, 159, 34, 0.08);
+        }
+        .tool-pseudo:hover .tool-arrow {
+            transform: translateX(4px);
+        }
+
+        /* Estilo Assembler (Cyan) */
+        .tool-assembler {
+            border-color: rgba(56, 189, 248, 0.35);
+        }
+        .tool-assembler .tool-icon-box {
+            background: rgba(56, 189, 248, 0.12);
+            color: var(--accent-cyan);
+        }
+        .tool-assembler .tool-category {
+            color: var(--accent-cyan);
+        }
+        .tool-assembler .tool-arrow {
+            color: var(--accent-cyan);
+        }
+        .tool-assembler:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.25);
+            background: rgba(56, 189, 248, 0.08);
+        }
+        .tool-assembler:hover .tool-arrow {
+            transform: translateX(4px);
+        }
+
+        /* --- SECCIÓN CLIMA HORIZONTAL ADAPTATIVA --- */
+        #weather-section {
+            background-color: var(--secondary-dark);
+            padding: 60px 16px;
+            border-top: 2px solid var(--accent-gold);
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .dashboard {
+            width: 100%;
+            max-width: 1200px;
+            background: rgba(25, 23, 27, 0.95);
+            border: 1px solid rgba(210, 159, 34, 0.3);
+            border-radius: 24px;
+            padding: 36px 28px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 20px;
+            gap: 16px;
+        }
+
+        .brand h2 { 
+            font-size: clamp(1.6rem, 5vw, 2.3rem); 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            color: var(--text-light); 
+            line-height: 1.15;
+        }
+        .brand p { 
+            color: var(--accent-gold); 
+            font-size: 0.8rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            margin-top: 6px; 
+        }
+
+        .date-display { text-align: right; }
+        #current-date { font-size: 1.05rem; font-weight: 600; color: var(--text-light); white-space: nowrap; }
+        .date-display span { color: var(--accent-gold); font-size: 0.8rem; display: block; text-transform: uppercase; font-weight: 600; }
+
+        .timeline-container { 
+            position: relative; 
+            margin: 15px 0; 
+            width: 100%;
+        }
+        .timeline-container::before, .timeline-container::after { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            width: 35px; 
+            height: 100%; 
+            z-index: 2; 
+            pointer-events: none; 
+        }
+        .timeline-container::before { left: 0; background: linear-gradient(to right, #19171b, transparent); }
+        .timeline-container::after { right: 0; background: linear-gradient(to left, #19171b, transparent); }
+
+        .timeline-scroll { 
+            display: flex; 
+            gap: 14px; 
+            overflow-x: auto; 
+            padding: 22px 10px 18px 10px; 
+            scroll-behavior: smooth; 
+            scrollbar-width: thin; 
+            scrollbar-color: var(--accent-gold) transparent; 
+            -webkit-overflow-scrolling: touch;
+        }
+        .timeline-scroll::-webkit-scrollbar { height: 6px; }
+        .timeline-scroll::-webkit-scrollbar-thumb { background: var(--accent-gold); border-radius: 10px; }
+
+        .hour-card { 
+            flex: 0 0 145px; 
+            background: rgba(255, 255, 255, 0.02); 
+            border: 1px solid rgba(255, 255, 255, 0.06); 
+            border-radius: 16px; 
+            padding: 18px 14px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: space-between; 
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+            position: relative; 
+            user-select: none;
+        }
+        .hour-card.now { 
+            border-color: var(--accent-gold); 
+            background: rgba(210, 159, 34, 0.06); 
+            box-shadow: 0 0 18px rgba(210, 159, 34, 0.22); 
+        }
+        .hour-card.now::before { 
+            content: 'AHORA'; 
+            position: absolute; 
+            top: -10px; 
+            background: var(--accent-gold); 
+            color: #000; 
+            font-size: 0.65rem; 
+            font-weight: 800; 
+            padding: 3px 8px; 
+            border-radius: 10px; 
+            letter-spacing: 1px; 
+        }
+
+        .card-time { font-size: 1.15rem; font-weight: 700; color: var(--text-light); }
+        .card-temp { font-size: 2rem; font-weight: 800; color: var(--accent-gold); margin: 6px 0; }
+        .card-feels-like { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; }
+        .card-wind-box { width: 100%; background: rgba(0, 0, 0, 0.35); border-radius: 10px; padding: 8px 4px; text-align: center; margin-bottom: 10px; border: 1px solid rgba(210, 159, 34, 0.12); }
+        .card-wind { font-size: 0.88rem; font-weight: 600; color: var(--text-light); }
+        .card-gusts { font-size: 0.75rem; color: #ff5252; margin-top: 2px; font-weight: 600; }
+        .card-dir { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
+        .arrow { display: inline-block; color: var(--accent-gold); font-size: 1rem; }
+        
+        .instructions { 
+            text-align: center; 
+            color: var(--text-muted); 
+            font-size: 0.75rem; 
+            margin-top: 15px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            padding: 0 10px;
+        }
+
+        .weather-source {
+            text-align: center;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+            letter-spacing: 0.8px;
+        }
+        .weather-source a {
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .weather-source a:hover {
+            text-decoration: underline;
+        }
+
+        /* --- PIE DE PÁGINA --- */
+        .site-footer {
+            background-color: #121014;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            text-align: center;
+        }
+
+        .footer-copy {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 0.8px;
+        }
+
+        .footer-copy strong {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        .footer-contact {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .footer-contact svg {
+            transition: transform 0.3s ease;
+        }
+
+        .footer-contact:hover {
+            color: #e1306c;
+            border-color: #e1306c;
+            background: rgba(225, 48, 108, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .footer-contact:hover svg {
+            transform: scale(1.1);
+        }
+
+        /* --- REGLAS RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .clock-digit-row { font-size: 68vw; letter-spacing: -14px; } 
+            
+            #weather-section { padding: 40px 12px; }
+            .dashboard { padding: 24px 14px; border-radius: 18px; }
+            header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 12px;
+                margin-bottom: 20px;
+                padding-bottom: 16px;
+            }
+            .brand h2 { font-size: 1.55rem; letter-spacing: 1px; }
+            .date-display { text-align: center; }
+            #current-date { font-size: 0.95rem; }
+
+            .hour-card {
+                flex: 0 0 130px;
+                padding: 16px 10px;
+                border-radius: 14px;
+            }
+            .card-time { font-size: 1.05rem; }
+            .card-temp { font-size: 1.75rem; }
+            .card-feels-like { font-size: 0.7rem; }
+            .card-wind { font-size: 0.82rem; }
+            .card-gusts { font-size: 0.7rem; }
+        }
+
+        @media (max-width: 380px) {
+            .hour-card { flex: 0 0 120px; }
+            .tool-card { padding: 14px; }
+        }
+
+        @media (min-width: 769px) {
+            .clock-digit-row { font-size: 26rem; letter-spacing: -24px; } 
+            .hero-content h1 { font-size: 7rem; }
+        }

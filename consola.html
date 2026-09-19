@@ -181,9 +181,35 @@
         </div>
     </main>
 
-    <footer class="site-footer">
-        <span class="footer-brand">Joelinton<span class="footer-domain">.vercel.app</span></span>
+<footer class="site-footer">
+        <button class="btn-disclaimer-trigger" id="btn-open-disclaimer">
+            <span>⚠️</span> Aviso pedagógico
+        </button>
+        <div class="footer-meta">
+            <span class="footer-brand">Joelinton<span class="footer-domain">.com.ar</span></span>
+        </div>
     </footer>
+
+    <!-- MODAL DE AVISO / DISCLAIMER -->
+    <div id="modal-disclaimer" class="modal-ayuda">
+        <div class="modal-content" style="max-width: 520px;">
+            <div class="modal-header">
+                <span class="modal-title-txt" style="color: var(--accent-gold);">
+                    ⚠️ Aviso Importante
+                </span>
+                <button class="btn-close-modal" id="btn-close-disclaimer">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Esta consola es un simulador experimental creado exclusivamente con fines de práctica personal y pedagógica.</p>
+                <p>El intérprete puede contener errores, limitaciones técnicas o discrepancias respecto al criterio evaluativo oficial.</p>
+                <p><b>No sustituye el juicio de los docentes ni las especificaciones oficiales de la cátedra.</b> El hecho de que un algoritmo ejecute correctamente en este entorno no garantiza su validez conceptual o académica.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="consola.js"></script>
+</body>
+</html>
 
     <script src="consola.js"></script>
 </body>

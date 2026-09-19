@@ -589,6 +589,113 @@
       font-size: 0.7rem;
       color: #64748b;
       flex-shrink: 0;
+      gap: 10px;
+    }
+
+    /* Botón disparador del footer */
+    .btn-disclaimer-trigger {
+      background: rgba(234, 179, 8, 0.08);
+      border: 1px solid rgba(234, 179, 8, 0.35);
+      color: var(--jersey-gold);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-disclaimer-trigger:hover {
+      background: var(--jersey-gold);
+      color: #000;
+      box-shadow: 0 0 10px rgba(234, 179, 8, 0.4);
+    }
+
+    /* Modal emergente */
+    .modal-disclaimer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-disclaimer.active {
+      display: flex;
+    }
+
+    .modal-disclaimer-content {
+      background: var(--bg-card);
+      border: 1px solid var(--jersey-gold);
+      border-radius: 8px;
+      width: 90%;
+      max-width: 520px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .modal-disclaimer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 1.2rem;
+      background: rgba(18, 14, 22, 0.98);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .modal-disclaimer-title {
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--jersey-gold);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 1px;
+    }
+
+    .btn-close-modal {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: color 0.2s;
+      line-height: 1;
+    }
+
+    .btn-close-modal:hover {
+      color: var(--jersey-red);
+    }
+
+    .modal-disclaimer-body {
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .modal-disclaimer-body p {
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .modal-disclaimer-body strong {
+      color: var(--jersey-cyan);
     }
 
     @media (max-width: 992px) {

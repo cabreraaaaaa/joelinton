@@ -51,6 +51,18 @@
                 if (e.target === modalAyuda) modalAyuda.classList.remove('active'); 
             });
         }
+        // LÓGICA DEL MODAL DE AVISO / DISCLAIMER
+        const btnOpenDisclaimer = document.getElementById('btn-open-disclaimer');
+        const modalDisclaimer = document.getElementById('modal-disclaimer');
+        const btnCloseDisclaimer = document.getElementById('btn-close-disclaimer');
+
+        if (btnOpenDisclaimer && modalDisclaimer && btnCloseDisclaimer) {
+            btnOpenDisclaimer.addEventListener('click', () => modalDisclaimer.classList.add('active'));
+            btnCloseDisclaimer.addEventListener('click', () => modalDisclaimer.classList.remove('active'));
+            modalDisclaimer.addEventListener('click', (e) => { 
+                if (e.target === modalDisclaimer) modalDisclaimer.classList.remove('active'); 
+            });
+        }
 
         btnCloseNotice.addEventListener('click', () => {
             mobileNotice.style.display = 'none';

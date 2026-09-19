@@ -133,10 +133,33 @@
     </div>
   </main>
 
-  <footer>
-    <div>JOELINTON.vercel.app // SET 8085</div>
+<footer>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <button class="btn-disclaimer-trigger" id="btn-open-disclaimer">
+        <span>⚠️</span> AVISO PEDAGÓGICO
+      </button>
+      <span>JOELINTON.com.ar // SET 8085</span>
+    </div>
     <div>SOPORTE: IN, OUT, LDA, STA, MOV, MVI, ADD, SUB, ADI, SUI, JMP, JZ, JM, HLT</div>
   </footer>
-<script src="PSEUDOASSEMBLER.js"></script>
+
+  <!-- MODAL DE AVISO / DISCLAIMER -->
+  <div id="modal-disclaimer" class="modal-disclaimer">
+    <div class="modal-disclaimer-content">
+      <div class="modal-disclaimer-header">
+        <span class="modal-disclaimer-title">
+          <span>⚠️</span> AVISO IMPORTANTE
+        </span>
+        <button class="btn-close-modal" id="btn-close-disclaimer">&times;</button>
+      </div>
+      <div class="modal-disclaimer-body">
+        <p>Esta consola es un simulador experimental creado exclusivamente con fines de práctica personal y pedagógica.</p>
+        <p>El intérprete puede contener errores, limitaciones técnicas o discrepancias respecto al criterio evaluativo oficial.</p>
+        <p><strong>No sustituye el juicio de los docentes ni las especificaciones oficiales de la cátedra.</strong> El hecho de que un algoritmo ejecute correctamente en este entorno no garantiza su validez conceptual o académica.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="PSEUDOASSEMBLER.js"></script>
 </body>
 </html>

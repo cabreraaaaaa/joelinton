@@ -1,5 +1,4 @@
-
-        const META_KEYWORDS = [
+const META_KEYWORDS = [
             'comienza', 'constantes', 'constante', 'entonces', 'escribir', 'escribirln',
             'hacer', 'hasta', 'leer', 'mientras', 'opcion', 'opción', 'de',
             'para', 'repetir', 'si', 'sino', 'termina', 'variables', 'variable',
@@ -396,189 +395,181 @@
         }
 
     function validateSyntax(code) {
-    // Si el editor está vacío o con texto por defecto, no mostrar errores
-    if (code.trim() === '' || code.trim() === 'Escribe tu código aquí...') {
-        return { status: 'ok', errors: [], warnings: [], declaredVars: {}, declaredConsts: {}, declaredTypes: {}, subprograms: {} };
+        if (code.trim() === '' || code.trim() === 'Escribe tu código aquí...') {
+            return { status: 'ok', errors: [], warnings: [], declaredVars: {}, declaredConsts: {}, declaredTypes: {}, subprograms: {} };
+        }
+
+        const lines = code.split('\n');
+        const errors = [];
+        const warnings = [];
+
+        const declaredConsts = {};
+        const declaredTypes = {};
+        const declaredVars = {};
+        const subprograms = {};
+
+        let section = 'none';
+
+        // 1. Registrar Constantes y Tipos
+        lines.forEach((raw) => {
+            let l = raw.trim().replace(/\{[^}]*\}/g, '').trim();
+            const cIdx = l.indexOf('//');
+            if (cIdx !== -1) l = l.substring(0, cIdx).trim();
+            if (!l) return;
+
+            const low = l.toLowerCase();
+            if (low === 'constantes' || low === 'constante') { section = 'constantes'; return; }
+            if (low === 'tipos' || low === 'tipo') { section = 'tipos'; return; }
+            if (low === 'variables' || low === 'variable' || 
+                low.startsWith('procedimiento') || low.startsWith('funcion') || low.startsWith('función') || 
+                low.startsWith('comienza')) {
+                section = 'other';
+                return;
+            }
+
+            if (section === 'constantes') {
+                const sepMatch = l.match(/[:=]/);
+                if (sepMatch) {
+                    const parts = l.split(sepMatch[0]);
+                    const cName = parts[0].trim().toLowerCase();
+                    let rawVal = parts[1].trim();
+                    let parsedVal = rawVal;
+                    if (/^[+-]?\d+$/.test(rawVal)) parsedVal = parseInt(rawVal, 10);
+                    else if (/^[+-]?\d+\.\d+$/.test(rawVal)) parsedVal = parseFloat(rawVal);
+                    declaredConsts[cName] = parsedVal;
+                }
+            } else if (section === 'tipos') {
+                const tDef = parseTypeDefinition(l, declaredConsts);
+                if (tDef) declaredTypes[tDef.name] = tDef;
+            }
+        });
+
+        // 2. Estructura, Variables y Subprogramas
+        let currentSubprogram = null;
+        let inSubVars = false;
+        let inGlobalVars = false;
+        let hasMainComienza = false;
+        let hasMainTermina = false;
+
+        lines.forEach((raw, idx) => {
+            const lineNum = idx + 1;
+            let l = raw.trim().replace(/\{[^}]*\}/g, '').trim();
+            const cIdx = l.indexOf('//');
+            if (cIdx !== -1) l = l.substring(0, cIdx).trim();
+            if (!l) return;
+
+            const low = l.toLowerCase();
+            if (low.startsWith('programa')) return;
+
+            if (low === 'constantes' || low === 'constante' || low === 'tipos' || low === 'tipo') {
+                inGlobalVars = false;
+                return;
+            }
+
+            if (low === 'variables' || low === 'variable') {
+                if (currentSubprogram) {
+                    inSubVars = true;
+                } else {
+                    inGlobalVars = true;
+                }
+                return;
+            }
+
+            if (low.startsWith('procedimiento') || low.startsWith('funcion') || low.startsWith('función')) {
+                inGlobalVars = false;
+                const sub = parseSubprogramHeader(l);
+                if (!sub) {
+                    errors.push({ line: lineNum, msg: 'Cabecera de subprograma inválida.' });
+                } else {
+                    currentSubprogram = {
+                        ...sub,
+                        localVars: {},
+                        bodyLines: [],
+                        startLine: lineNum
+                    };
+                    subprograms[sub.name] = currentSubprogram;
+                    inSubVars = false;
+                }
+                return;
+            }
+
+            if (low.startsWith('comienza')) {
+                inGlobalVars = false;
+                if (currentSubprogram) {
+                    inSubVars = false;
+                } else {
+                    hasMainComienza = true;
+                }
+                return;
+            }
+
+            if (low.startsWith('termina')) {
+                inGlobalVars = false;
+                if (currentSubprogram) {
+                    currentSubprogram = null;
+                    inSubVars = false;
+                } else {
+                    hasMainTermina = true;
+                }
+                return;
+            }
+
+            if (inGlobalVars && !currentSubprogram) {
+                if (l.includes(':')) {
+                    const parts = l.split(':');
+                    const vList = parts[0].split(',').map(v => v.trim().toLowerCase());
+                    const tipo = parts[1].trim().toLowerCase();
+                    vList.forEach(v => { if (v) declaredVars[v] = tipo; });
+                }
+                return;
+            }
+
+            if (currentSubprogram && inSubVars) {
+                if (l.includes(':')) {
+                    const parts = l.split(':');
+                    const vList = parts[0].split(',').map(v => v.trim().toLowerCase());
+                    const tipo = parts[1].trim().toLowerCase();
+                    vList.forEach(v => { if (v) currentSubprogram.localVars[v] = tipo; });
+                }
+                return;
+            }
+        });
+
+        if (!hasMainComienza) errors.push({ line: lines.length, msg: 'Falta la metapalabra "comienza" del programa principal.' });
+        if (!hasMainTermina) errors.push({ line: lines.length, msg: 'Falta la metapalabra "termina" del programa principal.' });
+
+        let status = 'ok';
+        if (errors.length > 0) status = 'error';
+        else if (warnings.length > 0) status = 'warn';
+
+        return { status, errors, warnings, declaredVars, declaredConsts, declaredTypes, subprograms };
     }
 
-    const lines = code.split('\n');
-    const errors = [];
-    const warnings = [];
-
-    const declaredConsts = {};
-    const declaredTypes = {};
-    const declaredVars = {};
-    const subprograms = {};
-
-    let section = 'none';
-
-    // 1. PRIMERA PASADA: Registrar Constantes y Tipos (globales)
-    lines.forEach((raw) => {
-        let l = raw.trim().replace(/\{[^}]*\}/g, '').trim();
-        const cIdx = l.indexOf('//');
-        if (cIdx !== -1) l = l.substring(0, cIdx).trim();
-        if (!l) return;
-
-        const low = l.toLowerCase();
-        if (low === 'constantes' || low === 'constante') { section = 'constantes'; return; }
-        if (low === 'tipos' || low === 'tipo') { section = 'tipos'; return; }
-        if (low === 'variables' || low === 'variable' || 
-            low.startsWith('procedimiento') || low.startsWith('funcion') || low.startsWith('función') || 
-            low.startsWith('comienza')) {
-            section = 'other';
-            return;
-        }
-
-        if (section === 'constantes') {
-            const sepMatch = l.match(/[:=]/);
-            if (sepMatch) {
-                const parts = l.split(sepMatch[0]);
-                const cName = parts[0].trim().toLowerCase();
-                let rawVal = parts[1].trim();
-                let parsedVal = rawVal;
-                if (/^[+-]?\d+$/.test(rawVal)) parsedVal = parseInt(rawVal, 10);
-                else if (/^[+-]?\d+\.\d+$/.test(rawVal)) parsedVal = parseFloat(rawVal);
-                declaredConsts[cName] = parsedVal;
-            }
-        } else if (section === 'tipos') {
-            const tDef = parseTypeDefinition(l, declaredConsts);
-            if (tDef) declaredTypes[tDef.name] = tDef;
-        }
-    });
-
-    // 2. SEGUNDA PASADA: Estructura, Variables y Subprogramas
-    let currentSubprogram = null;
-    let inSubVars = false;
-    let inGlobalVars = false;
-    let hasMainComienza = false;
-    let hasMainTermina = false;
-
-    lines.forEach((raw, idx) => {
-        const lineNum = idx + 1;
-        let l = raw.trim().replace(/\{[^}]*\}/g, '').trim();
-        const cIdx = l.indexOf('//');
-        if (cIdx !== -1) l = l.substring(0, cIdx).trim();
-        if (!l) return;
-
-        const low = l.toLowerCase();
-        if (low.startsWith('programa')) return;
-
-        // Declaraciones de secciones principales
-        if (low === 'constantes' || low === 'constante' || low === 'tipos' || low === 'tipo') {
-            inGlobalVars = false;
-            return;
-        }
-
-        if (low === 'variables' || low === 'variable') {
-            if (currentSubprogram) {
-                inSubVars = true;
-            } else {
-                inGlobalVars = true;
-            }
-            return;
-        }
-
-        // Subprogramas (procedimientos / funciones)
-        if (low.startsWith('procedimiento') || low.startsWith('funcion') || low.startsWith('función')) {
-            inGlobalVars = false;
-            const sub = parseSubprogramHeader(l);
-            if (!sub) {
-                errors.push({ line: lineNum, msg: 'Cabecera de subprograma inválida.' });
-            } else {
-                currentSubprogram = {
-                    ...sub,
-                    localVars: {},
-                    bodyLines: [],
-                    startLine: lineNum
-                };
-                subprograms[sub.name] = currentSubprogram;
-                inSubVars = false;
-            }
-            return;
-        }
-
-        // Bloque Comienza / Termina
-        if (low.startsWith('comienza')) {
-            inGlobalVars = false;
-            if (currentSubprogram) {
-                inSubVars = false;
-            } else {
-                hasMainComienza = true;
-            }
-            return;
-        }
-
-        if (low.startsWith('termina')) {
-            inGlobalVars = false;
-            if (currentSubprogram) {
-                currentSubprogram = null;
-                inSubVars = false;
-            } else {
-                hasMainTermina = true;
-            }
-            return;
-        }
-
-        // Captura de variables globales
-        if (inGlobalVars && !currentSubprogram) {
-            if (l.includes(':')) {
-                const parts = l.split(':');
-                const vList = parts[0].split(',').map(v => v.trim().toLowerCase());
-                const tipo = parts[1].trim().toLowerCase();
-                vList.forEach(v => { if (v) declaredVars[v] = tipo; });
-            }
-            return;
-        }
-
-        // Captura de variables locales de subprograma
-        if (currentSubprogram && inSubVars) {
-            if (l.includes(':')) {
-                const parts = l.split(':');
-                const vList = parts[0].split(',').map(v => v.trim().toLowerCase());
-                const tipo = parts[1].trim().toLowerCase();
-                vList.forEach(v => { if (v) currentSubprogram.localVars[v] = tipo; });
-            }
-            return;
-        }
-    });
-
-    if (!hasMainComienza) errors.push({ line: lines.length, msg: 'Falta la metapalabra "comienza" del programa principal.' });
-    if (!hasMainTermina) errors.push({ line: lines.length, msg: 'Falta la metapalabra "termina" del programa principal.' });
-
-    let status = 'ok';
-    if (errors.length > 0) status = 'error';
-    else if (warnings.length > 0) status = 'warn';
-
-    return { status, errors, warnings, declaredVars, declaredConsts, declaredTypes, subprograms };
-}
-
         function runDiagnosticReport() {
-            const val = validateSyntax(codeInput.value);
+            currentValidation = validateSyntax(codeInput.value);
+            updateStatusUI(currentValidation);
+            renderLineNumbers(currentValidation);
+
             printTerm('--- INFORME DE DIAGNÓSTICO & DEBUG ---', 'debug');
 
-            if (val.status === 'ok') {
+            if (currentValidation.status === 'ok') {
                 printTerm('✔ Sintaxis y estructura validadas con éxito.', 'success');
-                printTerm(`✔ Vectores y tipos registrados: ${Object.keys(val.declaredTypes).length}`, 'sys');
-                printTerm(`✔ Procedimientos y funciones registrados: ${Object.keys(val.subprograms).length}`, 'sys');
+                printTerm(`✔ Vectores y tipos registrados: ${Object.keys(currentValidation.declaredTypes).length}`, 'sys');
+                printTerm(`✔ Procedimientos y funciones registrados: ${Object.keys(currentValidation.subprograms).length}`, 'sys');
                 printTerm('✔ Algoritmo listo para ejecutar.', 'sys');
             } else {
-                val.errors.forEach(err => printTerm(`  [Línea ${err.line}] -> ${err.msg}`, 'error'));
-                val.warnings.forEach(w => printTerm(`  [Línea ${w.line}] -> ${w.msg}`, 'warn'));
+                currentValidation.errors.forEach(err => printTerm(`  [Línea ${err.line}] -> ${err.msg}`, 'error'));
+                currentValidation.warnings.forEach(w => printTerm(`  [Línea ${w.line}] -> ${w.msg}`, 'warn'));
             }
             if (window.innerWidth <= 768) setMobileTab('terminal');
         }
 
         btnDiagnostico.addEventListener('click', runDiagnosticReport);
 
-        function updateEditor() {
-            const text = codeInput.value;
-            const lines = text.split('\n');
-
-            currentValidation = validateSyntax(text);
-            updateStatusUI(currentValidation);
-
-            const errLines = new Set(currentValidation.errors.map(e => e.line));
-            const warnLines = new Set(currentValidation.warnings.map(w => w.line));
+        function renderLineNumbers(val = null) {
+            const lines = codeInput.value.split('\n');
+            const errLines = val ? new Set(val.errors.map(e => e.line)) : new Set();
+            const warnLines = val ? new Set(val.warnings.map(w => w.line)) : new Set();
 
             let linesHtml = '';
             for (let i = 1; i <= lines.length; i++) {
@@ -588,7 +579,18 @@
                 linesHtml += `<div class="line-num-item">${dot}${i}</div>`;
             }
             lineNumbers.innerHTML = linesHtml;
+        }
+
+        // Se ejecuta al tipear: no molesta con errores mientras escribes
+        function updateEditor() {
+            const text = codeInput.value;
+            renderLineNumbers(null);
             codeHighlight.innerHTML = highlightSyntax(text) + '\n';
+
+            // Mantiene el badge y barra limpios durante la edición
+            statusBadge.className = 'status-badge status-ok';
+            statusText.innerText = 'Editando...';
+            issuesBar.innerHTML = '<span class="issue-tag ok">✔ Modo edición (los errores se validan al Ejecutar o Diagnosticar)</span>';
         }
 
         function updateStatusUI(val) {
@@ -745,7 +747,6 @@
                             return;
                         }
 
-             // Tipo general o cadena (convierte a número si es numérico)
                         termInput.disabled = true;
                         termInput.value = '';
                         if (/^[+-]?\d+$/.test(trimmed)) {
@@ -883,8 +884,6 @@
             let returnVal = 0;
             for (let lineObj of sub.bodyLines) {
                 const raw = lineObj.text;
-                const low = raw.toLowerCase();
-
                 if (raw.includes('<-') || raw.includes(':=')) {
                     const sep = raw.includes('<-') ? '<-' : ':=';
                     const parts = raw.split(sep);
@@ -1098,7 +1097,6 @@
                     continue;
                 }
 
-                // Invocación a procedimiento: nombre(arg1, arg2)
                 const procCallMatch = raw.match(/^([a-zA-ZáéíóúÁÉÍÓÚñÑ_][a-zA-Z0-9áéíóúÁÉÍÓÚñÑ_]*)\s*\((.*)\)$/);
                 if (procCallMatch && !raw.includes('<-') && !raw.includes(':=')) {
                     const callName = procCallMatch[1].trim().toLowerCase();
@@ -1109,7 +1107,6 @@
                     }
                 }
 
-                // Asignación: variable <- valor o vector(i) <- valor
                 if (raw.includes('<-') || raw.includes(':=')) {
                     const sep = raw.includes('<-') ? '<-' : ':=';
                     const parts = raw.split(sep);
@@ -1125,8 +1122,6 @@
         }
 
 async function executeCode() {
-    updateEditor();
-
     if (window.innerWidth <= 768) setMobileTab('terminal');
     else if (terminalCard.classList.contains('collapsed')) {
         terminalCard.classList.remove('collapsed');
@@ -1141,6 +1136,10 @@ async function executeCode() {
     waitingForInput = null;
 
     const check = validateSyntax(codeInput.value);
+    currentValidation = check;
+    updateStatusUI(check);
+    renderLineNumbers(check);
+
     if (check.status === 'error') {
         clearTerminal();
         printTerm('NO SE PUEDE EJECUTAR: Existen errores de sintaxis.', 'error');
@@ -1163,7 +1162,6 @@ async function executeCode() {
     const declaredTypes = check.declaredTypes;
     const subprograms = check.subprograms;
 
-    // Resetear cuerpos de subprogramas
     Object.keys(subprograms).forEach(k => {
         subprograms[k].bodyLines = [];
     });
@@ -1181,7 +1179,6 @@ async function executeCode() {
 
         const low = l.toLowerCase();
 
-        // 1. Detectar cabecera de subprograma
         if (low.startsWith('procedimiento') || low.startsWith('funcion') || low.startsWith('función')) {
             const parsedHeader = parseSubprogramHeader(l);
             if (parsedHeader && subprograms[parsedHeader.name]) {
@@ -1190,7 +1187,6 @@ async function executeCode() {
             continue;
         }
 
-        // 2. Líneas dentro de un subprograma
         if (currentSub) {
             if (low.startsWith('termina')) {
                 currentSub = null;
@@ -1205,18 +1201,15 @@ async function executeCode() {
             continue;
         }
 
-        // 3. Detectar 'comienza' del Programa Principal
         if (!mainStarted && low.startsWith('comienza')) {
             mainStarted = true;
             continue;
         }
 
-        // 4. Fin del programa principal
         if (mainStarted && low.startsWith('termina')) {
             break;
         }
 
-        // 5. Líneas del cuerpo principal
         if (mainStarted) {
             mainBodyLines.push({ text: l, lineNum: i + 1 });
         }

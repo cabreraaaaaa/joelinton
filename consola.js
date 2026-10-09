@@ -843,7 +843,7 @@ function evaluateExpressionAdvanced(expr, memory, constants, declaredTypes, subp
         .replace(/≥/g, '>=')
         .replace(/≤/g, '<=')
         .replace(/≠/g, '!=')
-        .replace(/\bdiv\b/gi, '/')
+        .replace(/\b([a-zA-Z0-9_().]+)\s+div\s+([a-zA-Z0-9_().]+)\b/gi, 'Math.trunc(($1)/($2))')
         .replace(/\bmod\b/gi, '%')
         .replace(/\by\b/gi, '&&')
         .replace(/\bo\b/gi, '||')

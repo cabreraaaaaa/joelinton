@@ -871,6 +871,8 @@ function evaluateExpressionAdvanced(expr, memory, constants, declaredTypes, subp
         .replace(/\by\b/gi, '&&')
         .replace(/\bo\b/gi, '||')
         .replace(/\bno\b/gi, '!')
+        .replace(/\bverdadero\b/gi, 'true')
+        .replace(/\bfalso\b/gi, 'false')
         .replace(/<>/g, '!=')
         .replace(/>=/g, '>=')
         .replace(/<=/g, '<=')

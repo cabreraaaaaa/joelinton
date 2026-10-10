@@ -861,14 +861,7 @@ function evaluateExpressionAdvanced(expr, memory, constants, declaredTypes, subp
         });
     }
 
-    const scope = { 
-    verdadero: true, 
-    falso: false, 
-    true: true, 
-    false: false, 
-    ...constants, 
-    ...memory 
-    };
+    const scope = { verdadero: true, falso: false, true: true, false: false, ...constants, ...memory };
     let jsExpr = expr
         .replace(/≥/g, '>=')
         .replace(/≤/g, '<=')
